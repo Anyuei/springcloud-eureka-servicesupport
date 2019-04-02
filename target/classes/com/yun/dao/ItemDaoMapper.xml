@@ -20,63 +20,74 @@ CREATE TABLE `object` (
 -->
 <mapper namespace="com.yun.dao.ItemDao">
 	<!--新增对象 测试通过 2019.4.2 -->
-	<insert id="insertCategory" parameterType="Category">
-		INSERT INTO categories(categoryID,categoryName,state,subCategoryID,supCategoryID,userID,createTime,likes,views)
-	    VALUES(#{categoryID},#{categoryName},#{state},#{subCategoryID},#{supCategoryID},#{userID},#{createTime},#{likes},#{views})
+	<insert id="insertItem" parameterType="Item" useGeneratedKeys="true" keyProperty="objectID">
+		INSERT INTO object(
+                objectName,
+                details,
+                dislikes,
+                likes,
+                viewTimes,
+                commentsTimes,
+                categoryID,
+                createUser,
+                createTime,
+                state,
+                objectPicturePath
+                )
+	    VALUES(
+                      #{objectName},
+                      #{details},
+                      #{dislikes},
+                      #{likes},
+                      #{viewTimes},
+                      #{commentsTimes},
+                      #{categoryID},
+                      #{createUser},
+                      #{createTime},
+                      #{state},
+                      #{objectPicturePath}
+                      )
 	</insert>
-	<!--根据ID删除分类 测试通过 2019.3.25 -->
-	<delete id="deleteCategoryByID">
-	    DELETE FROM categories WHERE categoryID=#{categoryID}
+	<!--根据对象ID删除对象 测试通过 2019.4.2 -->
+	<delete id="deleteItemByID">
+	    DELETE FROM object WHERE objectID=#{objectID}
 	</delete>
-	<!--修改分类 测试通过 2019.3.25 -->
-	<update id="updateCategoryByID">
+	<!--根据所属分类ID删除所有对象 测试通过 2019.4.2 -->
+	<delete id="deleteItemsByCategoryID">
+		DELETE FROM object WHERE categoryID=#{categoryID}
+	</delete>
+	<!--修改对象信息 测试通过 2019.4.2 -->
+	<update id="updateItemByID" >
 	    UPDATE
-		categories
+		object
 	    SET
-        <if test="categoryID != null">categoryID=#{categoryID},</if>
-        <if test="categoryName != null">categoryName=#{categoryName},</if>
-        <if test="state != null">state=#{state},</if>
-        <if test="subCategoryID != null">subCategoryID=#{subCategoryID},</if>
-        <if test="supCategoryID != null">supCategoryID=#{supCategoryID},</if>
-        <if test="userID != null">userID=#{userID},</if>
-        <if test="createTime != null">createTime=#{createTime},</if>
+        <if test="objectName != null">objectName=#{objectName},</if>
+        <if test="details != null">details=#{details},</if>
+        <if test="dislikes != null">dislikes=#{dislikes},</if>
         <if test="likes != null">likes=#{likes},</if>
-		<if test="views != null">views=#{views}</if>
+        <if test="viewTimes != null">viewTimes=#{viewTimes},</if>
+        <if test="commentsTimes != null">commentsTimes=#{commentsTimes},</if>
+        <if test="categoryID != null">categoryID=#{categoryID},</if>
+        <if test="createUser != null">createUser=#{createUser},</if>
+		<if test="createTime != null">createTime=#{createTime},</if>
+		<if test="state != null">state=#{state},</if>
+		<if test="objectPicturePath != null">objectPicturePath=#{objectPicturePath}</if>
 	    WHERE userID=#{userID}
 	</update>
 
-    <!--根据ID查询分类 测试通过 2019.3.25 -->
-	<select id="retrieveCategoryByID" resultType="Category" parameterType="java.lang.Long">
-		SELECT * FROM categories WHERE categoryID = #{categoryID}
+    <!--根据ID查询对象 测试通过 2019.4.2 -->
+	<select id="retrieveItemByID" resultType="Item" parameterType="java.lang.Long">
+		SELECT * FROM object WHERE objectID = #{objectID}
 	</select>
 
-	<!-- 根据状态查询分类 (0-审核 1-通过 2-驳回 3-封禁) 比如用于查询未通过审核的分类 测试通过 2019.3.25-->
-	<select id="retrieveCategorysByState" resultType="Category">
-		SELECT * FROM categories WHERE state = #{state}
+	<!-- 根据某类目下的所有对象 测试通过 2019.3.25-->
+	<select id="retrieveItemsByCategoryID" resultType="Item">
+		SELECT * FROM object WHERE categoryID = #{categoryID}
 	</select>
 
-	<!-- 根据类名查询分类 测试通过 2019.3.25-->
-	<select id="retrieveCategoryByName" resultType="Category" parameterType="java.lang.String">
-		SELECT * FROM categories WHERE categoryName = #{categoryName}
-	</select>
-
-	<!-- 根据最受欢迎的n个类目查询 类目需为审核通过 state==1,likes+0：varchar转为整型排序 测试通过 2019.3.25-->
-	<select id="retrieveNCategoriesByMostLikes" resultType="Category" parameterType="java.lang.Integer">
-		SELECT categoryID,categoryName,likes FROM categories WHERE state=1 ORDER BY likes+0 DESC LIMIT #{limit};
-	</select>
-
-	<!-- 根据类目名模糊查 测试通过 2019.3.25-->
-	<select id="retrieveCategoriesByName" resultType="Category" parameterType="java.lang.String">
-		SELECT * FROM categories WHERE categoryName LIKE CONCAT('%',#{categoryName},'%')
-	</select>
-
-	<!-- 根据父类目ID查 所有子类目 测试通过 2019.3.25-->
-	<select id="retrieveCategoriesBySupID" resultType="Category" parameterType="java.lang.Long">
-		SELECT * FROM categories WHERE supCategoryID = #{supCategoryID};
-	</select>
-	<!-- 根据父类目ID查 所有子类ID 测试通过 2019.4.2-->
-	<select id="retrieveCategoriesIDBySupID" resultType="java.lang.Long" parameterType="java.lang.Long">
-		SELECT categoryID FROM categories WHERE supCategoryID = #{supCategoryID};
+	<!-- 根据对象的所属类目，查询处于某状态对象的信息。 测试通过 2019.4.2-->
+	<select id="retrieveItemsInStateByCategoryID" resultType="Item" parameterType="java.lang.String">
+		SELECT * FROM object WHERE objectName =  #{0} and state = #{1}
 	</select>
 </mapper>
 

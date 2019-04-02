@@ -1,6 +1,7 @@
 package com.yun.serviceImpl;
 
 import com.yun.dao.CategoryDao;
+import com.yun.dao.ItemDao;
 import com.yun.entity.Category;
 import com.yun.service.CategoryService;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Resource
     private CategoryDao categoryDao;
 
+    @Resource
+    private ItemDao itemDao;
     /**
      * 添加新类
      * @param category
@@ -41,17 +44,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategoryByID(Long categoryID) {
         if (categoryDao.retrieveCategoryByID(categoryID)!=null){
-            List<Long> subCategoriesID = categoryDao.retrieveCategoriesIDBySupID(categoryID);
+            List<Long> subCategoriesID = categoryDao.retrieveCategoriesIDBySupID(categoryID);//得到所有子类ID
             if (subCategoriesID==null||subCategoriesID.isEmpty()){//当分类为叶子分类时，可以直接删除。
-                categoryDao.deleteCategoryByID(categoryID);
-                //删除类目下所有对象
-
+                //删除类目为categoryID 下所有对象
+                itemDao.deleteItemsByCategoryID(categoryID);
+            }else{//当不为叶子分类时，递归到子分类
+                for (Long subCategoryID : subCategoriesID) {
+                    deleteCategoryByID(subCategoryID);//递归删除
+                }
             }
-            for (Long subCategoryID : subCategoriesID) {
-                deleteCategoryByID(subCategoryID);
-            }
+            //删除类目
+            categoryDao.deleteCategoryByID(categoryID);
         }
-
     }
 
     @Override

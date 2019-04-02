@@ -8,9 +8,9 @@ import java.util.List;
  * 操作category表（已完成）
  */
 public interface CategoryDao {
-    void insertCategory(Category category);
-    void deleteCategoryByID(Long id);
-    void updateCategoryByID(Category category);
+    Integer insertCategory(Category category);
+    Integer deleteCategoryByID(Long id);
+    Integer updateCategoryByID(Category category);
     Category retrieveCategoryByID(Long id);
 
     /**

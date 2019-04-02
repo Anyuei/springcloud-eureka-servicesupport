@@ -1,17 +1,16 @@
-package com.yun.dao;
+package com.yun.service;
 
 import com.yun.entity.Item;
 
 import java.util.List;
 
-public interface ItemDao {
+public interface ItemService {
+
     void insertItem(Item item);
     void deleteItemByID(Long objectID);
     void deleteItemsByCategoryID(Long categoryID);
     void updateItemByID(Item item);
     Item retrieveItemByID(Long objectID);
-
-
     /**
      * 根据对象的所属类目查询对象信息
      * @param categoryID 类目ID
