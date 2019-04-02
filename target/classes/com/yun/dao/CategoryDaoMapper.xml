@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+CREATE TABLE `categorys` (
+  `categoryID` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '类目ID',
+  `categoryName` varchar(255) NOT NULL DEFAULT '' COMMENT '类目名',
+  `state` int(11) NOT NULL DEFAULT '0' COMMENT '类目状态(0-审核 1-通过 2-驳回 3-封禁)',
+  `subCategoryID` bigint(11) DEFAULT NULL COMMENT '子类目',
+  `supCategoryID` bigint(11) DEFAULT '0' COMMENT '父类目',
+  `userID` varchar(255) NOT NULL DEFAULT '' COMMENT '类目创建者ID',
+  `createTime` datetime NOT NULL COMMENT '创建时间',
+  `likes` varchar(255) NOT NULL DEFAULT '0' COMMENT '分类热度点赞数',
+  `views` varchar(255) DEFAULT '0' COMMENT '分类浏览量',
+  PRIMARY KEY (`categoryID`),
+  UNIQUE KEY `categoryName` (`categoryName`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2200000001 DEFAULT CHARSET=utf8;
+-->
+<mapper namespace="com.yun.dao.CategoryDao">
+	<!--新增分类 测试通过 2019.3.25 -->
+	<insert id="insertCategory" parameterType="Category">
+		INSERT INTO categories(categoryID,categoryName,state,subCategoryID,supCategoryID,userID,createTime,likes,views)
+	    VALUES(#{categoryID},#{categoryName},#{state},#{subCategoryID},#{supCategoryID},#{userID},#{createTime},#{likes},#{views})
+	</insert>
+	<!--根据ID删除分类 测试通过 2019.3.25 -->
+	<delete id="deleteCategoryByID">
+	    DELETE FROM categories WHERE categoryID=#{categoryID}
+	</delete>
+	<!--修改分类 测试通过 2019.3.25 -->
+	<update id="updateCategoryByID">
+	    UPDATE
+		categories
+	    SET
+        <if test="categoryID != null">categoryID=#{categoryID},</if>
+        <if test="categoryName != null">categoryName=#{categoryName},</if>
+        <if test="state != null">state=#{state},</if>
+        <if test="subCategoryID != null">subCategoryID=#{subCategoryID},</if>
+        <if test="supCategoryID != null">supCategoryID=#{supCategoryID},</if>
+        <if test="userID != null">userID=#{userID},</if>
+        <if test="createTime != null">createTime=#{createTime},</if>
+        <if test="likes != null">likes=#{likes},</if>
+		<if test="views != null">views=#{views}</if>
+	    WHERE userID=#{userID}
+	</update>
+
+    <!--根据ID查询分类 测试通过 2019.3.25 -->
+	<select id="retrieveCategoryByID" resultType="Category" parameterType="java.lang.Long">
+		SELECT * FROM categories WHERE categoryID = #{categoryID}
+	</select>
+
+	<!-- 根据状态查询分类 (0-审核 1-通过 2-驳回 3-封禁) 比如用于查询未通过审核的分类 测试通过 2019.3.25-->
+	<select id="retrieveCategorysByState" resultType="Category">
+		SELECT * FROM categories WHERE state = #{state}
+	</select>
+
+	<!-- 根据类名查询分类 测试通过 2019.3.25-->
+	<select id="retrieveCategoryByName" resultType="Category" parameterType="java.lang.String">
+		SELECT * FROM categories WHERE categoryName = #{categoryName}
+	</select>
+
+	<!-- 根据最受欢迎的n个类目查询 类目需为审核通过 state==1,likes+0：varchar转为整型排序 测试通过 2019.3.25-->
+	<select id="retrieveNCategoriesByMostLikes" resultType="Category" parameterType="java.lang.Integer">
+		SELECT categoryID,categoryName,likes FROM categories WHERE state=1 ORDER BY likes+0 DESC LIMIT #{limit};
+	</select>
+
+	<!-- 根据类目名模糊查 测试通过 2019.3.25-->
+	<select id="retrieveCategoriesByName" resultType="Category" parameterType="java.lang.String">
+		SELECT * FROM categories WHERE categoryName LIKE CONCAT('%',#{categoryName},'%')
+	</select>
+
+	<!-- 根据父类目ID查 所有子类目 测试通过 2019.3.25-->
+	<select id="retrieveCategoriesBySupID" resultType="Category" parameterType="java.lang.Long">
+		SELECT * FROM categories WHERE supCategoryID = #{supCategoryID};
+	</select>
+	<!-- 根据父类目ID查 所有子类ID 测试通过 2019.4.2-->
+	<select id="retrieveCategoriesIDBySupID" resultType="java.lang.Long" parameterType="java.lang.Long">
+		SELECT categoryID FROM categories WHERE supCategoryID = #{supCategoryID};
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

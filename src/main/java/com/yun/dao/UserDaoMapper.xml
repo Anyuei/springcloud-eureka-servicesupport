@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+CREATE TABLE `users` (
+  `userID` int(11) NOT NULL AUTO_INCREMENT,
+  `userName` varchar(255) NOT NULL,
+  `userNickname` varchar(255) NOT NULL,
+  `userPassword` varchar(255) NOT NULL,
+  `avatarPath` varchar(255) NOT NULL COMMENT '头像',
+  `gender` bit(1) NOT NULL COMMENT '性别',
+  `xp` int(10) NOT NULL COMMENT '经验值',
+  `telephone` varchar(11) NOT NULL COMMENT '电话号码',
+  `email` varchar(255) NOT NULL COMMENT '邮箱',
+  `state` int(11) unsigned NOT NULL COMMENT '用户状态(0-正常 1-禁言 2-封号 )',
+  PRIMARY KEY (`userID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+-->
+<mapper namespace="com.yun.dao.UserDao">
+	<!--插入用户 测试通过 2019.3.25 -->
+	<insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userID">
+		INSERT INTO users(userName,userNickname,userPassword,avatarPath,gender,xp,telephone,email,state,signature)
+	    VALUES(#{userName},#{userNickname},#{userPassword},#{avatarPath},#{gender},#{xp},#{telephone},#{email},#{state},#{signature})
+	</insert>
+	<!--根据ID删除用户 测试通过 2019.3.25 -->
+	<delete id="deleteUserByID">
+	    DELETE FROM users WHERE userID=#{userID}
+	</delete>
+	<!--根据ID删除用户 测试通过 2019.3.25 -->
+	<update id="updateUserByID">
+	    UPDATE
+	      users
+	    SET
+        <if test="userName != null">userName=#{userName},</if>
+        <if test="userNickname != null">userNickname=#{userNickname},</if>
+        <if test="userPassword != null">userPassword=#{userPassword},</if>
+        <if test="avatarPath != null">avatarPath=#{avatarPath},</if>
+        <if test="gender != null">gender=#{gender},</if>
+        <if test="xp != null">xp=#{xp},</if>
+        <if test="telephone != null">telephone=#{telephone},</if>
+        <if test="email != null"> email=#{email},</if>
+        <if test="state != null">state=#{state},</if>
+		<if test="signature != null">signature=#{signature}</if>
+	    WHERE userID=#{userID}
+	</update>
+	<!--根据ID查询用户 测试通过 2019.3.25 -->
+	<select id="retrieveUserByID" resultType="User">
+		SELECT * FROM users WHERE userID = #{id}
+	</select>
+	<!-- 根据名字精确查询 测试通过 2019.3.25 -->
+	<select id="retrieveUserByName" resultType="User">
+		SELECT * FROM users WHERE userName = #{name}
+	</select>
+
+	<!-- 根据名字模糊查询 测试通过 2019.3.25 -->
+	<select id="retrieveUsersByName" resultType="User">
+		SELECT * FROM users WHERE userName like CONCAT('%',#{name},'%')
+	</select>
+
+	<!-- 根据昵称精确查询 测试通过 2019.3.25 -->
+	<select id="retrieveUserByNickname" resultType="User">
+		SELECT * FROM users WHERE userNickname = #{nickname}
+	</select>
+	<!-- 根据昵称模糊查询 测试通过 2019.3.25 -->
+	<select id="retrieveUsersByNickname" resultType="User">
+		SELECT * FROM users WHERE userNickname LIKE CONCAT('%',#{nickname},'%')
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
