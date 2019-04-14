@@ -22,11 +22,11 @@ public class Item {
     private Date createTime;
     private Integer state;
     private String objectPicturePath;
-
+    private String brief_introduction;
     public Item() {
     }
 
-    public Item(Long objectID, String objectName, String details, String dislikes, String likes, String viewTimes, String commentsTimes, Long categoryID, String createUser, Date createTime, Integer state, String objectPicturePath) {
+    public Item(Long objectID, String objectName, String details, String dislikes, String likes, String viewTimes, String commentsTimes, Long categoryID, String createUser, Date createTime, Integer state, String objectPicturePath, String brief_introduction) {
         this.objectID = objectID;
         this.objectName = objectName;
         this.details = details;
@@ -39,11 +39,12 @@ public class Item {
         this.createTime = createTime;
         this.state = state;
         this.objectPicturePath = objectPicturePath;
+        this.brief_introduction = brief_introduction;
     }
 
     @Override
     public String toString() {
-        return "ItemDao{" +
+        return "Item{" +
                 "objectID=" + objectID +
                 ", objectName='" + objectName + '\'' +
                 ", details='" + details + '\'' +
@@ -56,6 +57,7 @@ public class Item {
                 ", createTime=" + createTime +
                 ", state=" + state +
                 ", objectPicturePath='" + objectPicturePath + '\'' +
+                ", brief_introduction='" + brief_introduction + '\'' +
                 '}';
     }
 
@@ -153,5 +155,13 @@ public class Item {
 
     public void setObjectPicturePath(String objectPicturePath) {
         this.objectPicturePath = objectPicturePath;
+    }
+
+    public String getBrief_introduction() {
+        return brief_introduction;
+    }
+
+    public void setBrief_introduction(String brief_introduction) {
+        this.brief_introduction = brief_introduction;
     }
 }

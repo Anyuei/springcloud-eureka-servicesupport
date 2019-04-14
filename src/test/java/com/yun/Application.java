@@ -55,9 +55,12 @@ public class Application
         System.out.println(categoryDao.retrieveCategoriesByName("衣"));
     }
 
+    /**
+     * 读取TXT文件，录种类入数据库
+     */
     @Test
     public void insertCategories(){
-        makeCategoryFromPath("C:\\Users\\anxiaopei\\Desktop\\cate.txt"," ");
+        makeCategoryFromPath("C:\\Users\\anxiaopei\\Desktop\\2200009000.txt","##");
     }
     public void makeCategoryFromPath(String docPath, String split) {
         List<String> linesList = readLineToListFromPath(docPath);
@@ -67,14 +70,14 @@ public class Application
             for (String line : linesList) {
                 String[] kv = line.split(split);
                 try {
-                    key = kv[0].trim();
-                    value =Long.parseLong(kv[1].trim());
+                    key = kv[1].trim();
+                    value =Long.parseLong(kv[0].trim());
                     Category category = new Category(
                             value,//类目ID
                             key,//类目名
                             1,//类目状态(0-审核 1-通过 2-驳回 3-封禁)
                             null,//子类目
-                            2200000000L,//父类目
+                            2200009000L,//父类目
                             "1",//类目创建者ID
                             new Date(),//创建时间
                             "1",//分类热度点赞数

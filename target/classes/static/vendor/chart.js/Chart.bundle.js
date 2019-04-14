@@ -14231,7 +14231,7 @@ var exports = module.exports = {
 			ctx.lineTo(x + xOffset, y - yOffset);
 			ctx.closePath();
 			break;
-		case 'star':
+		case 'star_img':
 			ctx.beginPath();
 			ctx.moveTo(x, y + radius);
 			ctx.lineTo(x, y - radius);
