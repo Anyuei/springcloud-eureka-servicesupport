@@ -11,7 +11,12 @@ public interface ItemDao {
     void updateItemByID(Item item);
     Item retrieveItemByID(Long objectID);
 
-
+    /**
+     * 根据对象名模糊查对象
+     * @param objectName
+     * @return
+     */
+    List<Item> retrieveItemsByName(String objectName);
     /**
      * 根据对象的所属类目查询对象信息
      * @param categoryID 类目ID
