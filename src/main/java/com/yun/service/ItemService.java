@@ -17,7 +17,7 @@ public interface ItemService {
      * @param objectName
      * @return
      */
-    List<Item> searchByName(String objectName);
+    List<Item> searchByName(String objectName,Long userID);
     /**
      * 根据对象的所属类目查询对象信息
      * @param categoryID 类目ID

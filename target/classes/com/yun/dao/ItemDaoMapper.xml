@@ -32,7 +32,8 @@ CREATE TABLE `object` (
                 createUser,
                 createTime,
                 state,
-                objectPicturePath
+                objectPicturePath,
+                brief_introduction
                 )
 	    VALUES(
                       #{objectName},
@@ -45,7 +46,8 @@ CREATE TABLE `object` (
                       #{createUser},
                       #{createTime},
                       #{state},
-                      #{objectPicturePath}
+                      #{objectPicturePath},
+                      #{brief_introduction}
                       )
 	</insert>
 	<!--根据对象ID删除对象 测试通过 2019.4.2 -->
@@ -71,7 +73,8 @@ CREATE TABLE `object` (
         <if test="createUser != null">createUser=#{createUser},</if>
 		<if test="createTime != null">createTime=#{createTime},</if>
 		<if test="state != null">state=#{state},</if>
-		<if test="objectPicturePath != null">objectPicturePath=#{objectPicturePath}</if>
+		<if test="objectPicturePath != null">objectPicturePath=#{objectPicturePath},</if>
+        <if test="brief_introduction != null">brief_introduction=#{brief_introduction}</if>
 	    WHERE userID=#{userID}
 	</update>
 
@@ -79,6 +82,10 @@ CREATE TABLE `object` (
 	<select id="retrieveItemByID" resultType="Item" parameterType="java.lang.Long">
 		SELECT * FROM object WHERE objectID = #{objectID}
 	</select>
+    <!--根据ID查询对象 测试通过 2019.4.14 -->
+    <select id="retrieveItemsByName" resultType="Item" parameterType="java.lang.String">
+        SELECT * FROM object WHERE objectName LIKE CONCAT('%',#{objectName},'%') LIMIT 10;
+    </select>
 
 	<!-- 根据某类目下的所有对象 测试通过 2019.3.25-->
 	<select id="retrieveItemsByCategoryID" resultType="Item">
@@ -87,7 +94,7 @@ CREATE TABLE `object` (
 
 	<!-- 根据对象的所属类目，查询处于某状态对象的信息。 测试通过 2019.4.2-->
 	<select id="retrieveItemsInStateByCategoryID" resultType="Item" parameterType="java.lang.String">
-		SELECT * FROM object WHERE objectName =  #{0} and state = #{1}
+		SELECT * FROM object WHERE categoryID =  #{0} and state = #{1}
 	</select>
 </mapper>
 

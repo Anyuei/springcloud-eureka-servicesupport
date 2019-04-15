@@ -23,10 +23,11 @@ public class Item {
     private Integer state;
     private String objectPicturePath;
     private String brief_introduction;
+    private Boolean islike=false;
     public Item() {
     }
 
-    public Item(Long objectID, String objectName, String details, String dislikes, String likes, String viewTimes, String commentsTimes, Long categoryID, String createUser, Date createTime, Integer state, String objectPicturePath, String brief_introduction) {
+    public Item(Long objectID, String objectName, String details, String dislikes, String likes, String viewTimes, String commentsTimes, Long categoryID, String createUser, Date createTime, Integer state, String objectPicturePath, String brief_introduction,Boolean islike) {
         this.objectID = objectID;
         this.objectName = objectName;
         this.details = details;
@@ -40,6 +41,7 @@ public class Item {
         this.state = state;
         this.objectPicturePath = objectPicturePath;
         this.brief_introduction = brief_introduction;
+        this.islike=islike;
     }
 
     @Override
@@ -58,6 +60,7 @@ public class Item {
                 ", state=" + state +
                 ", objectPicturePath='" + objectPicturePath + '\'' +
                 ", brief_introduction='" + brief_introduction + '\'' +
+                ", islike='" + islike + '\'' +
                 '}';
     }
 
@@ -163,5 +166,12 @@ public class Item {
 
     public void setBrief_introduction(String brief_introduction) {
         this.brief_introduction = brief_introduction;
+    }
+    public Boolean getIslike() {
+        return islike;
+    }
+
+    public void setIslike(Boolean islike) {
+        this.islike = islike;
     }
 }

@@ -1,3 +1,5 @@
+
+<!-- World 界面 -->
 <style>
 
   /*种类按钮 样式*/
@@ -19,6 +21,43 @@
     background-color:#9fcdff;
     border-color: #eef5f9;
   }
+  /*对象标题样式*/
+  .itemNameStyle{
+    font-size: larger;
+    padding: 16px 0px 0px 16px;
+  }
+
+  .itemNameStyle:hover{
+     font-size: larger;
+     color: #bd2130;
+  }
+  /*对象图片样式*/
+  .itemBgImgStyle img{
+    top: 0px;
+    transition: all 1s;
+    -moz-transition: all 1s;
+    -webkit-transition: all 1s;
+    -o-transition: all 1s;
+    position: relative;
+  }
+  .itemBgImgStyle img:hover{
+    top: -6px;
+    width: 105%;
+    height: 105%;
+  }
+  .likesIcon{
+    color: #ba0000;
+  }
+  .likesIcon:hover{
+    color: #f00;
+  }
+  .likesIcon:focus{
+    color: #f00;
+  }
+  .ItemOperationArea{
+    position:absolute;
+    bottom:5px;
+  }
 </style>
   <!-- 评论区-->
   <header class="page-header">
@@ -30,9 +69,9 @@
         <!-- 搜索栏 -->
         <div class="col-lg-6">
           <div class="input-group">
-            <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
+            <input id="itemsKey" type="text" class="form-control" aria-label="Text input with segmented dropdown button" placeholder="请输入关键词">
             <div class="input-group-append">
-              <button type="button" class="btn btn-outline-secondary">search</button>
+              <button id="searchItems" type="button" class="btn btn-outline-secondary">search</button>
               <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="sr-only">Toggle Dropdown</span>
               </button>
@@ -63,19 +102,19 @@
     <li class="nav-item" id="Item1">
       <a class="nav-link active" id="CategoryNav1" data-toggle="tab" href="#CategoryArea1" role="tab" aria-controls="CategoryArea1" aria-selected="true">主分类</a>
     </li>
-
+    <!--此处代码由getCategories()方法生成-->
   </ul>
   <!--详细类目显示区-->
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="CategoryArea1" role="tabpanel" aria-labelledby="CategoryArea1-tab">
-
+      <!--此处代码由setSubcategories()方法生成-->
     </div>
   </div>
 
 
   <section class="tables">
     <div class="container-fluid">
-      <div class="row">
+      <div class="row itemsArea_SearchResult">
         <div class="col-lg-12 card">
           <div class="row">
             <div class="col-lg-3">
@@ -260,4 +299,72 @@
         $('#'+btn).tab('show');
         //$('#myTab a[href=tab1]').tab('show');//备选方案
     }
+
+    /*搜索 被评论对象*/
+    $('#searchItems').click(function(){
+        /*获取关键词*/
+        var itemKey = $('#itemsKey').val();
+
+        /*判断空值*/
+        if(itemKey == ''){
+            alert('搜索内容不能为空！');
+        }else{
+            $.ajax({
+                type: 'get',
+                url: '${request.contextPath }/items/searchByName/'+itemKey,//infos查所有
+                async: true,
+                dataType: 'json',
+                success: function(data) {
+                    $('.itemsArea_SearchResult').html("");
+                    console.log(data);
+                    var HTML_TXT="";
+                    $.each(data,function(index,element){
+                        var islike ="fa-heart-o";
+                        if(element['islike']==true){
+                            islike= "fa-heart"
+                            console.log("aaaaaaaaaa");
+                        }
+                        HTML_TXT +=
+                            /* 对象展示核心 Html 代码 */
+                            "<div class='col-lg-12 card'>"+
+                              "<div class='row'>"+
+                                "<div class='col-lg-3 itemBgImgStyle'>"+
+                                  "<img src='${request.contextPath }" + element['objectPicturePath']+ "' width='100%' height='100%'>"+
+                                "</div>"+
+                                "<div class='col-lg-9'>"+
+                                  "<h3 class='itemNameStyle'>"+
+                                     element['objectName']+
+                                  "</h3>"+
+                                  "<hr>"+
+                                  "<div class=''>"+
+                                     element['brief_introduction']+
+                                  "</div><br>"+
+                                  "<div class='ItemOperationArea'>"+
+                                    "<a class='likesIcon' href='javascript:void(0)' id='"+element['objectID']+"_likes'  value='"+element['objectID']+"' onclick='likesBtn(this)'>"+
+                                    "<li id='"+element['objectID']+"_likesIcon' class='fa "+ islike +"'>喜欢</li>"+
+                                    "</a>"+
+                                     element['likes']+
+                                  "</div>"+
+                                "</div>"+
+                              "</div>"+
+                            "</div>"+
+                            "<br>"
+                        ;
+                    });
+                    $('.itemsArea_SearchResult').append(HTML_TXT)//显示数据
+                },
+                error: function() {
+                    alert("无结果");
+                }
+            });
+        }
+    })
+    /*点赞功能*/
+    function likesBtn(likesBtnDom){
+        var id = likesBtnDom.id;
+        console.log(id);
+        $('#'+id+'Icon').toggleClass("fa-heart fa-heart-o");
+    }
 </script>
+
+<!-- World 界面 end-->

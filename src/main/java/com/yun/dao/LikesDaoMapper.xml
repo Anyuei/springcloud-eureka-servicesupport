@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--用户点赞信息 DDL
+CREATE TABLE `likes` (
+  `userID` varchar(255) NOT NULL COMMENT '点赞用户ID',
+  `likesObjectIDs` varchar(255) NOT NULL DEFAULT '' COMMENT '用户点赞对象ID集合',
+  PRIMARY KEY (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-->
+<mapper namespace="com.yun.dao.LikesDao">
+	<!--新增对象 测试通过 2019.4.2 -->
+	<insert id="insertLikes" parameterType="java.lang.String">
+		INSERT INTO likes(userID,likesObjectIDs)
+	    VALUES(#{userID},#{likesObjectIDs})
+	</insert>
+	<!--根据对象ID删除对象 测试通过 2019.4.2 -->
+	<delete id="deleteLikesByID">
+	    DELETE FROM likes WHERE userID=#{userID}
+	</delete>
+	<!--修改对象信息 测试通过 2019.4.2 -->
+	<update id="updateItemByID" >
+	    UPDATE
+		  likes
+	    SET
+        <if test="likesObjectIDs != null">likesObjectIDs=#{likesObjectIDs}</if>
+	    WHERE userID=#{userID}
+	</update>
+    <select id="retrieveLikesByID" resultType="Like">
+        SELECT * FROM likes WHERE userID = #{userID}
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

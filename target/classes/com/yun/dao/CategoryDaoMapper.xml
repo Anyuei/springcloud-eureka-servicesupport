@@ -64,7 +64,7 @@ CREATE TABLE `categorys` (
 
 	<!-- 根据类目名模糊查 测试通过 2019.3.25-->
 	<select id="retrieveCategoriesByName" resultType="Category" parameterType="java.lang.String">
-		SELECT * FROM categories WHERE categoryName LIKE CONCAT('%',#{categoryName},'%')
+		SELECT * FROM categories WHERE categoryName LIKE CONCAT('%',#{categoryName},'%') limit 20;
 	</select>
 
 	<!-- 根据父类目ID查 所有子类目 测试通过 2019.3.25-->

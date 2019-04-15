@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -38,13 +39,13 @@ class UserController {
      */
     @RequestMapping("/validationLogin")
     @ResponseBody//禁用把返回值解析为路径，而直接把返回结果加到HTTP响应体中
-    public String validationLogin(User user, HttpServletRequest request) {
+    public String validationLogin(User user, HttpServletRequest request,HttpSession session) {
         if (user.getUserNickname() != null && user.getUserPassword() != null) {
             User reallyUser = userService.retrieveUserByNickname(user.getUserNickname());
             if (reallyUser != null && reallyUser.getUserPassword().equals(user.getUserPassword())) {
                 String userNickname = reallyUser.getUserNickname();
                 System.out.println("USER:" + userNickname + " login success！["+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()) +"]");
-                request.getSession().setAttribute(userNickname, userNickname);
+                session.setAttribute(userNickname, userNickname);
                 return "success";
             }
         }
@@ -57,12 +58,15 @@ class UserController {
      * @return
      */
     @RequestMapping("/index/{userNickname}")
-    public String getMainPath(@PathVariable String userNickname,Model model,HttpServletRequest request) {
+    public String getMainPath(@PathVariable String userNickname,Model model,HttpServletRequest request,HttpSession session) {
         //当会话还有用户存有，可免密再次登录
-        if (request.getSession().getAttribute(userNickname)!=null&&!request.getSession().isNew()){
+        if (session.getAttribute(userNickname)!=null&&!session.isNew()){
             User reallyUser = userService.retrieveUserByNickname(userNickname);
             if (reallyUser!=null){
                 model.addAttribute("user", reallyUser);
+                reallyUser.setUserPassword("");
+                //把用户信息存入会话
+                session.setAttribute("currentUserInfo",reallyUser);
                 return "index";
             }
         }
