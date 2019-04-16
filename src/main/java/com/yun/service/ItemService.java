@@ -13,6 +13,12 @@ public interface ItemService {
     Item retrieveItemByID(Long objectID);
 
     /**
+     * 根据对象ID点赞
+     * @param objectID
+     * @return
+     */
+    String likeItem(String objectID,Long userID);
+    /**
      * 根据对象名模糊查对象
      * @param objectName
      * @return

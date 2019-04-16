@@ -259,7 +259,7 @@
         });
     }
     //获取类ID，类名，父类ID
-    //类目被点击后，刷新导航条，和数据区。在响应类目后面追加导航Nav及数据区追加类目。
+    //类目XXXX被点击后，刷新导航条，和数据区。在类目XXXX后面追加导航Nav及数据区追加类目。
     function setSubcategories(categoryID,categoryName,supCategoryID){
         console.log(categoryID,categoryName,supCategoryID);
         //父类导航Item，用于被子类追加导航
@@ -315,12 +315,13 @@
                 async: true,
                 dataType: 'json',
                 success: function(data) {
+                    //成功搜索后先清空，对象显示区
                     $('.itemsArea_SearchResult').html("");
                     console.log(data);
                     var HTML_TXT="";
                     $.each(data,function(index,element){
                         var islike ="fa-heart-o";
-                        /*用来判定当前对象是否被当前用户点赞过，一遍显示不同的点赞状态*/
+                        /*用来判定当前对象是否被当前用户点赞过，以便显示不同的点赞状态*/
                         if(element['islike']==true){
                             islike= "fa-heart"
                         }
@@ -340,10 +341,10 @@
                                      element['brief_introduction']+
                                   "</div><br>"+
                                   "<div class='ItemOperationArea'>"+
-                                    "<a class='likesIcon' href='javascript:void(0)' id='"+element['objectID']+"_likes'  value='"+element['objectID']+"' onclick='likesBtn(this)'>"+
-                                    "<li id='"+element['objectID']+"_likesIcon' class='fa "+ islike +"'>喜欢</li>"+
+                                    "<a class='likesIcon' href='javascript:void(0)' id='like_"+element['objectID']+"' onclick='likesBtn(this)'>"+
+                                    "<li id='like_"+element['objectID']+"_Icon' class='fa "+ islike +"'>喜欢</li>"+
                                     "</a>"+
-                                     element['likes']+
+                                    "<span id='like_"+element['objectID']+"_Count'>"+element['likes']+"</span>"+
                                   "</div>"+
                                 "</div>"+
                               "</div>"+
@@ -361,9 +362,27 @@
     })
     /*点赞功能*/
     function likesBtn(likesBtnDom){
-        var id = likesBtnDom.id;
-        console.log(id);
-        $('#'+id+'Icon').toggleClass("fa-heart fa-heart-o");
+        var objectID_likes = likesBtnDom.id;
+        var objectID = objectID_likes.substring(5,objectID_likes.length);//截取被点赞对象ID
+        console.log(objectID);
+        $.ajax({
+              type: 'get',
+              url: '${request.contextPath }/items/like?objectID='+objectID,//infos查所有,
+              async: true,
+              dataType: 'text',
+              cache: false,
+              success: function (data) {
+                  var count = $('#'+objectID_likes+'_Count').text();
+                  var countInt =parseInt(count);
+                  if(data=="\"like\""){
+                      $('#'+objectID_likes+'_Icon').removeClass("fa-heart-o").addClass("fa-heart");
+                      $('#'+objectID_likes+'_Count').text(countInt+1);
+                  }else{
+                      $('#'+objectID_likes+'_Icon').removeClass("fa-heart").addClass("fa-heart-o");
+                      $('#'+objectID_likes+'_Count').text(countInt-1);
+                  }
+              }
+        })
     }
 </script>
 

@@ -13,8 +13,8 @@ public class Item {
     private Long objectID;
     private String objectName;
     private String details;
-    private String dislikes;
-    private String likes;
+    private Integer dislikes;
+    private Integer likes;
     private String viewTimes;
     private String commentsTimes;
     private Long categoryID;
@@ -27,7 +27,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(Long objectID, String objectName, String details, String dislikes, String likes, String viewTimes, String commentsTimes, Long categoryID, String createUser, Date createTime, Integer state, String objectPicturePath, String brief_introduction,Boolean islike) {
+    public Item(Long objectID, String objectName, String details, Integer dislikes, Integer likes, String viewTimes, String commentsTimes, Long categoryID, String createUser, Date createTime, Integer state, String objectPicturePath, String brief_introduction,Boolean islike) {
         this.objectID = objectID;
         this.objectName = objectName;
         this.details = details;
@@ -88,19 +88,19 @@ public class Item {
         this.details = details;
     }
 
-    public String getDislikes() {
+    public Integer getDislikes() {
         return dislikes;
     }
 
-    public void setDislikes(String dislikes) {
+    public void setDislikes(Integer dislikes) {
         this.dislikes = dislikes;
     }
 
-    public String getLikes() {
+    public Integer getLikes() {
         return likes;
     }
 
-    public void setLikes(String likes) {
+    public void setLikes(Integer likes) {
         this.likes = likes;
     }
 

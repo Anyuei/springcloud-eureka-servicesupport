@@ -59,7 +59,7 @@ CREATE TABLE `object` (
 		DELETE FROM object WHERE categoryID=#{categoryID}
 	</delete>
 	<!--修改对象信息 测试通过 2019.4.2 -->
-	<update id="updateItemByID" >
+	<update id="updateItemByID" parameterType="Item">
 	    UPDATE
 		object
 	    SET
@@ -75,7 +75,7 @@ CREATE TABLE `object` (
 		<if test="state != null">state=#{state},</if>
 		<if test="objectPicturePath != null">objectPicturePath=#{objectPicturePath},</if>
         <if test="brief_introduction != null">brief_introduction=#{brief_introduction}</if>
-	    WHERE userID=#{userID}
+	    WHERE objectID = #{objectID}
 	</update>
 
     <!--根据ID查询对象 测试通过 2019.4.2 -->

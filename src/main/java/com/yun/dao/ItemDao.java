@@ -30,4 +30,5 @@ public interface ItemDao {
      * @return 所有对象
      */
     List<Item> retrieveItemsInStateByCategoryID(Long categoryID,Integer state);
+
 }

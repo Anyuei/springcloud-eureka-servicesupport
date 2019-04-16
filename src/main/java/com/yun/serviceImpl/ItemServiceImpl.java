@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -91,5 +92,42 @@ public class ItemServiceImpl implements ItemService {
             objectIDs.add(like.getObjectID());
         }
         return objectIDs;
+    }
+
+    /**
+     * 一个方法两个功能 该方法被调用后，先查询是否用户 userID 是否对 objectID_str 点过赞
+     * 如果点过，那么取消点赞，并返回前台 点赞图标
+     * 如果没点过，那么点赞
+     * @param objectID_str
+     * @param userID
+     * @return
+     */
+    public String likeItem(String objectID_str,Long userID){
+        Long objectID = Long.parseLong(objectID_str);
+        Like like = likesDao.retrieveLikeByID(userID,objectID);
+        Item item =itemDao.retrieveItemByID(objectID);
+        System.out.println(like);
+        int count = item.getLikes();
+        //若已点过赞，则取消赞
+        if (like!=null&&like.getObjectID()!=null){
+            likesDao.deleteLikeByID(userID,objectID);
+
+            item.setLikes(count-1);
+            itemDao.updateItemByID(item);
+
+            return "dislike";
+        }else{//否者执行点赞
+            like=new Like(null,userID,objectID,new Date());
+
+            item.setLikes(count+1);
+            itemDao.updateItemByID(item);
+
+            int state = likesDao.insertLike(like);
+            if (state==1){
+                return "like";
+            }else {
+                return "dislike";
+            }
+        }
     }
 }
