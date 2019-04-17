@@ -23,11 +23,11 @@ public class Item {
     private Integer state;
     private String objectPicturePath;
     private String brief_introduction;
-    private Boolean islike=false;
+    private Integer islike=0;
     public Item() {
     }
 
-    public Item(Long objectID, String objectName, String details, Integer dislikes, Integer likes, String viewTimes, String commentsTimes, Long categoryID, String createUser, Date createTime, Integer state, String objectPicturePath, String brief_introduction,Boolean islike) {
+    public Item(Long objectID, String objectName, String details, Integer dislikes, Integer likes, String viewTimes, String commentsTimes, Long categoryID, String createUser, Date createTime, Integer state, String objectPicturePath, String brief_introduction, Integer islike) {
         this.objectID = objectID;
         this.objectName = objectName;
         this.details = details;
@@ -41,7 +41,7 @@ public class Item {
         this.state = state;
         this.objectPicturePath = objectPicturePath;
         this.brief_introduction = brief_introduction;
-        this.islike=islike;
+        this.islike = islike;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class Item {
                 "objectID=" + objectID +
                 ", objectName='" + objectName + '\'' +
                 ", details='" + details + '\'' +
-                ", dislikes='" + dislikes + '\'' +
-                ", likes='" + likes + '\'' +
+                ", dislikes=" + dislikes +
+                ", likes=" + likes +
                 ", viewTimes='" + viewTimes + '\'' +
                 ", commentsTimes='" + commentsTimes + '\'' +
                 ", categoryID=" + categoryID +
@@ -60,7 +60,7 @@ public class Item {
                 ", state=" + state +
                 ", objectPicturePath='" + objectPicturePath + '\'' +
                 ", brief_introduction='" + brief_introduction + '\'' +
-                ", islike='" + islike + '\'' +
+                ", islike=" + islike +
                 '}';
     }
 
@@ -167,11 +167,12 @@ public class Item {
     public void setBrief_introduction(String brief_introduction) {
         this.brief_introduction = brief_introduction;
     }
-    public Boolean getIslike() {
+
+    public Integer getIslike() {
         return islike;
     }
 
-    public void setIslike(Boolean islike) {
+    public void setIslike(Integer islike) {
         this.islike = islike;
     }
 }

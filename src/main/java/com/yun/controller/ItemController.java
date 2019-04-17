@@ -51,10 +51,12 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/like")
-    public @ResponseBody String likeItem(@RequestParam("objectID")String objectID, HttpSession session){
+    public @ResponseBody String likeItem(@RequestParam("objectID")String objectID,
+                                         @RequestParam("likeState")String likeState,
+                                         HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
         System.out.println("55---"+user);
         System.out.println("56---"+objectID);
-        return itemService.likeItem(objectID,user.getUserID());
+        return itemService.likeItem(objectID,user.getUserID(),likeState);
     }
 }

@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<!--用户点赞信息 DDL
+<!--用户态度信息 DDL
 CREATE TABLE `likes` (
   `likesID` bigint(20) NOT NULL AUTO_INCREMENT,
   `userID` int(11) NOT NULL COMMENT '点赞用户ID',
   `objectID` bigint(11) NOT NULL COMMENT '用户点赞对象ID集合',
-  `likeTime` datetime NOT NULL COMMENT '点赞时间',
+  `likeTime` datetime NOT NULL COMMENT '发表态度时间',
   PRIMARY KEY (`likesID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 -->
 <mapper namespace="com.yun.dao.LikesDao">
-	<!--新增用户点赞记录 测试通过 2019.4.16 -->
+	<!--新增用户态度记录 测试通过 2019.4.16 -->
 	<insert id="insertLike" parameterType="Like" useGeneratedKeys="true" keyProperty="likesID">
-		INSERT INTO likes(userID,objectID,likeTime)
-	    VALUES(#{userID},#{objectID},#{likeTime})
+		INSERT INTO likes(userID,objectID,stateTime,stateOfMind)
+	    VALUES(#{userID},#{objectID},#{stateTime},#{stateOfMind})
 	</insert>
-	<!--删除用户点赞记录 测试通过 2019.4.16 -->
+	<!--删除用户态度记录 测试通过 2019.4.16 -->
 	<delete id="deleteLikeByID">
 	    DELETE FROM likes WHERE userID=#{userID} AND objectID=#{objectID}
 	</delete>
+    <!--修改态度信息 测试通过 2019.4.17 -->
+    <update id="updateLikeByID" parameterType="Like">
+        UPDATE
+        likes
+        SET
+        <if test="userID != null">userID=#{userID},</if>
+        <if test="objectID != null">objectID=#{objectID},</if>
+        <if test="stateTime != null">stateTime=#{stateTime},</if>
+        <if test="stateOfMind != null">stateOfMind=#{stateOfMind}</if>
+        WHERE likesID = #{likesID}
+    </update>
     <!--查询某用户所有点赞记录 测试通过 2019.4.16-->
     <select id="retrieveLikesByID" resultType="Like">
         SELECT * FROM likes WHERE userID = #{userID}

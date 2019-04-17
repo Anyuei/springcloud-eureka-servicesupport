@@ -1,17 +1,18 @@
 package com.yun.serviceImpl;
 
+import com.sun.imageio.plugins.common.I18N;
 import com.yun.dao.ItemDao;
 import com.yun.dao.LikesDao;
 import com.yun.entity.Item;
 import com.yun.entity.Like;
 import com.yun.service.ItemService;
-import com.yun.utils.SessionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -53,12 +54,10 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> searchByName(String objectName,Long userID){
         List<Item> items = itemDao.retrieveItemsByName(objectName);
         //查询当前用户点赞对象ID集合
-        List<Long> objectIDs = getObjectIDsOfUserLikesByUserID(userID);
+        HashMap<Long,Integer> map = getObjectIDAndlikestateMapOfUserLikesByUserID(userID);
+        //把用户的点赞状态分别赋值给所查询的对象，前台展示需要知道每个对象的当前用户的点赞状态
         for (Item item : items) {
-            //如果用户点赞对象ID集合包含当前对象ID，则把当前对象被点赞状态设为true，该属性将会被前端用来设置前端对象的点赞状态
-            if (objectIDs.contains(item.getObjectID())){
-                item.setIslike(true);
-            }
+            item.setIslike(map.get(item.getObjectID()));
         }
         return items;
     }
@@ -85,49 +84,58 @@ public class ItemServiceImpl implements ItemService {
      * @param userID
      * @return
      */
-    public List<Long> getObjectIDsOfUserLikesByUserID(Long userID){
+    public HashMap<Long,Integer> getObjectIDAndlikestateMapOfUserLikesByUserID(Long userID){
         List<Like> likes = likesDao.retrieveLikesByID(userID);
+        HashMap<Long,Integer> map = new HashMap<>();
         List<Long> objectIDs=new ArrayList<>();
         for (Like like : likes) {
-            objectIDs.add(like.getObjectID());
+            map.put(like.getObjectID(),like.getStateOfMind());
         }
-        return objectIDs;
+        return map;
     }
 
     /**
-     * 一个方法两个功能 该方法被调用后，先查询是否用户 userID 是否对 objectID_str 点过赞
-     * 如果点过，那么取消点赞，并返回前台 点赞图标
-     * 如果没点过，那么点赞
+     * 用户：userID对事物：objectID_str表达态度操作，likeState_str(-1:不喜欢; 0:无感; 1：喜欢;)
      * @param objectID_str
      * @param userID
+     * @param likeState_str
      * @return
      */
-    public String likeItem(String objectID_str,Long userID){
+    public String likeItem(String objectID_str, Long userID, String likeState_str){
         Long objectID = Long.parseLong(objectID_str);
+        Integer likeState = Integer.parseInt(likeState_str);
+        //先查询此用户对此对象的态度
         Like like = likesDao.retrieveLikeByID(userID,objectID);
-        Item item =itemDao.retrieveItemByID(objectID);
-        System.out.println(like);
-        int count = item.getLikes();
-        //若已点过赞，则取消赞
-        if (like!=null&&like.getObjectID()!=null){
-            likesDao.deleteLikeByID(userID,objectID);
-
-            item.setLikes(count-1);
-            itemDao.updateItemByID(item);
-
-            return "dislike";
-        }else{//否者执行点赞
-            like=new Like(null,userID,objectID,new Date());
-
-            item.setLikes(count+1);
-            itemDao.updateItemByID(item);
-
-            int state = likesDao.insertLike(like);
-            if (state==1){
-                return "like";
-            }else {
-                return "dislike";
-            }
+        //如果用户之前未发表过态度，初始化态度
+        if (like==null){
+            like=new Like(null,userID,objectID,new Date(),0);
+            likesDao.insertLike(like);
         }
+        //如果当前与之前态度一致，直接返回
+        if (like.getStateOfMind()==likeState){
+            return likeState_str;
+        }
+        Item item =itemDao.retrieveItemByID(objectID);
+        //likeState(-1:不喜欢; 0:无感; 1：喜欢;)
+        if (like.getStateOfMind()==0 && likeState==1){
+            item.setLikes(item.getLikes()+likeState);
+        }else if (like.getStateOfMind()==0&&likeState==-1){
+            item.setDislikes(item.getDislikes()-likeState);
+        }else if (like.getStateOfMind()==1&&likeState==0){
+            item.setLikes(item.getLikes()-1);
+        }else if (like.getStateOfMind()==-1&&likeState==0){
+            item.setDislikes(item.getDislikes()-1);
+        }else{
+            item.setLikes(item.getLikes()+likeState);
+            item.setDislikes(item.getDislikes()-likeState);
+        }
+        //获取对象的喜欢数与不喜欢数并更新
+        like.setStateTime(new Date());
+        like.setStateOfMind(likeState);
+
+        likesDao.updateLikeByID(like);
+        itemDao.updateItemByID(item);
+
+        return likeState_str;
     }
 }

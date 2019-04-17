@@ -14,12 +14,8 @@
   }
   .categoriesBtnStyle:hover{
     color: #ebebeb !important;
-    padding: 11px 28px;
-    font-size: 16px;
-    line-height: 0.5;
-    border-radius: 18px;
+    font-size: 17px;
     background-color:#9fcdff;
-    border-color: #eef5f9;
   }
   /*对象标题样式*/
   .itemNameStyle{
@@ -45,6 +41,7 @@
     width: 105%;
     height: 105%;
   }
+  /*点赞图标样式*/
   .likesIcon{
     color: #ba0000;
   }
@@ -54,9 +51,28 @@
   .likesIcon:focus{
     color: #f00;
   }
+  /*不看好图标样式*/
+  .dislikesIcon{
+    color: #235724;
+  }
+  .dislikesIcon:hover{
+    color: #2a762b;
+  }
+  .dislikesIcon:focus{
+    color: #309b31;
+  }
+
+  /*搜索结果 操作栏样式（点赞等）*/
   .ItemOperationArea{
     position:absolute;
     bottom:5px;
+  }
+  /*点赞数字样式*/
+  .likeCountNum{
+    padding: 0px 5px 0px 10px;
+    color: #9fcdff;
+    font-size: larger;
+    font-style: italic;
   }
 </style>
   <!-- 评论区-->
@@ -115,110 +131,11 @@
   <section class="tables">
     <div class="container-fluid">
       <div class="row itemsArea_SearchResult">
-        <div class="col-lg-12 card">
-          <div class="row">
-            <div class="col-lg-3">
-              <img src="${request.contextPath }/img/objectsImages/star_img/ycy.jpeg" width="100%" height="100%">
-            </div>
-            <div class="col-lg-9">
-              <div class="">
-                12312313
-              </div>
-              <hr>
-              <div class="">
-                11111111111111
-              </div>
-            </div>
-          </div>
-        </div>
-        <br>
-          <div class="col-lg-12 card">
-            <div class="row">
-              <div class="col-lg-3">
-                <img src="${request.contextPath }/img/objectsImages/performer_img/gakki_Main_bg.jpg" width="100%" height="100%">
-              </div>
-              <div class="col-lg-9">
-                <div class="">
-                  gakki
-                </div>
-                <hr>
-                <div class="">
-                  11111111111111
-                </div>
-              </div>
-            </div>
-          </div>
-
-<!--        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-close">
-              <div class="dropdown">
-                <button type="button" id="closeCard4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                <div aria-labelledby="closeCard4" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
-              </div>
-            </div>
-            <div class="card-header d-flex align-items-center">
-              <h3 class="h4">Compact Table</h3>
-            </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                  <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter      </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">6</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter      </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>-->
+        <!--被评论对象 搜索结果展示区-->
       </div>
     </div>
   </section>
-  <!-- Page Footer-->
-<script>
+  <script>
     /* 初次进入加载根类目 */
     $(function() {
         getCategories(1);//根类目ID为1
@@ -258,6 +175,8 @@
             }
         });
     }
+
+
     //获取类ID，类名，父类ID
     //类目XXXX被点击后，刷新导航条，和数据区。在类目XXXX后面追加导航Nav及数据区追加类目。
     function setSubcategories(categoryID,categoryName,supCategoryID){
@@ -293,12 +212,15 @@
         getCategories(categoryID);//获取类目，并追加数据
         activeBtn(categoryNavID);//激活Button
     }
+
+
 /*    <a class="nav-link active show" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">*/
     //根据tab的ID激活tab
     function activeBtn(btn){
         $('#'+btn).tab('show');
         //$('#myTab a[href=tab1]').tab('show');//备选方案
     }
+
 
     /*搜索 被评论对象*/
     $('#searchItems').click(function(){
@@ -321,30 +243,51 @@
                     var HTML_TXT="";
                     $.each(data,function(index,element){
                         var islike ="fa-heart-o";
-                        /*用来判定当前对象是否被当前用户点赞过，以便显示不同的点赞状态*/
-                        if(element['islike']==true){
-                            islike= "fa-heart"
+                        var isdislike ="fa-thumbs-o-down";
+                        /*用来判定当前对象是否被当前用户发表过态度，以便显示不同的态度状态*/
+                        if(element['islike']==-1){
+                            isdislike="fa-thumbs-down";
+                        }
+                        if(element['islike']==1){
+                            islike= "fa-heart";
                         }
                         HTML_TXT +=
                             /* 对象展示核心 Html 代码 */
                             "<div class='col-lg-12 card'>"+
                               "<div class='row'>"+
                                 "<div class='col-lg-3 itemBgImgStyle'>"+
+                                  //图片区
                                   "<img src='${request.contextPath }" + element['objectPicturePath']+ "' width='100%' height='100%'>"+
                                 "</div>"+
                                 "<div class='col-lg-9'>"+
+                                  //对象名
                                   "<h3 class='itemNameStyle'>"+
-                                     element['objectName']+
+                                     element['objectName']+//对象名
                                   "</h3>"+
                                   "<hr>"+
+                                  //简介
                                   "<div class=''>"+
                                      element['brief_introduction']+
                                   "</div><br>"+
+                                  //对象操作区
                                   "<div class='ItemOperationArea'>"+
+                                    //喜欢按钮---------------------------------------------------------
                                     "<a class='likesIcon' href='javascript:void(0)' id='like_"+element['objectID']+"' onclick='likesBtn(this)'>"+
                                     "<li id='like_"+element['objectID']+"_Icon' class='fa "+ islike +"'>喜欢</li>"+
                                     "</a>"+
-                                    "<span id='like_"+element['objectID']+"_Count'>"+element['likes']+"</span>"+
+                                    //点赞数量
+                                    "<span id='like_"+element['objectID']+"_Count' class='likeCountNum'>"+element['likes']+"</span>"+
+                                    //不看好按钮-------------------------------------------------------
+                                    "<a class='dislikesIcon' href='javascript:void(0)' id='dislike_"+element['objectID']+"' onclick='likesBtn(this)'>"+
+                                    "<li id='dislike_"+element['objectID']+"_Icon' class='fa "+ isdislike +"'>不看好</li>"+
+                                    "</a>"+
+                                    //不看好数量
+                                    "<span id='dislike_"+element['objectID']+"_Count' class='likeCountNum'>"+element['dislikes']+"</span>"+
+                                    //浏览量显示-------------------------------------------------------
+                                    "<li id='' class='fa fa-eye'>浏览量</li>"+
+                                    "<span id='' class=''>"+element['viewTimes']+"</span>"+
+                                    //创建者显示-------------------------------------------------------
+                                    "<span id='' class=''>"+element['likes']+"</span>"+
                                   "</div>"+
                                 "</div>"+
                               "</div>"+
@@ -360,30 +303,90 @@
             });
         }
     })
+
+
     /*点赞功能*/
     function likesBtn(likesBtnDom){
         var objectID_likes = likesBtnDom.id;
-        var objectID = objectID_likes.substring(5,objectID_likes.length);//截取被点赞对象ID
+        var objectID = objectID_likes.split("_")[1];//截取被点赞对象ID
+        var iconClass = $('#'+objectID_likes+'_Icon').attr("class").split(" ")[1];
+        var antitude="0";
+        if (iconClass==="fa-heart-o") {
+            antitude="1";
+        }
+        if (iconClass==="fa-thumbs-o-down") {
+            antitude="-1";
+        }
         console.log(objectID);
         $.ajax({
               type: 'get',
-              url: '${request.contextPath }/items/like?objectID='+objectID,//infos查所有,
+              url: '${request.contextPath }/items/like?objectID='+objectID+'&likeState='+antitude,//确定被操作的对象objectID，及需要变动的状态antitude
               async: true,
               dataType: 'text',
               cache: false,
               success: function (data) {
+
                   var count = $('#'+objectID_likes+'_Count').text();
                   var countInt =parseInt(count);
-                  if(data=="\"like\""){
-                      $('#'+objectID_likes+'_Icon').removeClass("fa-heart-o").addClass("fa-heart");
-                      $('#'+objectID_likes+'_Count').text(countInt+1);
-                  }else{
-                      $('#'+objectID_likes+'_Icon').removeClass("fa-heart").addClass("fa-heart-o");
+                  console.log("number"+countInt);
+                  $('#'+objectID_likes+'_Icon').removeClass(iconClass);
+                  if(data==="\"1\""){
+                      console.log("333");
+                      Like(objectID_likes);
+                  }else if(data==="\"-1\""){
+                      console.log("336");
+                      Dislike(objectID_likes);
+                  }else if(data==="\"0\""){
+                      console.log("339");
+                      if (objectID_likes.split("_")[0]==="like"){
+                          console.log("341");
+                          $('#'+objectID_likes+'_Icon').addClass("fa-heart-o");
+                      }else{
+                          console.log("344");
+                          $('#'+objectID_likes+'_Icon').addClass("fa-thumbs-o-down");
+                      }
                       $('#'+objectID_likes+'_Count').text(countInt-1);
                   }
               }
         })
     }
-</script>
+    /*点击不看好按钮时的操作*/
+    function Dislike(id_dislike_str) {
+        var id_like_str = id_dislike_str.substring(3,id_dislike_str.length);
+        /*如果此时喜欢按钮被激活，取消激活，且数量减一*/
+        var domIndex;
+        if ($('#'+id_like_str+'_Icon').attr("class").split(" ")[1]==="fa-heart") {
+            console.log("355");
+            domIndex = $('#'+id_like_str+'_Count');
+            var countlike = parseInt(domIndex.text());
+            domIndex.text(countlike-1);
+            $('#'+id_like_str+'_Icon').removeClass("fa-heart").addClass("fa-heart-o");
+        }
+        /*不看好按钮激活，数量加一*/
+        domIndex = $('#'+id_dislike_str+'_Count');
+        var countdislike = parseInt(domIndex.text());
+        domIndex.text(countdislike+1);
+        $('#'+id_dislike_str+'_Icon').removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
+    }
+    /*点击喜欢按钮时的操作*/
+    function Like(id_like_str) {
+        var id_dislike_str = 'dis'+id_like_str;
+        var domIndex;
+        /*如果此时不看好按钮被激活，取消激活，且数量减一*/
+        if ($('#'+id_dislike_str+'_Icon').attr("class").split(" ")[1]==="fa-thumbs-down") {
+            console.log("367");
+            domIndex = $('#'+id_dislike_str+'_Count');
+            var countdislike = parseInt(domIndex.text());
+            domIndex.text(countdislike-1);
+            $('#'+id_dislike_str+'_Icon').removeClass("fa-thumbs-down").addClass("fa-thumbs-o-down");
+        }
+        /*喜欢按钮激活，数量加一*/
+        domIndex =$('#'+id_like_str+'_Count');
+        var countlike = parseInt(domIndex.text());
+        domIndex.text(countlike+1);
+        $('#'+id_like_str+'_Icon').removeClass("fa-heart-o").addClass("fa-heart");
+    }
+    /*搜索结果对象中 操作区的评论按钮功能*/
+  </script>
 
 <!-- World 界面 end-->

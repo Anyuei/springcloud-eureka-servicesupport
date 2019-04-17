@@ -6,32 +6,36 @@ import java.util.Date;
 /**
  * @version : V1.0
  * @ClassName: Like
- * @Description: 点赞信息实体类
+ * @Description: 态度 实体类 喜欢状态 0-无感 1-喜欢 2-不看好
  * @Auther: Anakki
  * @Date: 2019/3/22 23:59
  */
 public class Like implements Serializable {
     private Long likesID;
-    private Long userID;//点赞用户ID
-    private Long objectID;//点赞用户ID
-    private Date likeTime;//点赞时间
+    private Long userID;//用户ID
+    private Long objectID;//对象ID
+    private Date stateTime;//发表状态时间
+    private Integer stateOfMind;//心理状态
     public Like() {
     }
+
     @Override
     public String toString() {
         return "Like{" +
                 "likesID=" + likesID +
                 ", userID=" + userID +
                 ", objectID=" + objectID +
-                ", likeTime=" + likeTime +
+                ", stateTime=" + stateTime +
+                ", stateOfMind=" + stateOfMind +
                 '}';
     }
 
-    public Like(Long likesID, Long userID, Long objectID, Date likeTime) {
+    public Like(Long likesID, Long userID, Long objectID, Date stateTime, Integer stateOfMind) {
         this.likesID = likesID;
         this.userID = userID;
         this.objectID = objectID;
-        this.likeTime = likeTime;
+        this.stateTime = stateTime;
+        this.stateOfMind = stateOfMind;
     }
 
     public Long getLikesID() {
@@ -58,11 +62,19 @@ public class Like implements Serializable {
         this.objectID = objectID;
     }
 
-    public Date getLikeTime() {
-        return likeTime;
+    public Date getStateTime() {
+        return stateTime;
     }
 
-    public void setLikeTime(Date likeTime) {
-        this.likeTime = likeTime;
+    public void setStateTime(Date stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public Integer getStateOfMind() {
+        return stateOfMind;
+    }
+
+    public void setStateOfMind(Integer stateOfMind) {
+        this.stateOfMind = stateOfMind;
     }
 }

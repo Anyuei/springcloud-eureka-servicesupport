@@ -14,6 +14,7 @@ public interface LikesDao {
     Integer insertLike(Like like);
     Integer deleteLikeByID(@Param("userID") Long userID,@Param("objectID")Long objectID);
     List<Like> retrieveLikesByID(Long userID);
+    Integer updateLikeByID(Like like);
 
     /**
      * 查询某用户某点赞记录

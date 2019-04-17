@@ -17,7 +17,7 @@ public interface ItemService {
      * @param objectID
      * @return
      */
-    String likeItem(String objectID,Long userID);
+    String likeItem(String objectID,Long userID,String likeState);
     /**
      * 根据对象名模糊查对象
      * @param objectName
