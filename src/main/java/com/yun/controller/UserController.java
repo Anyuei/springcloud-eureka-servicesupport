@@ -34,12 +34,12 @@ class UserController {
     /**
      * 登录异步验证
      * @param user
-     * @param request
+     * @param session
      * @return
      */
     @RequestMapping("/validationLogin")
     @ResponseBody//禁用把返回值解析为路径，而直接把返回结果加到HTTP响应体中
-    public String validationLogin(User user, HttpServletRequest request,HttpSession session) {
+    public String validationLogin(User user,HttpSession session) {
         if (user.getUserNickname() != null && user.getUserPassword() != null) {
             User reallyUser = userService.retrieveUserByNickname(user.getUserNickname());
             if (reallyUser != null && reallyUser.getUserPassword().equals(user.getUserPassword())) {
@@ -55,10 +55,12 @@ class UserController {
     /**
      * 用户主界面
      * @param userNickname
+     * @param model
+     * @param session
      * @return
      */
     @RequestMapping("/index/{userNickname}")
-    public String getMainPath(@PathVariable String userNickname,Model model,HttpServletRequest request,HttpSession session) {
+    public String getMainPath(@PathVariable String userNickname,Model model,HttpSession session) {
         //当会话还有用户存有，可免密再次登录
         if (session.getAttribute(userNickname)!=null&&!session.isNew()){
             User reallyUser = userService.retrieveUserByNickname(userNickname);
@@ -114,7 +116,7 @@ class UserController {
             return "nickname_exists";
         }
         return "fail";
-        //识别非法用户名（此处需求）
+        //识别非法用户名（此处需求还需要完成）
     }
 }
 

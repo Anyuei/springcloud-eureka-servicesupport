@@ -18,12 +18,21 @@ public interface ItemService {
      * @return
      */
     String likeItem(String objectID,Long userID,String likeState);
+
+    /**
+     * 根据对象名精确查对象
+     * @param objectName
+     * @param userID
+     * @return
+     */
+    Item searchItemByName(String objectName,Long userID);
+
     /**
      * 根据对象名模糊查对象
      * @param objectName
      * @return
      */
-    List<Item> searchByName(String objectName,Long userID);
+    List<Item> searchItemsByName(String objectName,Long userID);
     /**
      * 根据对象的所属类目查询对象信息
      * @param categoryID 类目ID

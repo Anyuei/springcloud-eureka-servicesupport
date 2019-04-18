@@ -36,7 +36,7 @@ public class ItemController {
     @RequestMapping("/searchByName/{itemName}")
     public @ResponseBody List<Item> searchItems(@PathVariable String itemName, HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
-        List<Item> items = itemService.searchByName(itemName,user.getUserID());
+        List<Item> items = itemService.searchItemsByName(itemName,user.getUserID());
         if (!items.isEmpty()){
             return items;
         }else {
@@ -45,7 +45,7 @@ public class ItemController {
     }
 
     /**
-     * 处理点赞请求
+     * 处理用户对 对象的 态度状态 请求
      * @param objectID
      * @param session
      * @return
@@ -55,8 +55,6 @@ public class ItemController {
                                          @RequestParam("likeState")String likeState,
                                          HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
-        System.out.println("55---"+user);
-        System.out.println("56---"+objectID);
         return itemService.likeItem(objectID,user.getUserID(),likeState);
     }
 }

@@ -50,11 +50,10 @@ public class CategoryController {
     /**
      * 查找子类目
      * @param supCategoryID
-     * @param model
      * @return
      */
     @RequestMapping("/getSubCategories")
-    public @ResponseBody List<Category> getCategories(@RequestParam("supCategoryID")Long supCategoryID, Model model){
+    public @ResponseBody List<Category> getCategories(@RequestParam("supCategoryID")Long supCategoryID){
         List<Category> categoriesList =  categoryService.retrieveCategoriesBySupID(supCategoryID);
         if (categoriesList==null||categoriesList.size()==0);
         return categoriesList;

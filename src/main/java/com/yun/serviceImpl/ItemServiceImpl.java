@@ -45,17 +45,30 @@ public class ItemServiceImpl implements ItemService {
     public Item retrieveItemByID(Long objectID){
         return itemDao.retrieveItemByID(objectID);
     }
-
+    /**
+     * 根据对象名精确查对象
+     * @param objectName
+     * @param userID
+     * @return
+     */
+    public Item searchItemByName(String objectName,Long userID){
+        Item item = itemDao.retrieveItemByName(objectName);
+        //查询当前用户对此对象ID发表的态度状态
+        Like like = likesDao.retrieveLikeByID(userID,item.getObjectID());
+        //把用户的态度状态赋值给所查询的对象，前台展示需要知道对象的当前用户的态度状态
+        item.setIslike(like.getStateOfMind());
+        return item;
+    }
     /**
      * 根据对象名模糊查对象
      * @param objectName
      * @return
      */
-    public List<Item> searchByName(String objectName,Long userID){
+    public List<Item> searchItemsByName(String objectName,Long userID){
         List<Item> items = itemDao.retrieveItemsByName(objectName);
-        //查询当前用户点赞对象ID集合
+        //查询当前用户对所有类似此对象name发表的态度状态
         HashMap<Long,Integer> map = getObjectIDAndlikestateMapOfUserLikesByUserID(userID);
-        //把用户的点赞状态分别赋值给所查询的对象，前台展示需要知道每个对象的当前用户的点赞状态
+        //把用户的态度状态分别赋值给所查询的对象，前台展示需要知道每个对象的当前用户的态度状态
         for (Item item : items) {
             item.setIslike(map.get(item.getObjectID()));
         }

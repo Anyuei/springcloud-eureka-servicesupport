@@ -80,21 +80,27 @@ CREATE TABLE `object` (
 
     <!--根据ID查询对象 测试通过 2019.4.2 -->
 	<select id="retrieveItemByID" resultType="Item" parameterType="java.lang.Long">
-		SELECT * FROM object WHERE objectID = #{objectID}
+		SELECT * FROM object WHERE objectID = #{objectID};
 	</select>
-    <!--根据ID查询对象 测试通过 2019.4.14 -->
+    
+    <!--根据对象名精确对象 测试通过 2019.4.14 -->
+    <select id="retrieveItemByName" resultType="Item" parameterType="java.lang.String">
+        SELECT * FROM object WHERE objectName =#{objectName};
+    </select>
+    
+    <!--根据对象名模糊查询对象 测试通过 2019.4.14 -->
     <select id="retrieveItemsByName" resultType="Item" parameterType="java.lang.String">
         SELECT * FROM object WHERE objectName LIKE CONCAT('%',#{objectName},'%') LIMIT 10;
     </select>
 
 	<!-- 根据某类目下的所有对象 测试通过 2019.3.25-->
 	<select id="retrieveItemsByCategoryID" resultType="Item">
-		SELECT * FROM object WHERE categoryID = #{categoryID}
+		SELECT * FROM object WHERE categoryID = #{categoryID};
 	</select>
 
 	<!-- 根据对象的所属类目，查询处于某状态对象的信息。 测试通过 2019.4.2-->
 	<select id="retrieveItemsInStateByCategoryID" resultType="Item" parameterType="java.lang.String">
-		SELECT * FROM object WHERE categoryID =  #{0} and state = #{1}
+		SELECT * FROM object WHERE categoryID =  #{0} and state = #{1};
 	</select>
 </mapper>
 
