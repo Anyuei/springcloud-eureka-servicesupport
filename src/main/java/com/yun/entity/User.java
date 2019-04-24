@@ -1,8 +1,9 @@
 package com.yun.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
     long userID;
     String userName;
     String userNickname;

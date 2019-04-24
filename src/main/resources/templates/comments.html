@@ -242,6 +242,7 @@
                     console.log(data);
                     var HTML_TXT="";
                     $.each(data,function(index,element){
+                        var objectPicturePath = element['objectPicturePath'].split(",")[0];
                         var islike ="fa-heart-o";
                         var isdislike ="fa-thumbs-o-down";
                         /*用来判定当前对象是否被当前用户发表过态度，以便显示不同的态度状态*/
@@ -257,7 +258,9 @@
                               "<div class='row'>"+
                                 "<div class='col-lg-3 itemBgImgStyle'>"+
                                   //图片区
-                                  "<img src='${request.contextPath }" + element['objectPicturePath']+ "' width='100%' height='100%'>"+
+                                  "<a href='${request.contextPath }/world/"+element['objectName']+"'>"+
+                                    "<img src='${request.contextPath }" + objectPicturePath + "' width='100%' height='100%'>"+
+                                  "</a>"+
                                 "</div>"+
                                 "<div class='col-lg-9'>"+
                                   //对象名

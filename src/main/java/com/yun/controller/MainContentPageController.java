@@ -25,9 +25,14 @@ public class MainContentPageController {
     private ItemService itemService;
 
     @RequestMapping("/{itemName}")
-    public Item initPage(@PathVariable String itemName, HttpSession session, Model model){
+    public String initPage(@PathVariable String itemName, HttpSession session, Model model){
         User user = (User)session.getAttribute("currentUserInfo");
         Item item = itemService.searchItemByName(itemName,user.getUserID());
-        return item;
+        String[] img_paths = item.getObjectPicturePath().split(",");
+        item.setObjectPicturePath(img_paths[0]);
+        model.addAttribute("item",item);
+        model.addAttribute("img_paths",img_paths);
+        model.addAttribute("img_paths_length",img_paths.length);
+        return "objectMainContentPage";
     }
 }

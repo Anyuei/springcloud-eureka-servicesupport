@@ -1,12 +1,11 @@
-package com.yun.dao;
+package com.yun.service;
+
 
 import com.yun.entity.Comment;
+
 import java.util.List;
 
-/**
- * 操作comment表Dao
- */
-public interface CommentDao {
+public interface CommentService {
     /**
      * 添加评论表
      * @param comment

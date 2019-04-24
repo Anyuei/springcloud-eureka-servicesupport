@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--评论对象表DDL
+CREATE TABLE `comments` (
+  `commentID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '评论ID',
+  `userID` int(11) NOT NULL COMMENT '评论的用户ID',
+  `objectID` bigint(20) NOT NULL COMMENT '被评论的事物ID',
+  `stars` varchar(255) NOT NULL DEFAULT '' COMMENT '评分星级（极差=1，差=2，中=3，好=4，极好=5）',
+  `content` text NOT NULL COMMENT '评论内容',
+  `imagesPath` text NOT NULL COMMENT '评论图片',
+  `likes` varchar(255) NOT NULL DEFAULT '' COMMENT '支持数',
+  `opposition` varchar(255) NOT NULL DEFAULT '' COMMENT '反对数',
+  `realNameSupports` varchar(255) NOT NULL DEFAULT '' COMMENT '实名支持数',
+  `realNameOpposition` varchar(255) NOT NULL COMMENT '实名反对数',
+  `state` int(11) NOT NULL COMMENT '评论状态 （0=审核中，1=通过，2=封禁，3=删除）',
+  `commentTime` datetime NOT NULL COMMENT '评论时间',
+  PRIMARY KEY (`commentID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+-->
+<mapper namespace="com.yun.dao.CommentDao">
+	<!--新增评论 测试通过 2019.4.24 -->
+	<insert id="insertComment" parameterType="Comment" useGeneratedKeys="true" keyProperty="commentID">
+		INSERT INTO comments(
+                userID,
+                objectID,
+                stars,
+                content,
+                imagesPath,
+                likes,
+                opposition,
+                realNameSupports,
+                realNameOpposition,
+                state,
+                commentTime
+                )
+	    VALUES(
+                      #{userID},
+                      #{objectID},
+                      #{stars},
+                      #{content},
+                      #{imagesPath},
+                      #{likes},
+                      #{opposition},
+                      #{realNameSupport},
+                      #{realNameOpposition},
+                      #{state},
+                      #{commentTime}
+                      )
+	</insert>
+
+    <delete id="deleteCommentByID">
+        DELETE FROM comments WHERE commentID = #{commentID}
+    </delete>
+
+
+    <resultMap id="CommentMap" type="Comment">
+        <id column="commentID" property="commentID"/>
+        <result column="userID" property="userID"/>
+        <result column="objectID" property="objectID"/>
+        <result column="stars" property="stars"/>
+        <result column="content" property="content"/>
+        <result column="imagesPath" property="imagesPath"/>
+        <result column="likes" property="likes"/>
+        <result column="opposition" property="opposition"/>
+        <result column="realNameSupports" property="realNameSupport"/>
+        <result column="realNameOpposition" property="realNameOpposition"/>
+        <result column="state" property="state"/>
+        <result column="commentTime" property="commentTime"/>
+
+        <association property="user" javaType="User">
+            <id column="userID" property="userID"/>
+            <result column="userName" property="userName"/>
+            <result column="userNickname" property="userNickname"/>
+            <result column="avatarPath" property="avatarPath"/>
+            <result column="gender" property="gender"/>
+            <result column="xp" property="xp"/>
+            <result column="userState" property="state"/>
+            <result column="signature" property="signature"/>
+        </association>
+
+    </resultMap>
+    <select id="retrieveCommentsByObjectID" resultMap="CommentMap" parameterType="java.lang.Long">
+        SELECT c.* ,
+               u.userName,
+               u.userNickname,
+               u.avatarPath,
+               u.gender,
+               u.xp,
+               u.state AS userState,
+               u.signature
+        FROM
+             comments c,users u
+        WHERE
+                c.userID=u.userID
+        AND
+              c.objectID=#{objectID}
+        AND
+          c.state !=0/*过滤审核不通过的评论*/
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

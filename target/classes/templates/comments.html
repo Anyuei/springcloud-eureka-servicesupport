@@ -69,7 +69,7 @@
   }
   /*点赞数字样式*/
   .likeCountNum{
-    padding: 0px 5px 0px 10px;
+    padding: 0px 15px 0px 10px;
     color: #9fcdff;
     font-size: larger;
     font-style: italic;
@@ -242,6 +242,7 @@
                     console.log(data);
                     var HTML_TXT="";
                     $.each(data,function(index,element){
+                        var objectPicturePath = element['objectPicturePath'].split(",")[0];
                         var islike ="fa-heart-o";
                         var isdislike ="fa-thumbs-o-down";
                         /*用来判定当前对象是否被当前用户发表过态度，以便显示不同的态度状态*/
@@ -257,7 +258,9 @@
                               "<div class='row'>"+
                                 "<div class='col-lg-3 itemBgImgStyle'>"+
                                   //图片区
-                                  "<img src='${request.contextPath }" + element['objectPicturePath']+ "' width='100%' height='100%'>"+
+                                  "<a href='${request.contextPath }/world/"+element['objectName']+"'>"+
+                                    "<img src='${request.contextPath }" + objectPicturePath + "' width='100%' height='100%'>"+
+                                  "</a>"+
                                 "</div>"+
                                 "<div class='col-lg-9'>"+
                                   //对象名
@@ -311,12 +314,12 @@
         var objectID = objectID_likes.split("_")[1];//截取被点赞对象ID
         var iconClass = $('#'+objectID_likes+'_Icon').attr("class").split(" ")[1];
         var antitude="0";
-        if (iconClass==="fa-heart-o") {
-            antitude="1";
+        if (iconClass==="fa-heart-o") {//当被点赞对象需要激活的是 点赞按钮时
+            antitude="1";//态度参数为 1
         }
-        if (iconClass==="fa-thumbs-o-down") {
-            antitude="-1";
-        }
+        if (iconClass==="fa-thumbs-o-down") {//当被点赞对象需要激活的是 不看好按钮时
+            antitude="-1";//态度参数为 -1
+        }//当都不等于时 态度为0 意味此时是某个被激活的按钮被点击，表示取消激活，取消态度发布，后台会把之前的状态重置为0
         console.log(objectID);
         $.ajax({
               type: 'get',
@@ -325,21 +328,16 @@
               dataType: 'text',
               cache: false,
               success: function (data) {
-
                   var count = $('#'+objectID_likes+'_Count').text();
                   var countInt =parseInt(count);
                   console.log("number"+countInt);
                   $('#'+objectID_likes+'_Icon').removeClass(iconClass);
                   if(data==="\"1\""){
-                      console.log("333");
                       Like(objectID_likes);
                   }else if(data==="\"-1\""){
-                      console.log("336");
                       Dislike(objectID_likes);
                   }else if(data==="\"0\""){
-                      console.log("339");
                       if (objectID_likes.split("_")[0]==="like"){
-                          console.log("341");
                           $('#'+objectID_likes+'_Icon').addClass("fa-heart-o");
                       }else{
                           console.log("344");

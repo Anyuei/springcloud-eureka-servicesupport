@@ -1,5 +1,10 @@
 package com.yun.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
+import java.io.Serializable;
+import java.util.Date;
+
 /**
  * @version : V1.0
  * @ClassName: Comment 评论实体类 对应库表 comments
@@ -7,9 +12,10 @@ package com.yun.entity;
  * @Auther: Anakki
  * @Date: 2019/4/2 15:21
  */
-public class Comment {
+public class Comment implements Serializable {
     private Long commentID;//评论ID
     private Integer userID;//评论对应用户ID
+    private User user;//评论对应用户ID
     private Long objectID;//评论对应被评论对象ID
     private String stars;//评价星级
     private String content;//评价内容
@@ -18,20 +24,9 @@ public class Comment {
     private String opposition;//反对数
     private String realNameSupport;//实名支持数
     private String realNameOpposition;//实名反对数
-
+    private String state;//评论状态
+    private Date commentTime;//评论时间
     public Comment() {
-    }
-    public Comment(Long commentID, Integer userID, Long objectID, String stars, String content, String imagesPath, String likes, String opposition, String realNameSupport, String realNameOpposition) {
-        this.commentID = commentID;
-        this.userID = userID;
-        this.objectID = objectID;
-        this.stars = stars;
-        this.content = content;
-        this.imagesPath = imagesPath;
-        this.likes = likes;
-        this.opposition = opposition;
-        this.realNameSupport = realNameSupport;
-        this.realNameOpposition = realNameOpposition;
     }
 
     @Override
@@ -39,6 +34,7 @@ public class Comment {
         return "Comment{" +
                 "commentID=" + commentID +
                 ", userID=" + userID +
+                ", user=" + user +
                 ", objectID=" + objectID +
                 ", stars='" + stars + '\'' +
                 ", content='" + content + '\'' +
@@ -47,8 +43,11 @@ public class Comment {
                 ", opposition='" + opposition + '\'' +
                 ", realNameSupport='" + realNameSupport + '\'' +
                 ", realNameOpposition='" + realNameOpposition + '\'' +
+                ", state='" + state + '\'' +
+                ", commentTime=" + commentTime +
                 '}';
     }
+
     public Long getCommentID() {
         return commentID;
     }
@@ -129,4 +128,27 @@ public class Comment {
         this.realNameOpposition = realNameOpposition;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Date getCommentTime() {
+        return commentTime;
+    }
+
+    public void setCommentTime(Date commentTime) {
+        this.commentTime = commentTime;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

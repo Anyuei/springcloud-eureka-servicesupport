@@ -1,5 +1,8 @@
 package com.yun.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +12,7 @@ import java.util.Date;
  * @Auther: Anakki
  * @Date: 2019/3/22 23:59
  */
-public class Item {
+public class Item implements Serializable {
     private Long objectID;
     private String objectName;
     private String details;
@@ -19,6 +22,7 @@ public class Item {
     private String commentsTimes;
     private Long categoryID;
     private String createUser;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     private Integer state;
     private String objectPicturePath;

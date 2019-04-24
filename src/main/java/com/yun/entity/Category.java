@@ -1,5 +1,7 @@
 package com.yun.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,6 +19,7 @@ public class Category implements Serializable {
     private Long subCategoryID;//子类目
     private Long supCategoryID;//父类目
     private String userID;//类目创建者ID
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;//创建时间
     private String likes;//分类热度点赞数
     private String views;//分类浏览量

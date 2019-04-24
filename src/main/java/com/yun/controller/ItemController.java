@@ -37,6 +37,7 @@ public class ItemController {
     public @ResponseBody List<Item> searchItems(@PathVariable String itemName, HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
         List<Item> items = itemService.searchItemsByName(itemName,user.getUserID());
+
         if (!items.isEmpty()){
             return items;
         }else {

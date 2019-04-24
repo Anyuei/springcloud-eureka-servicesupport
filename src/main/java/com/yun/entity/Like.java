@@ -1,5 +1,7 @@
 package com.yun.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ public class Like implements Serializable {
     private Long likesID;
     private Long userID;//用户ID
     private Long objectID;//对象ID
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date stateTime;//发表状态时间
     private Integer stateOfMind;//心理状态
     public Like() {

@@ -14,9 +14,6 @@ import org.springframework.context.annotation.Bean;
 @EnableDiscoveryClient//代表自己是一个服务提供方
 @MapperScan("com.yun.dao")
 public class EurekaServiceApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(EurekaServiceApplication.class,args);
-    }
     @Bean
     public HttpMessageConverters fastJsonConfigure(){
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
@@ -26,5 +23,8 @@ public class EurekaServiceApplication {
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         converter.setFastJsonConfig(fastJsonConfig);
         return new HttpMessageConverters(converter);
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServiceApplication.class,args);
     }
 }
