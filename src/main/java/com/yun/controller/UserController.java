@@ -41,7 +41,9 @@ class UserController {
     @ResponseBody//禁用把返回值解析为路径，而直接把返回结果加到HTTP响应体中
     public String validationLogin(User user,HttpSession session) {
         if (user.getUserNickname() != null && user.getUserPassword() != null) {
+            System.out.println("用户名->"+user.getUserNickname()+"希望登录");
             User reallyUser = userService.retrieveUserByNickname(user.getUserNickname());
+            System.out.println(reallyUser);
             if (reallyUser != null && reallyUser.getUserPassword().equals(user.getUserPassword())) {
                 String userNickname = reallyUser.getUserNickname();
                 System.out.println("USER:" + userNickname + " login success！["+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()) +"]");

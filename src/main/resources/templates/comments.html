@@ -233,7 +233,7 @@
         }else{
             $.ajax({
                 type: 'get',
-                url: '${request.contextPath }/items/searchByName/'+itemKey,//infos查所有
+                url: '${request.contextPath }/items/searchByName?itemKey='+itemKey,//infos查所有
                 async: true,
                 dataType: 'json',
                 success: function(data) {

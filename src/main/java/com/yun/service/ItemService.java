@@ -30,9 +30,11 @@ public interface ItemService {
     /**
      * 根据对象名模糊查对象
      * @param objectName
+     * @param userID
      * @return
      */
     List<Item> searchItemsByName(String objectName,Long userID);
+
     /**
      * 根据对象的所属类目查询对象信息
      * @param categoryID 类目ID

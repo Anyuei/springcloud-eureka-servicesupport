@@ -6,7 +6,6 @@
     <groupId>com.yun</groupId>
     <artifactId>springcloud-eureka-servicesupport</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <!-- 打为jar包 -->
     <packaging>jar</packaging>
     <name>springcloud-eureka-servicesupport</name>
     <!-- FIXME change it to the project's website -->
@@ -89,6 +88,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
+            <scope>runtime</scope>
         </dependency>
         <!--fastjson-->
         <dependency>
@@ -96,7 +96,8 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.49</version>
         </dependency>
-        <!-- 文件上传下载 -->
+<!--
+        &lt;!&ndash; 文件上传下载 &ndash;&gt;
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
@@ -105,6 +106,8 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+-->
+
 
     </dependencies>
 
@@ -121,11 +124,19 @@
         </dependencies>
     </dependencyManagement>
     <build>
+        <finalName>ServiceSupport_module</finalName>
         <plugins>
             <!--引入springboot官方插件-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中-->
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>

@@ -1,6 +1,7 @@
 server:
   port: 8701 # 服务提供方
-
+  tomcat:
+    uri-encoding: UTF-8
 # 指定当前eureka客户端的注册地址,
 eureka:
   client:
@@ -8,7 +9,8 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:8699/eureka
   instance:
     hostname: localhost
-
+banner:
+  charset: UTF-8
 
 spring:
   #当前服务名称
@@ -16,13 +18,18 @@ spring:
     name: eureka-service
   #数据源
   datasource:
+#    type: org.apache.commons.dbcp.BasicDataSource
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/yunbase?&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+#    username: root
+#    password: 123
     type: org.apache.commons.dbcp.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yunbase?&useSSL=false
+    url: jdbc:mysql://localhost:3306/yunbase?&useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: 123
-  resources:
-    static-locations: classpath:/resources/,classpath:/static/
+    password: ayp43520
+    # resources:
+    # static-locations: classpath:/resources/,classpath:/static/
   #freemarker静态资源配置
   freemarker:
     template-loader-path: classpath:/templates
@@ -38,7 +45,13 @@ spring:
     suffix: .html
     settings:
       template_update_delay: 10
-
+  messages:
+    encoding: UTF-8
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
 mybatis:
   mapper-locations: classpath:com/yun/dao/*.xml
   type-aliases-package: com.yun.entity

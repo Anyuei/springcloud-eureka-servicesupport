@@ -149,11 +149,9 @@
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-freemarker:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.26-incubating" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context-support:4.3.11.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-devtools:1.5.7.RELEASE" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.49" level="project" />
-    <orderEntry type="library" name="Maven: commons-fileupload:commons-fileupload:unknown" level="project" />
-    <orderEntry type="library" name="Maven: commons-io:commons-io:unknown" level="project" />
   </component>
 </module>

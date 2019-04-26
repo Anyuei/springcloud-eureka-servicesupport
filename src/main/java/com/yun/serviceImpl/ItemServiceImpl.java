@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @version : V1.0
  * @ClassName: ItemServiceImpl
- * @Description:
+ * @Description: 对被评论对象的相关操作
  * @Auther: Anakki
  * @Date: 2019/4/2 20:42
  */
@@ -55,8 +55,12 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemDao.retrieveItemByName(objectName);
         //查询当前用户对此对象ID发表的态度状态
         Like like = likesDao.retrieveLikeByID(userID,item.getObjectID());
-        //把用户的态度状态赋值给所查询的对象，前台展示需要知道对象的当前用户的态度状态
-        item.setIslike(like.getStateOfMind());
+        //把用户的态度状态赋值给所查询的对象，前台展示需要知道被搜索对象的当前用户的态度状态
+        if (like==null||like.getStateOfMind()==null){
+            item.setIslike(0);
+        }else{
+            item.setIslike(like.getStateOfMind());
+        }
         return item;
     }
     /**
@@ -100,7 +104,6 @@ public class ItemServiceImpl implements ItemService {
     public HashMap<Long,Integer> getObjectIDAndlikestateMapOfUserLikesByUserID(Long userID){
         List<Like> likes = likesDao.retrieveLikesByID(userID);
         HashMap<Long,Integer> map = new HashMap<>();
-        List<Long> objectIDs=new ArrayList<>();
         for (Like like : likes) {
             map.put(like.getObjectID(),like.getStateOfMind());
         }

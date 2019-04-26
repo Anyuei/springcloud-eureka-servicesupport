@@ -24,6 +24,12 @@ public interface ItemDao {
      */
     List<Item> retrieveItemsByName(String objectName);
     /**
+     * 根据对象ID模糊查对象
+     * @param objectID
+     * @return
+     */
+    List<Item> retrieveItemsByID(Long objectID);
+    /**
      * 根据对象的所属类目查询对象信息
      * @param categoryID 类目ID
      * @return 所有对象

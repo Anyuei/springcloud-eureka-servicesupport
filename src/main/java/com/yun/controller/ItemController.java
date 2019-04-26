@@ -33,9 +33,10 @@ public class ItemController {
      * @param session
      * @return
      */
-    @RequestMapping("/searchByName/{itemName}")
-    public @ResponseBody List<Item> searchItems(@PathVariable String itemName, HttpSession session){
+    @RequestMapping(value = "/searchByName")
+    public @ResponseBody List<Item> searchItems(@RequestParam("itemKey") String itemName, HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
+        System.out.println("搜索对象->"+itemName+"（关键词）");
         List<Item> items = itemService.searchItemsByName(itemName,user.getUserID());
 
         if (!items.isEmpty()){
