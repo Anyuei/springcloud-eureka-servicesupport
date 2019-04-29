@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--
+CREATE TABLE `systemDocName` (
+  `fileID` int(11) NOT NULL,
+  `fileName` varchar(255) DEFAULT NULL COMMENT '文件夹名',
+  `fileLevel` int(11) DEFAULT NULL COMMENT '文件夹级别',
+  `parentFile` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`fileID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-->
+<mapper namespace="com.yun.dao.FileStructureDao">
+	<select id="retrieveFiles" resultType="com.yun.entity.FileInfo">
+		SELECT * FROM systemDocName
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

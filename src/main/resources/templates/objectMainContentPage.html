@@ -68,9 +68,9 @@
     .commentBtn{
       margin: 20px 25px 5px 25px;
     }
-      .disappear{
-          display: none;
-      }
+    .disappear{
+       display: none;
+    }
     #operationBar{
         background-color: #138496;
     }
@@ -80,7 +80,7 @@
       <!-- Main Navbar 主页面头部-->
       <#include "/header.html"/>
       <div class="container">
-          <div class="objectID disappear">${item.objectID!''}</div>
+        <div class="objectID disappear">${item.objectID!''}</div>
         <div class="bigBackgroundImg container" align="center">
           <!-- 轮播图 -->
           <div id="carouselExampleIndicators" class="carousel slide">
@@ -109,12 +109,13 @@
               <span class="sr-only">Next</span>
             </a>
           </div>
-        <!-- 轮播图 end-->
-        </div>
-        <div id="operationBar">
+          <!-- 轮播图 end-->
+      </div>
+        <!-- 发表态度按钮 -->
+          <div id="operationBar">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg" s>发表态度</button>
-        </div>
-
+          </div>
+        <!-- 发表态度按钮 end-->
         <!-- 评论区 -->
         <div class="jumbotron container" id="commentArea">
 
@@ -132,13 +133,26 @@
                       <h2 class="text-center">发表态度</h2>
                     </div>
                     <div class="modal-body">
-                      <form class="form-group" id="CommentForm" action="" style="margin-bottom: 0px;">
+                      <form class="form-group" id="CommentForm">
+                          <input class="form-control" type="hidden" name="objectID" id="CommentObjectID" value="${item.objectID!''}">
                         <div class="form-group" style="margin-bottom: 0px;">
                           <label for="">你的印象：</label>
-                          <input class="form-control" type="text" id="CommentContent" placeholder="">
+                          <input class="form-control" type="text" name="content" id="" placeholder="">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0px;">
+                          <label for="">添加图片：</label>
+                          <input class="form-control" type="file" name="image" id="uploadImage" placeholder="请上传图片">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0px;">
+                          <label for="">添加视频：</label>
+                          <input class="form-control" type="file" name="video" id="uploadVideo" placeholder="请上传视频">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0px;">
+                          <label for="">建议：</label>
+                          <input class="form-control" type="text"  placeholder="">
                         </div>
                         <div class="text-right">
-                          <button class="btn btn-primary commentBtn" type="submit" style="background-color: #3a8cd2b3; border: 0px solid transparent;">提交</button>
+                          <button class="btn btn-primary commentBtn" type="submit" style="background-color: #3a8cd2b3; border: 0px solid transparent;" id="submitCommentBtn">提交</button>
                           <button class="btn btn-danger commentBtn" data-dismiss="modal" style="background-color: #fb5e5999;border: 0px solid transparent;">取消</button>
                         </div>
                       </form>
@@ -192,7 +206,7 @@
         //reader.readAsDataURL(file);
         reader.readAsBinaryString(file)
     }
-
+    /*初次加载 激活轮播图 div 并获取评论*/
     $(function () {
         $(".carousel-inner .carousel-item").first().addClass("active");
         $(".carousel-indicators li").first().addClass("active");
@@ -200,7 +214,7 @@
         getComments(objectID);
 
     })
-
+    /*获取对象的评论显示在对象下方*/
     function getComments(objectID) {
         console.log("评论获取成功"+objectID);
         $.ajax(
@@ -244,6 +258,52 @@
                 }
             }
         )
+    }
+    /*提交评论*/
+    $(function() {
+
+        /*当提交按钮被点击*/
+        $("#submitCommentBtn").click(function() {
+                //先检验用户状态
+                console.log(checklogin())
+                if (checklogin()=="false"){
+                    alert("请重新登录");
+                    return;
+                }
+                /*获取form表单数据*/
+                var formData = new FormData($("#CommentForm")[0]);
+                $.ajax({
+                    url : '${request.contextPath }/comment/postComment',
+                    type : 'post',
+                    data : formData,
+                    async : false,//发表评论需同步
+                    cache : false,
+                    dataType: 'json',
+                    contentType : false,
+                    processData : false, /*要求为Boolean类型的参数，默认为true。默认情况下，发送的数据将被转换为对象（从技术角度来讲而非字符串）以配合默认内容类型"application/x-www-form-urlencoded"。如果要发送DOM树信息或者其他不希望转换的信息，请设置为false。*/
+                    success : function(returndata) {
+                        alert(returndata)
+                    },
+                    error : function(returndata) {
+                        alert(returndata);
+                    }
+                });
+        })
+    })
+    function checklogin() {
+        $.ajax({
+            url : '${request.contextPath }/user/state',
+            type : 'get',
+            async : false,//检测登录状态需同步
+            cache : false,
+            dataType: 'json',
+            success : function(returndata) {
+                return returndata;
+            },
+            error : function(returndata) {
+                alert("系统内部错误：返回值"+returndata);
+            }
+        });
     }
 </script>
 </html>

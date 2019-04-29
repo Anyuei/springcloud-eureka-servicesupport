@@ -13,7 +13,7 @@ import java.util.List;
 public interface LikesDao {
     Integer insertLike(Like like);
     Integer deleteLikeByID(@Param("userID") Long userID,@Param("objectID")Long objectID);
-    List<Like> retrieveLikesByID(Long userID);
+    List<Like> retrieveLikesByID(Integer userID);
     Integer updateLikeByID(Like like);
 
     /**
@@ -22,5 +22,5 @@ public interface LikesDao {
      * @param objectID
      * @return
      */
-    Like retrieveLikeByID(@Param("userID") Long userID,@Param("objectID")Long objectID);
+    Like retrieveLikeByID(@Param("userID") Integer userID,@Param("objectID")Long objectID);
 }

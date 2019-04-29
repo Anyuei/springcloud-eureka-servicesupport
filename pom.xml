@@ -96,17 +96,22 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.49</version>
         </dependency>
-<!--
-        &lt;!&ndash; 文件上传下载 &ndash;&gt;
         <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>4.3.6.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-        </dependency>
--->
+        <!--
+                &lt;!&ndash; 文件上传下载 &ndash;&gt;
+                <dependency>
+                    <groupId>commons-fileupload</groupId>
+                    <artifactId>commons-fileupload</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </dependency>
+        -->
 
 
     </dependencies>

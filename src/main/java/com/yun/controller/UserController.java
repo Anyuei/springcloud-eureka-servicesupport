@@ -120,5 +120,16 @@ class UserController {
         return "fail";
         //识别非法用户名（此处需求还需要完成）
     }
+    /**
+     * 检测会话情况
+     * @return
+     */
+    @RequestMapping("/state")
+    public @ResponseBody String checkSession(HttpSession session) {
+        if (session.getAttribute("currentUserInfo")==null){
+            return "false";
+        }
+        return "true";
+    }
 }
 

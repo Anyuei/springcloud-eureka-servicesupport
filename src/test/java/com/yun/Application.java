@@ -60,8 +60,9 @@ public class Application
      */
     @Test
     public void insertCategories(){
-        makeCategoryFromPath("C:\\Users\\anxiaopei\\Desktop\\2200009000.txt","##");
+        makeCategoryFromPath("C:\\Users\\anxiaopei\\Desktop\\8005000000.txt","##");
     }
+
     public void makeCategoryFromPath(String docPath, String split) {
         List<String> linesList = readLineToListFromPath(docPath);
         String key ="" ;
@@ -77,11 +78,11 @@ public class Application
                             key,//类目名
                             1,//类目状态(0-审核 1-通过 2-驳回 3-封禁)
                             null,//子类目
-                            2200009000L,//父类目
-                            "1",//类目创建者ID
+                            8005000000L,//父类目
+                            "7",//类目创建者ID
                             new Date(),//创建时间
-                            "1",//分类热度点赞数
-                            "1"//分类浏览量
+                            "0",//分类热度点赞数
+                            "0"//分类浏览量
                     );
                     categoryDao.insertCategory(category);
                 } catch (Exception e) {

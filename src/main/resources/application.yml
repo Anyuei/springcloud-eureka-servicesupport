@@ -25,14 +25,14 @@ spring:
 #    password: 123
     type: org.apache.commons.dbcp.BasicDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yunbase?&useSSL=false&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://148.70.66.147:3306/yunbase?&useSSL=false&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: ayp43520
-    # resources:
-    # static-locations: classpath:/resources/,classpath:/static/
+#  resources:
+#    static-locations: classpath:/resources/,classpath:/static/
   #freemarker静态资源配置
   freemarker:
-    template-loader-path: classpath:/templates
+    #template-loader-path: classpath:/templates
     #关闭缓存，及时刷新，上线生产环境需要修改为true
     cache: false
     charset: UTF-8
@@ -48,6 +48,9 @@ spring:
   messages:
     encoding: UTF-8
   http:
+    multipart:
+      max-request-size: 209715200
+      max-file-size: 209715200    #用来控制默认上传文件的大小  这里的单位是字节  这里的配置是200m
     encoding:
       charset: utf-8
       enabled: true
@@ -55,4 +58,5 @@ spring:
 mybatis:
   mapper-locations: classpath:com/yun/dao/*.xml
   type-aliases-package: com.yun.entity
+
 

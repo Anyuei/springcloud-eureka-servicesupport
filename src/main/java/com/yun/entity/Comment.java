@@ -17,14 +17,14 @@ public class Comment implements Serializable {
     private Integer userID;//评论对应用户ID
     private User user;//评论对应用户ID
     private Long objectID;//评论对应被评论对象ID
-    private String stars;//评价星级
+    private String stars="5";//评价星级
     private String content;//评价内容
-    private String imagesPath;//评论图片路径
-    private String likes;//支持数
-    private String opposition;//反对数
-    private String realNameSupport;//实名支持数
-    private String realNameOpposition;//实名反对数
-    private String state;//评论状态
+    private String imagesPath="/";//评论图片路径
+    private String likes="0";//支持数
+    private String opposition="0";//反对数
+    private String realNameSupport="0";//实名支持数
+    private String realNameOpposition="0";//实名反对数
+    private String state="1";//评论状态
     private Date commentTime;//评论时间
     public Comment() {
     }

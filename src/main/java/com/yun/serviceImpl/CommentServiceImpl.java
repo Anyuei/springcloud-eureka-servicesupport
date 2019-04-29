@@ -25,7 +25,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Integer insertComment(Comment comment) {
-        return null;
+
+        return commentDao.insertComment(comment);
     }
 
     @Override

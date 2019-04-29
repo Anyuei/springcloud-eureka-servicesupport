@@ -51,10 +51,13 @@ public class ItemServiceImpl implements ItemService {
      * @param userID
      * @return
      */
-    public Item searchItemByName(String objectName,Long userID){
+    public Item searchItemByName(String objectName,Integer userID){
         Item item = itemDao.retrieveItemByName(objectName);
         //查询当前用户对此对象ID发表的态度状态
-        Like like = likesDao.retrieveLikeByID(userID,item.getObjectID());
+        Like like=null;
+        if (userID!=null){
+            like = likesDao.retrieveLikeByID(userID,item.getObjectID());
+        }
         //把用户的态度状态赋值给所查询的对象，前台展示需要知道被搜索对象的当前用户的态度状态
         if (like==null||like.getStateOfMind()==null){
             item.setIslike(0);
@@ -68,13 +71,15 @@ public class ItemServiceImpl implements ItemService {
      * @param objectName
      * @return
      */
-    public List<Item> searchItemsByName(String objectName,Long userID){
+    public List<Item> searchItemsByName(String objectName,Integer userID){
         List<Item> items = itemDao.retrieveItemsByName(objectName);
-        //查询当前用户对所有类似此对象name发表的态度状态
-        HashMap<Long,Integer> map = getObjectIDAndlikestateMapOfUserLikesByUserID(userID);
-        //把用户的态度状态分别赋值给所查询的对象，前台展示需要知道每个对象的当前用户的态度状态
-        for (Item item : items) {
-            item.setIslike(map.get(item.getObjectID()));
+        if(userID!=null){
+            //查询当前用户对所有类似此对象name发表的态度状态
+            HashMap<Long,Integer> map = getObjectIDAndlikestateMapOfUserLikesByUserID(userID);
+            //把用户的态度状态分别赋值给所查询的对象，前台展示需要知道每个对象的当前用户的态度状态
+            for (Item item : items) {
+                item.setIslike(map.get(item.getObjectID()));
+            }
         }
         return items;
     }
@@ -101,7 +106,7 @@ public class ItemServiceImpl implements ItemService {
      * @param userID
      * @return
      */
-    public HashMap<Long,Integer> getObjectIDAndlikestateMapOfUserLikesByUserID(Long userID){
+    public HashMap<Long,Integer> getObjectIDAndlikestateMapOfUserLikesByUserID(Integer userID){
         List<Like> likes = likesDao.retrieveLikesByID(userID);
         HashMap<Long,Integer> map = new HashMap<>();
         for (Like like : likes) {
@@ -117,7 +122,7 @@ public class ItemServiceImpl implements ItemService {
      * @param likeState_str
      * @return
      */
-    public String likeItem(String objectID_str, Long userID, String likeState_str){
+    public String likeItem(String objectID_str, Integer userID, String likeState_str){
         Long objectID = Long.parseLong(objectID_str);
         Integer likeState = Integer.parseInt(likeState_str);
         //先查询此用户对此对象的态度
@@ -133,15 +138,15 @@ public class ItemServiceImpl implements ItemService {
         }
         Item item =itemDao.retrieveItemByID(objectID);
         //likeState(-1:不喜欢; 0:无感; 1：喜欢;)
-        if (like.getStateOfMind()==0 && likeState==1){
+        if (like.getStateOfMind()==0 && likeState==1){//之前无状态现在喜欢
             item.setLikes(item.getLikes()+likeState);
-        }else if (like.getStateOfMind()==0&&likeState==-1){
+        }else if (like.getStateOfMind()==0&&likeState==-1){//之前无状态现在不喜欢
             item.setDislikes(item.getDislikes()-likeState);
-        }else if (like.getStateOfMind()==1&&likeState==0){
+        }else if (like.getStateOfMind()==1&&likeState==0){//之前喜欢现在无状态
             item.setLikes(item.getLikes()-1);
-        }else if (like.getStateOfMind()==-1&&likeState==0){
+        }else if (like.getStateOfMind()==-1&&likeState==0){//之前不喜欢现在无状态
             item.setDislikes(item.getDislikes()-1);
-        }else{
+        }else{//之前喜欢，现在不喜欢 或 之前喜欢现在不喜欢
             item.setLikes(item.getLikes()+likeState);
             item.setDislikes(item.getDislikes()-likeState);
         }

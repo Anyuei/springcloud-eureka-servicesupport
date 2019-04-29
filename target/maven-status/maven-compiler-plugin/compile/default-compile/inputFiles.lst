@@ -1,6 +1,8 @@
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\entity\Item.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\dao\ManagerDao.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\serviceImpl\CommentServiceImpl.java
+C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\utils\FileUtils.java
+C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\entity\FileInfo.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\dao\CategoryDao.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\service\CommentService.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\controller\CommentController.java
@@ -17,6 +19,8 @@ C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\c
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\service\CategoryService.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\entity\Like.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\dao\ItemDao.java
+C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\Configuration\TemplateLoader.java
+C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\dao\FileStructureDao.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\controller\ItemController.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\serviceImpl\CategoryServiceImpl.java
 C:\Users\anxiaopei\springcloud\springcloud-eureka-servicesupport\src\main\java\com\yun\controller\MainContentPageController.java

@@ -37,8 +37,12 @@ public class ItemController {
     public @ResponseBody List<Item> searchItems(@RequestParam("itemKey") String itemName, HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
         System.out.println("搜索对象->"+itemName+"（关键词）");
-        List<Item> items = itemService.searchItemsByName(itemName,user.getUserID());
-
+        List<Item> items=null;
+        if (user!=null){
+            items = itemService.searchItemsByName(itemName,user.getUserID());
+        }else{
+            items = itemService.searchItemsByName(itemName,null);
+        }
         if (!items.isEmpty()){
             return items;
         }else {

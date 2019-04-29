@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class Like implements Serializable {
     private Long likesID;
-    private Long userID;//用户ID
+    private Integer userID;//用户ID
     private Long objectID;//对象ID
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date stateTime;//发表状态时间
@@ -33,7 +33,7 @@ public class Like implements Serializable {
                 '}';
     }
 
-    public Like(Long likesID, Long userID, Long objectID, Date stateTime, Integer stateOfMind) {
+    public Like(Long likesID, Integer userID, Long objectID, Date stateTime, Integer stateOfMind) {
         this.likesID = likesID;
         this.userID = userID;
         this.objectID = objectID;
@@ -49,11 +49,11 @@ public class Like implements Serializable {
         this.likesID = likesID;
     }
 
-    public Long getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
-    public void setUserID(Long userID) {
+    public void setUserID(Integer userID) {
         this.userID = userID;
     }
 
