@@ -18,9 +18,9 @@ public interface UserDao {
 
     /**
      * 根据ID修改用户
-     * @param id
+     * @param user
      */
-    void updateUserByID(Integer id);
+    void updateUserByID(User user);
 
     /**
      * 根据ID查用户

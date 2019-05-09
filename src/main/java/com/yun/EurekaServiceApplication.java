@@ -11,23 +11,24 @@ import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.servlet.ViewResolver;
+
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 @SpringBootApplication
 @EnableDiscoveryClient//代表自己是一个服务提供方
 @MapperScan("com.yun.dao")
 public class EurekaServiceApplication extends WebMvcConfigurerAdapter {
-    public static String uploadPath;
+    public static String uploadPath;//绝对上传路径
+    public static String RELATIVE_UPLOADPATH;//相对上传路径
     public static String staticPath;
+    public static String RELATIVE_STATICPATH;//相对上传路径
     public static String templatePath;
 
     /**
@@ -80,11 +81,13 @@ public class EurekaServiceApplication extends WebMvcConfigurerAdapter {
     static {
         try {
             //项目jar包所在目录
-            String jar_parent = new File(ResourceUtils.getURL("classpath:").getPath()).getParentFile().getParentFile().getParent();
-            System.out.println("666666666"+jar_parent);
-            uploadPath =  jar_parent +File.separator+"logistics"+File.separator+"uploads"+File.separator;
-            staticPath = jar_parent + File.separator+"logistics"+File.separator+"staticPath"+File.separator;
-            templatePath = jar_parent +File.separator+"logistics"+File.separator+"templates"+File.separator;
+            String jar_parent = new File(ResourceUtils.getURL("classpath:").getPath()).getParentFile().getParentFile().getParent()+ File.separator;
+
+            RELATIVE_UPLOADPATH="logistics"+File.separator+"uploads"+File.separator;
+            RELATIVE_STATICPATH="logistics"+"/"+"staticPath"+"/";
+            uploadPath =  jar_parent +RELATIVE_UPLOADPATH;
+            staticPath = jar_parent +RELATIVE_STATICPATH;
+            templatePath = jar_parent +"logistics"+File.separator+"templates"+File.separator;
             if (!uploadPath.startsWith("file:")){
                 uploadPath="file:"+uploadPath;
             }
@@ -94,11 +97,6 @@ public class EurekaServiceApplication extends WebMvcConfigurerAdapter {
             if (!templatePath.startsWith("file:")){
                 templatePath="file:"+templatePath;
             }
-            final ArrayList<Object> docPathlist = new ArrayList<>();
-            docPathlist.add(uploadPath);
-            docPathlist.add(staticPath);
-            docPathlist.add(templatePath);
-            System.out.println(uploadPath+"="+staticPath+"="+templatePath);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

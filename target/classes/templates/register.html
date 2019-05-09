@@ -66,7 +66,6 @@
               </div>
             </div>
 
-            <!-- Logo & Information Panel-->
             <div class="col-lg-8">
               <div class="info d-flex align-items-center">
                 <div class="content">
@@ -83,7 +82,6 @@
       </div>
       <div class="copyrights text-center">
         <p>Design by <a href="#" class="external">Anakki</a>
-          <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
         </p>
       </div>
     </div>
@@ -109,16 +107,16 @@
                             type: 'post',
                             url: '${request.contextPath }/user/validationRegister',
                             async: true,
-                            dataType:"text",
                             data: {
                                 "userNickname": userNickname,
                                 "userPassword": userPassword,
                                 "email": email
                             },
+                            dataType: "json",
                             success: function(data) {
                                 if(data == "success") {
-                                    window.location.href = '${request.contextPath }/user/login';
-                                    console.log("用户"+userNickname+"注册成功");
+                                    //注册成功跳转登录页面
+                                    enterIndex();
                                 } else if(data == "nickname_exists") {
                                     $("#warning").text("用户名已被占用")
                                 }else if(data == "fail") {
@@ -130,10 +128,13 @@
                             }
                         });
                     }else{
-                        $("#warning").text("")
+                        $("#warning").text("用户名或密码不能为空")
                     }
                 })
         })
+      function enterIndex(){
+          window.location.href = '${request.contextPath }/user/login';
+      }
     </script>
   </body>
 </html>

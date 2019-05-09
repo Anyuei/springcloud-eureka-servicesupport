@@ -1,3 +1,10 @@
+<style>
+
+  .img-fluid {
+    max-width: 100%;
+    height: 100%;
+  }
+</style>
 <!-- 网站头部 -->
 <header class="header">
   <nav class="navbar">
@@ -13,7 +20,7 @@
         <!-- Navbar Header-->
         <div class="navbar-header">
           <!-- Navbar Brand -->
-          <a href="${request.contextPath }/user/index" class="navbar-brand d-none d-sm-inline-block">
+          <a href="${request.contextPath }/user/index/${user.userNickname }" class="navbar-brand d-none d-sm-inline-block">
             <div class="brand-text d-none d-lg-inline-block"><span>YourVoice </span></div>
             <div class="brand-text d-none d-sm-inline-block d-lg-none">
               <strong>BD</strong>

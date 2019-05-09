@@ -74,6 +74,12 @@
     #operationBar{
         background-color: #138496;
     }
+    .commentOperateArea span{
+      margin: 10px;
+    }
+    .commentTextArea *{
+      vertical-align: top;
+    }
   </style>
   <body>
     <div class="page">
@@ -234,17 +240,20 @@
                                     "<a class='pr-3' href=''>"+
                                     "<img class='rounded' src='"+element['user']['avatarPath']+"' alt='头像' width='75px'/>"+
                                     "</a>"+
-                                    "<div class='media-body'>"+
-                                        "<h5 class='mt-0'>"+element['user']['userName']+"</h5>"+"经验值:"+element['xp']+
-                                            /*评论内容*/
-                                            element['content']+
+                                    "<div class='media-body commentTextArea'>"+
+                                        "<span class='mt-0'>"+element['user']['userName']+"</span><hr>"+
+                                        "<span><img src='"+element['imagesPath'] +"' style='width: 200px;height: 200px;'></span>"+
+                                          /*评论内容*/
+                                        "<span style='margin: 0px 10px;'>"+element['content']+"</span>"+
                                    " </div>"+
                                 "</div>"+
-                                    "点赞:" +element['likes']+
-                                    "反对："+ element['opposition']+
-                                    "实名支持："+element['realNameSupport']+
-                                    "实名反对："+element['realNameOpposition']+
-                                    "评论时间" +element['commentTime']+
+                                    "<div class='commentOperateArea'>" +
+                                      "<span>"+"点赞:" +element['likes']+"</span>"+
+                                      "<span>"+ "反对："+ element['opposition']+"</span>"+
+                                      "<span>"+"实名支持："+element['realNameSupport']+"</span>"+
+                                      "<span>"+ "实名反对："+element['realNameOpposition']+"</span>"+
+                                      "<span>"+  "评论时间：" +element['commentTime']+"</span>"+
+                                    "</div>"+
                                 "<hr />"
                         });
                         console.log(comments);

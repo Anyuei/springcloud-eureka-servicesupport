@@ -4,6 +4,7 @@ import com.yun.EurekaServiceApplication;
 import com.yun.entity.Comment;
 import com.yun.entity.User;
 import com.yun.service.CommentService;
+import com.yun.utils.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +33,8 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/comment")
 public class CommentController {
-
+    private Integer limitImgSizeMB=5;//单位MB
+    private Long limitImgSize=1024L*1024*limitImgSizeMB;//2MB
     @Resource
     private CommentService commentService;
 
@@ -48,8 +52,8 @@ public class CommentController {
 
     /**
      * 用户发表评论
-     * @param file
-     * @param comment
+     * @param
+     * @param
      * @return
      */
     @RequestMapping(value = "/postComment",method = RequestMethod.POST,produces="text/jason;charset=UTF-8")
@@ -57,33 +61,26 @@ public class CommentController {
             HttpSession session,
             @RequestParam("image") MultipartFile image,
             Comment comment){
-        long imageSize = image.getSize();
+        String avatarPath_absolute =EurekaServiceApplication.staticPath+"img/Comment/";
+        /*获取文件后缀*/
         String originalFilename = image.getOriginalFilename();
-        User user = (User)session.getAttribute("currentUserInfo");
-        File path= null;
-        try {
-            path = new File(ResourceUtils.getURL("classpath:").getPath());
-        } catch (FileNotFoundException e) {
-            //路径获取失败
-            System.out.println("路径获取失败");
-            e.printStackTrace();
-        }
-        if(!path.exists()){
-            path=new File("");
-        }
-        File upload=new File(EurekaServiceApplication.uploadPath);
-        if(!upload.exists()){
-            upload.mkdirs();
-        }
-        System.out.println(upload.getAbsolutePath());
+        String fileSuffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        /*得到保存文件名*/
         String image_uuid = UUID.randomUUID().toString();
+        String imageSaveName= image_uuid+"."+fileSuffix;
+
+        String resultString = FileUtils.uploadFile(image, avatarPath_absolute, limitImgSize, imageSaveName);
+        if (!resultString.equals("上传成功")){
+            return "评论失败";
+        }
 
         //在开发测试模式时，得到地址为：{项目根目录}/target/static/images/upload/
         //在打成jar正式发布时，得到的地址为:{发布jar包目录}/static/images/upload/
-        comment.setImagesPath(EurekaServiceApplication.uploadPath+"image_uuid");
+        comment.setImagesPath("/img/Comment/"+imageSaveName);//路径存储为相对路径
+        //记录上传者
+        User user = (User)session.getAttribute("currentUserInfo");
         comment.setUserID(user.getUserID());
         comment.setCommentTime(new Date());
-        System.out.println(comment);
         if (commentService.insertComment(comment)==0){
             return "评论失败";
         }else{

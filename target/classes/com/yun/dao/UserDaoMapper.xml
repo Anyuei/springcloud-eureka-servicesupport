@@ -25,8 +25,8 @@ CREATE TABLE `users` (
 	<delete id="deleteUserByID">
 	    DELETE FROM users WHERE userID=#{userID}
 	</delete>
-	<!--根据ID删除用户 测试通过 2019.3.25 -->
-	<update id="updateUserByID">
+	<!--根据ID升级用户 测试通过 2019.5.9 -->
+	<update id="updateUserByID" parameterType="User">
 	    UPDATE
 	      users
 	    SET

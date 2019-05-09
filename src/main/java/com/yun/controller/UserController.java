@@ -1,20 +1,30 @@
 package com.yun.controller;
 
+import com.yun.EurekaServiceApplication;
 import com.yun.entity.User;
 import com.yun.service.UserService;
+import com.yun.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
 class UserController {
+
+    private Integer limitAvatarSizeMB=2;//单位MB
+    private Long limitAvatarSize=1024L*1024*limitAvatarSizeMB;//2MB
+
     @Autowired
     private UserService userService;
 
@@ -68,7 +78,12 @@ class UserController {
             User reallyUser = userService.retrieveUserByNickname(userNickname);
             if (reallyUser!=null){
                 model.addAttribute("user", reallyUser);
-                reallyUser.setUserPassword("");
+                reallyUser.setUserPassword(null);
+
+                String avatarPath = reallyUser.getAvatarPath();
+                if (avatarPath==null||avatarPath.equals("")){
+                    reallyUser.setAvatarPath("/img/defaultImages/defaultAvatar♂.jpg");
+                }
                 //把用户信息存入会话
                 session.setAttribute("currentUserInfo",reallyUser);
                 return "index";
@@ -101,7 +116,7 @@ class UserController {
      */
     @RequestMapping("/validationRegister")
     @ResponseBody
-    public String validationRegister(User user, HttpServletRequest request) {
+    public String validationRegister(User user) {
         String newUserNickname = user.getUserNickname();
         String newUserPassword =  user.getUserPassword();
         String newUserEmail = user.getEmail();
@@ -130,6 +145,32 @@ class UserController {
             return "false";
         }
         return "true";
+    }
+
+    /**
+     * 上传用户头像
+     * @return
+     */
+    @RequestMapping("/uploadAvatar")
+    public @ResponseBody String uploadAvatar(@RequestParam("file") MultipartFile file,HttpSession session){
+
+        String avatarPath_absolute =EurekaServiceApplication.staticPath+"img/Avatar/";
+        /*获取文件后缀*/
+        String originalFilename = file.getOriginalFilename();
+        String fileSuffix = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        /*得到保存文件名*/
+        String image_uuid = UUID.randomUUID().toString();
+        String imageSaveName= image_uuid+"."+fileSuffix;
+
+        String resultString = FileUtils.uploadFile(file, avatarPath_absolute, limitAvatarSize, imageSaveName);
+        if (!resultString.equals("上传成功")){
+            return resultString;
+        }
+
+        User user = (User)session.getAttribute("currentUserInfo");
+        user.setAvatarPath("/img/Avatar/"+imageSaveName);
+        userService.updateUserByID(user);
+        return "上传成功";
     }
 }
 

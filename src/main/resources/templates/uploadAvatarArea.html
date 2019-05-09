@@ -1,0 +1,55 @@
+
+
+<!-- 修改头像弹窗 -->
+<div id="changeAvatarArea" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLiveLabel">上传一张您满意的头像吧</h5>
+        <!--关闭按钮-->
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!--上传表单-->
+        <form id="uploadAvatarForm">
+          <div class="form-group">
+            <input type="file" id="" name="file" required>
+            <p class="help-block">请上传小于2M的文件</p>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button id="uploadbtn" type="button" class="btn btn-default">提交</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    /* ajax异步新建动漫 */
+    $(function(){
+        $("#uploadbtn").click(
+            function(){
+                var formData = new FormData($( "#uploadAvatarForm" )[0]);
+                $.ajax({
+                    url: '${request.contextPath }/user/uploadAvatar',
+                    type: 'POST',
+                    data: formData,
+                    async: true,
+                    cache: false,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false, /*要求为Boolean类型的参数，默认为true。默认情况下，发送的数据将被转换为对象（从技术角度来讲而非字符串）以配合默认内容类型"application/x-www-form-urlencoded"。如果要发送DOM树信息或者其他不希望转换的信息，请设置为false。*/
+                    success: function (returndata) {
+                        alert(returndata);
+                    },
+                    error: function (returndata) {
+                        alert(returndata);
+                    }
+                });
+            })
+
+    })
+</script>

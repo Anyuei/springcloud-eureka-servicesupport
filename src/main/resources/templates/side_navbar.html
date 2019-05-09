@@ -1,16 +1,29 @@
+<style>
+   .avatar{
+     width: 200px;
+     height: 200px;
+     overflow: hidden;
+   }
+</style>
 <!-- Side Navbar 左侧选项区-->
 <nav class="side-navbar">
   <!-- Sidebar Header-->
   <div class="sidebar-header d-flex align-items-center">
     <!--avatar 头像-->
-    <div class="avatar"><img src=${user.avatarPath!'上传头像'} alt="..." class="img-fluid rounded-circle"></div>
+    <div class="avatar">
+      <img src=${user.avatarPath!}  class="img-fluid rounded-circle">
+    </div>
     <!--用户名 与 个人说明-->
     <div class="title">
       <h1 class="h4">${user.userNickname!'用户名错误'}</h1>
       <p>${user.signature!'添加说明'}</p>
     </div>
   </div>
-  <!-- Sidebar Navidation Menus--><span class="heading">修改头像</span>
+  <!-- Button trigger modal -->
+  <span data-toggle="modal" data-target="#changeAvatarArea" class="heading" style="cursor: default">
+    修改头像
+  </span>
+
   <ul class="nav flex-column list-unstyled" id="myTab" role="tablist">
     <!-- 个人中心 -->
     <li class="nav-item">
@@ -67,3 +80,36 @@
     <li> <a href="#"> <i class="icon-picture"></i>Demo </a></li>
   </ul>
 </nav>
+
+<!-- 修改头像弹窗 -->
+<#include "/uploadAvatarArea.html"/>
+<script>
+/*    /!* 点击弹出上传头像 *!/
+    $(function(){
+        $("#changeAvatarBtn").click(
+)
+
+    })
+
+    /!*上传头像*!/
+    function(){
+
+        var formData = new FormData($( "#uploadform" )[0]);
+        $.ajax({
+            url: '${request.contextPath }/user/uploadAvatar',
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            dataType: 'json',
+            contentType: false,
+            processData: false, /!*要求为Boolean类型的参数，默认为true。默认情况下，发送的数据将被转换为对象（从技术角度来讲而非字符串）以配合默认内容类型"application/x-www-form-urlencoded"。如果要发送DOM树信息或者其他不希望转换的信息，请设置为false。*!/
+            success: function (returndata) {
+                alert(returndata);
+            },
+            error: function (returndata) {
+                alert(returndata);
+            }
+        });
+    }*/
+</script>

@@ -30,6 +30,7 @@ public class MainContentPageController {
         Item item = itemService.searchItemByName(itemName,user.getUserID());
         String[] img_paths = item.getObjectPicturePath().split(",");
         item.setObjectPicturePath(img_paths[0]);
+        model.addAttribute("user", user);
         model.addAttribute("item",item);//对象信息
         model.addAttribute("img_paths",img_paths);//轮播图
         model.addAttribute("img_paths_length",img_paths.length);//轮播图数量
