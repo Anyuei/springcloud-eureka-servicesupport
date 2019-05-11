@@ -220,7 +220,7 @@
         getComments(objectID);
 
     })
-    /*获取对象的评论显示在对象下方*/
+    /*对象详情页中：获取对象的评论显示在对象下方*/
     function getComments(objectID) {
         console.log("评论获取成功"+objectID);
         $.ajax(
@@ -234,26 +234,66 @@
                     if(data !=null) {
                         var comments = "";//<ul class='nav'>
                         $.each(data,function(index,element){
+                            var oppositionIcon = "fa-thumbs-o-down";/*反对按钮 未选中状态*/
+                            var likesIcon = "fa-thumbs-o-up";/*喜欢按钮 未选中状态*/
+
+                            var realNameOppositionStateIcon = "fa-thumbs-o-down";/*实名反对按钮 未选中状态*/
+                            var realNameSupportStateIcon ="fa-thumbs-o-up";/*实名喜欢按钮 未选中状态*/
+
+                            var realNameOppositionIcon="fa-id-card";/*实名支持图标*/
+                            var realNameSupportIcon="fa-id-card-o";/*实名反对图标*/
+                            if (element['commonOperateType']==1){
+                                likesIcon="fa-thumbs-up"
+                            }else if (element['commonOperateType']==-1) {
+                                oppositionIcon = "fa-thumbs-down"
+                            }
+
+                            if(element['realnameOperateType']==1){
+                                realNameSupportStateIcon = "fa-thumbs-up";
+                            }else if (element['realnameOperateType']==-1) {
+                                realNameOppositionStateIcon="fa-thumbs-down";
+                            }
                             console.log(element['commentID']);
                             comments +=
                                 "<div class='media'>"+
+                                    /*发表评论的用户头像*/
                                     "<a class='pr-3' href=''>"+
                                     "<img class='rounded' src='"+element['user']['avatarPath']+"' alt='头像' width='75px'/>"+
                                     "</a>"+
                                     "<div class='media-body commentTextArea'>"+
+                                        /*发表评论的用户姓名*/
                                         "<span class='mt-0'>"+element['user']['userName']+"</span><hr>"+
                                         "<span><img src='"+element['imagesPath'] +"' style='width: 200px;height: 200px;'></span>"+
                                           /*评论内容*/
-                                        "<span>"+element['content']+"</span>"+
+                                        "<span style='margin: 0px 10px;'>"+element['content']+"</span>"+
                                    " </div>"+
                                 "</div>"+
-                                    "<div class='commentOperateArea'>" +
-                                      "<span>"+"点赞:" +element['likes']+"</span>"+
-                                      "<span>"+ "反对："+ element['opposition']+"</span>"+
-                                      "<span>"+"实名支持："+element['realNameSupport']+"</span>"+
-                                      "<span>"+ "实名反对："+element['realNameOpposition']+"</span>"+
-                                      "<span>"+  "评论时间" +element['commentTime']+"</span>"+
-                                    "</div>"+
+
+                                "<div class='commentOperateArea'>" +
+                                    "<a href='javascript:void(0)' id='comment_likes_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                        "<li id='comment_likes_"+element['commentID']+"_Icon' class='fa "+ likesIcon +"'>" +
+                                            "点赞:" +element['likes']+
+                                        "</li>"+
+                                    "</a>"+
+                                    "<a href='javascript:void(0)' id='comment_opposition_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                        "<li id='comment_opposition_"+element['commentID']+"_Icon' class='fa "+ oppositionIcon +"'>" +
+                                            "反对："+ element['opposition']+
+                                        "</li>"+
+                                    "</a>"+
+                                    "<a href='javascript:void(0)' id='comment_realNameSupport_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                        "<i class='fa fa-id-card-o' aria-hidden='true'></i>"+
+                                        "<li id='comment_realNameSupport_"+element['commentID']+"_Icon' class='fa "+ realNameSupportStateIcon +"'>" +
+                                            "实名支持："+element['realNameSupport']+
+                                        "</li>"+
+                                    "</a>"+
+                                    "<a href='javascript:void(0)' id='comment_realNameOpposition_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                        "<i class='fa fa-id-card' aria-hidden='true'></i>"+
+                                        "<li id='comment_realNameOpposition_"+element['commentID']+"_Icon' class='fa "+ realNameOppositionStateIcon +"'>" +
+                                            "实名反对："+element['realNameOpposition']+
+                                        "</li>"+
+                                    "</a>"+
+                                    "<h6>"+element['commentTime']+"</h6>"+
+                                "</div>"+
                                 "<hr />"
                         });
                         console.log(comments);
@@ -314,5 +354,34 @@
             }
         });
     }
+    /*评论 点赞按钮触发*/
+    function operateComment(operationType_commentDom) {
+        //id会有四种结果（**代表被操作的评论ID）：
+        // likes_**
+        // opposition_**
+        // realNameSupport_**
+        // realNameOpposition_**
+        var operationType_commentID = operationType_commentDom.id;
+        var operationType = operationType_commentID.split("_")[1];//获取操作类型
+        var commentID = operationType_commentID.split("_")[2];//获取操作对象ID
+        $.ajax({
+            url : '${request.contextPath }/comment/operate',
+            type : 'post',
+            data : {
+                "operationType": operationType,
+                "commentID": commentID
+            },
+            async : false,
+            cache : false,
+            success : function(returndata) {
+                alert(returndata)
+            },
+            error : function(returndata) {
+                alert(returndata);
+            }
+        })
+    }
+
+
 </script>
 </html>

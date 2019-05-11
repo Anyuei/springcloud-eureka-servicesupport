@@ -4,8 +4,11 @@ import com.yun.dao.CategoryDao;
 import com.yun.dao.UserDao;
 import com.yun.entity.Category;
 import com.yun.entity.User;
+import com.yun.utils.RedisUtil;
+import com.yun.utils.RedisUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -40,6 +43,9 @@ public class Application
     private UserDao userDao;
     @Resource
     private CategoryDao categoryDao;
+
+    @Autowired
+    RedisUtil redisUtil;
     @Test
     public void insertUser(){
         User newUser = new User();
@@ -121,5 +127,11 @@ public class Application
             }
         }
         return null;
+    }
+    @Test
+    public void redisLinkTest(){
+        redisUtil.setKV("ssss", "dddd");
+        String res = redisUtil.getValueByKey("ssss");
+        System.out.println(res);
     }
 }

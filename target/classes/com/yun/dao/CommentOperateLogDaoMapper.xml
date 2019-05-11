@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--对评论的操作信息表DDL
+CREATE TABLE `commentOperate` (
+  `operateID` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '操作ID',
+  `operateTime` datetime NOT NULL COMMENT '操作时间',
+  `commonOperateType` int(255) NOT NULL COMMENT '对评论的普通操作类型 目前2种（likes:支持 1，opposition：-1 ,无状态0）',
+  `realnameOperateType` int(255) NOT NULL COMMENT '对评论的实名操作类型 目前2种( realNameSupports: 实名支持 1，realNameOpposition：实名反对 -1 ,无状态 0）',
+  `operateUserID` int(255) NOT NULL COMMENT '操作评论的用户',
+  `commentID` bigint(20) NOT NULL COMMENT '被操作评论 所属对象',
+  `objectID` bigint(20) NOT NULL COMMENT '记录当前对评论的操作 属于哪个评论对象(objectID)下的',
+  PRIMARY KEY (`operateID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-->
+<mapper namespace="com.yun.dao.CommentOperateLogDao">
+	<!--新增评论 测试通过 2019.5.11 -->
+	<insert id="insertCommentOperate" parameterType="CommentOperateLog" useGeneratedKeys="true" keyProperty="operateID">
+		INSERT INTO commentOperate(
+                operateTime,
+                commonOperateType,
+                realnameOperateType,
+                operateUserID,
+                commentID,
+                objectID
+                )
+	    VALUES(
+                      #{operateTime},
+                      #{commonOperateType},
+                      #{realnameOperateType},
+                      #{operateUserID},
+                      #{commentID},
+                      #{objectID}
+                      )
+	</insert>
+
+    <delete id="deleteCommentOperateByID">
+        DELETE FROM commentOperate WHERE operateID = #{operateID}
+    </delete>
+
+    <update id="updateCommentOperate" parameterType="CommentOperateLog">
+        UPDATE
+            commentOperate
+        SET
+        <if test="operateTime != null">operateTime=#{operateTime},</if>
+        <if test="commonOperateType != null">commonOperateType=#{commonOperateType},</if>
+        <if test="realnameOperateType != null">realnameOperateType=#{realnameOperateType},</if>
+        <if test="operateUserID != null">operateUserID=#{operateUserID},</if>
+        <if test="commentID != null">commentID=#{commentID},</if>
+        <if test="objectID != null">objectID=#{objectID}</if>
+        WHERE operateID = #{operateID}
+    </update>
+    <select id="retrieveCommentOperatesByUserIDAndObjectID" resultType="CommentOperateLog">
+        SELECT * FROM commentOperate WHERE objectID = #{objectID} and operateUserID = #{userID}
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

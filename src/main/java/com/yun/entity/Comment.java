@@ -26,6 +26,9 @@ public class Comment implements Serializable {
     private String realNameOpposition="0";//实名反对数
     private String state="1";//评论状态
     private Date commentTime;//评论时间
+
+    private Integer commonOperateType;//当前用户对此条评论普通操作类型
+    private Integer realnameOperateType;//当前用户对此条评论实名操作类型
     public Comment() {
     }
 
@@ -45,6 +48,8 @@ public class Comment implements Serializable {
                 ", realNameOpposition='" + realNameOpposition + '\'' +
                 ", state='" + state + '\'' +
                 ", commentTime=" + commentTime +
+                ", commonOperateType=" + commonOperateType +
+                ", realnameOperateType=" + realnameOperateType +
                 '}';
     }
 
@@ -150,5 +155,21 @@ public class Comment implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Integer getCommonOperateType() {
+        return commonOperateType;
+    }
+
+    public void setCommonOperateType(Integer commonOperateType) {
+        this.commonOperateType = commonOperateType;
+    }
+
+    public Integer getRealnameOperateType() {
+        return realnameOperateType;
+    }
+
+    public void setRealnameOperateType(Integer realnameOperateType) {
+        this.realnameOperateType = realnameOperateType;
     }
 }

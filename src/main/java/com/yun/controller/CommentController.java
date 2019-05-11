@@ -6,19 +6,13 @@ import com.yun.entity.User;
 import com.yun.service.CommentService;
 import com.yun.utils.FileUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Path;
+
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -44,9 +38,12 @@ public class CommentController {
      * @return
      */
     @RequestMapping("/getCommentsByObjectID")
-    public @ResponseBody List<Comment> getCommentsByObjectID(@RequestParam("ObjectID")String objectID_str){
+    public @ResponseBody List<Comment> getCommentsByObjectID(@RequestParam("ObjectID")String objectID_str,HttpSession session){
+        User user = (User)session.getAttribute("currentUserInfo");
+        Integer userID = user.getUserID();
         final long objectID = Long.parseLong(objectID_str);
-        final List<Comment> comments = commentService.retrieveCommentsByObjectID(objectID);
+        final List<Comment> comments = commentService.retrieveCommentsByObjectID(objectID,userID);
+
         return comments;
     }
 
@@ -87,5 +84,19 @@ public class CommentController {
             return "评论成功";
         }
 
+    }
+
+    /**
+     * 对评论的操作
+     * @return
+     */
+    @RequestMapping("/operate")
+    public @ResponseBody String operateComment(@RequestParam("operationType") String operationType,
+                                               @RequestParam("commentID") String commentID,
+                                               HttpSession session){
+        User user = (User)session.getAttribute("currentUserInfo");
+        Integer userID = user.getUserID();
+
+        return "success";
     }
 }

@@ -40,11 +40,11 @@ public interface CommentService {
     List<Comment> retrieveCommentsByUserID(Long userID);
 
     /**
-     * 根据被评论对象ID 查询评论
+     * 根据被评论对象ID 查询评论 当前有登录用户时，应当根据用户显示出 用户对他操作过的评论 做出不同的显示，比如点赞 反对的意见
      * @param objectID
      * @return
      */
-    List<Comment> retrieveCommentsByObjectID(Long objectID);
+    List<Comment> retrieveCommentsByObjectID(Long objectID,Integer userID);
 
     /**
      * 根据状态查询
