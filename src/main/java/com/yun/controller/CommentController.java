@@ -91,8 +91,8 @@ public class CommentController {
      * @return
      */
     @RequestMapping("/operate")
-    public @ResponseBody String operateComment(@RequestParam("operationType") String operationType,
-                                               @RequestParam("commentID") String commentID,
+    public @ResponseBody String operateComment(@RequestParam("operationType") String operationType,/*操作类型*/
+                                               @RequestParam("commentID") String commentID,/*被操作的评论的ID*/
                                                HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
         Integer userID = user.getUserID();

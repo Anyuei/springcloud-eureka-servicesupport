@@ -1,11 +1,11 @@
 package com.yun.controller;
 
-import com.yun.utils.RedisUtils;
+import com.yun.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @version : V1.0
@@ -18,22 +18,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value="/redis")
 public class RedisController{
     @Autowired
-    RedisUtils redisUtil;
+    RedisUtil redisUtil;
 
-    /**
-     * @auther: zhangyingqi
-     * @date: 16:23 2018/8/29
-     * @param: []
-     * @return: org.springframework.ui.ModelMap
-     * @Description: 执行redis写/读/生命周期
-     */
-    @RequestMapping(value = "getRedis",method = RequestMethod.POST)
+    @RequestMapping(value = "setKV",method = RequestMethod.POST)
     @ResponseBody
-    public String getRedis(){
-        redisUtil.set("20182018","这是一条测试数据", 0);
-        Long resExpire = redisUtil.expire("20182018", 60, 0);//设置key过期时间
-        String res = redisUtil.get("20182018", 0);
-        return res;
+    public String setRedisKV(String key,String value){
+        final String state = redisUtil.setKV(key, value);
+        return state;
     }
 
+    @RequestMapping(value = "getValueByKey",method = RequestMethod.GET)
+    @ResponseBody
+    public String getRedisValueByKey(@RequestParam("key") String key){
+        String res = redisUtil.getValueByKey(key);
+        return res;
+    }
 }
