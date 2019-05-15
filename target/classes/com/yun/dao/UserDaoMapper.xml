@@ -64,6 +64,10 @@ CREATE TABLE `users` (
 	<select id="retrieveUsersByNickname" resultType="User">
 		SELECT * FROM users WHERE userNickname LIKE CONCAT('%',#{nickname},'%')
 	</select>
+	<!-- 根据用户的经验值降序排列查询 测试通过 2019.5.24 -->
+	<select id="retrieveUsersByXP" resultType="User">
+		SELECT * FROM users ORDER BY xp DESC LIMIT #{startIndex},#{count}
+	</select>
 </mapper>
 
 

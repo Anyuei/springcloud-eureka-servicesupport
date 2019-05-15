@@ -20,10 +20,10 @@ public class Comment implements Serializable {
     private String stars="5";//评价星级
     private String content;//评价内容
     private String imagesPath="/";//评论图片路径
-    private String likes="0";//支持数
-    private String opposition="0";//反对数
-    private String realNameSupport="0";//实名支持数
-    private String realNameOpposition="0";//实名反对数
+    private Long likes=0L;//支持数
+    private Long opposition=0L;//反对数
+    private Long realNameSupport=0L;//实名支持数
+    private Long realNameOpposition=0L;//实名反对数
     private String state="1";//评论状态
     private Date commentTime;//评论时间
 
@@ -69,6 +69,14 @@ public class Comment implements Serializable {
         this.userID = userID;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Long getObjectID() {
         return objectID;
     }
@@ -101,35 +109,35 @@ public class Comment implements Serializable {
         this.imagesPath = imagesPath;
     }
 
-    public String getLikes() {
+    public Long getLikes() {
         return likes;
     }
 
-    public void setLikes(String likes) {
+    public void setLikes(Long likes) {
         this.likes = likes;
     }
 
-    public String getOpposition() {
+    public Long getOpposition() {
         return opposition;
     }
 
-    public void setOpposition(String opposition) {
+    public void setOpposition(Long opposition) {
         this.opposition = opposition;
     }
 
-    public String getRealNameSupport() {
+    public Long getRealNameSupport() {
         return realNameSupport;
     }
 
-    public void setRealNameSupport(String realNameSupport) {
+    public void setRealNameSupport(Long realNameSupport) {
         this.realNameSupport = realNameSupport;
     }
 
-    public String getRealNameOpposition() {
+    public Long getRealNameOpposition() {
         return realNameOpposition;
     }
 
-    public void setRealNameOpposition(String realNameOpposition) {
+    public void setRealNameOpposition(Long realNameOpposition) {
         this.realNameOpposition = realNameOpposition;
     }
 
@@ -147,14 +155,6 @@ public class Comment implements Serializable {
 
     public void setCommentTime(Date commentTime) {
         this.commentTime = commentTime;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Integer getCommonOperateType() {

@@ -13,7 +13,7 @@ CREATE TABLE `commentOperate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -->
 <mapper namespace="com.yun.dao.CommentOperateLogDao">
-	<!--新增评论 测试通过 2019.5.11 -->
+	<!--新增评论操作 测试通过 2019.5.11 -->
 	<insert id="insertCommentOperate" parameterType="CommentOperateLog" useGeneratedKeys="true" keyProperty="operateID">
 		INSERT INTO commentOperate(
                 operateTime,

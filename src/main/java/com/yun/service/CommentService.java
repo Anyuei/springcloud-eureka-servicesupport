@@ -31,13 +31,23 @@ public interface CommentService {
      * @return
      */
     Comment retrieveCommentByID(Long id);
-
+    /**
+     * 根据用户ID 查询评论 并根据字段 降序排序 获取index行往后的count条数据
+     * @param userID
+     * @return
+     */
+    List<Comment> retrieveCommentsByUserID(
+            Integer userID,
+            String key,
+            Integer index,
+            Integer count,
+            String descOrAsc);
     /**
      * 根据用户ID 查询评论
      * @param userID
      * @return
      */
-    List<Comment> retrieveCommentsByUserID(Long userID);
+    List<Comment> retrieveCommentsByUserID(Integer userID);
 
     /**
      * 根据被评论对象ID 查询评论 当前有登录用户时，应当根据用户显示出 用户对他操作过的评论 做出不同的显示，比如点赞 反对的意见

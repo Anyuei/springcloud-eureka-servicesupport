@@ -1,6 +1,8 @@
 package com.yun.dao;
 
 import com.yun.entity.User;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 public interface UserDao {
     /**
@@ -56,4 +58,13 @@ public interface UserDao {
      * @return
      */
     List<User> retrieveUsersByNickname(String nickname);
+
+    /**
+     * 根据用户经验值排序,并取对应分页的数据。
+     * @param startIndex 查询结果取数据位置
+     * @param count 查询数量
+     * @return
+     */
+    List<User> retrieveUsersByXP(@Param("startIndex") Integer startIndex, @Param("count")Integer count);
+
 }

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>CouldComment</title>
+    <title>CloudComment</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
@@ -20,7 +20,7 @@
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="${request.contextPath }/css/custom.css">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="${request.contextPath }/img/favicon.ico">
+    <link rel="shortcut icon" href="${request.contextPath }/img/favicon.png">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -38,7 +38,7 @@
         <div class="content-inner">
           <div class="tab-content" id="myTabContent">
             <!-- 个人主页 -->
-            <div class=" tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
               <#include "/personalPage.html"/>
             </div>
             <!-- 评价主区 -->
@@ -49,9 +49,21 @@
             <div class="tab-pane fade" id="community" role="tabpanel" aria-labelledby="community-tab">
               <#include "/community.html"/>
             </div>
-            <!-- 社区 -->
-            <div class="tab-pane fade" id="contributionList" role="tabpanel" aria-labelledby="community-tab">
+            <!-- 用户排名区 -->
+            <div class="tab-pane fade" id="contributionList" role="tabpanel" aria-labelledby="contributionList-tab">
               <#include "/contributionList.html"/>
+            </div>
+            <!--我的评价-->
+            <div class="tab-pane fade" id="myComments" role="tabpanel" aria-labelledby="myComments-tab">
+              <#include "/myComments.html"/>
+            </div>
+            <!--草稿箱-->
+            <div class="tab-pane fade" id="myDrafts" role="tabpanel" aria-labelledby="myDrafts-tab">
+              <#include "/myDrafts.html"/>
+            </div>
+            <!--待审核-->
+            <div class="tab-pane fade" id="myReviews" role="tabpanel" aria-labelledby="myReviews-tab">
+              <#include "/myReviews.html"/>
             </div>
           </div>
           <!-- Dashboard Counts Section-->

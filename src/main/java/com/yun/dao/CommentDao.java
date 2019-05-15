@@ -1,6 +1,8 @@
 package com.yun.dao;
 
 import com.yun.entity.Comment;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -38,8 +40,18 @@ public interface CommentDao {
      * @param userID
      * @return
      */
-    List<Comment> retrieveCommentsByUserID(Long userID);
-
+    List<Comment> retrieveCommentsByUserID(Integer userID);
+    /**
+     * 根据用户ID 查询评论 并根据字段 降序排序 获取index行往后的count条数据
+     * @param userID
+     * @return
+     */
+    List<Comment> retrieveCommentsByUserID_OrderByKey_StartIndex_HaveCount(
+            @Param("userID")Integer userID,
+            @Param("key") String key,
+            @Param("index")Integer index,
+            @Param("count")Integer count,
+            @Param("descOrAsc")String descOrAsc);
     /**
      * 根据被评论对象ID 查询评论
      * @param objectID

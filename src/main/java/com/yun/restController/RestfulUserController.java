@@ -49,6 +49,7 @@ class RestfulUserController {
         User reallyUser=null;
         if (userNickname != null) {
             reallyUser = userService.retrieveUserByNickname(userNickname);
+            reallyUser.setUserPassword("");
         }
         return reallyUser;
     }

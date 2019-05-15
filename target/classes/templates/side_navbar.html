@@ -26,52 +26,54 @@
 
   <ul class="nav flex-column list-unstyled" id="myTab" role="tablist">
     <!-- 个人中心 -->
-    <li class="nav-item">
+    <li class="nav-item mainSelect">
       <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
         <i class="fa fa-home fa-2x"></i>个人中心
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item mainSelect">
       <a class="nav-link" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false">
         <i class="fa fa-comments fa-2x" aria-hidden="true"></i>评论区
       </a>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item mainSelect">
       <a class="nav-link" id="community-tab" data-toggle="tab" href="#community" role="tab" aria-controls="community" aria-selected="false">
         <i class="fa fa-globe fa-2x" aria-hidden="true"></i>社区
       </a>
     </li>
-
-    <li class="nav-item">
+    <li class="nav-item mainSelect">
       <a class="nav-link" id="contributionList-tab" data-toggle="tab" href="#contributionList" role="tab" aria-controls="contributionList" aria-selected="false">
         <i class="fa fa-list-ol fa-2x" aria-hidden="true"></i>贡献榜
       </a>
     </li>
-    <li>
-      <a href="${request.contextPath }/sort/search"></i>发布评价</a></li>
-    <li>
-      <a href="#commentBox" aria-expanded="false" data-toggle="collapse">
-        <i class="fa fa-envelope fa-2x"></i>
-        意见箱
+
+  </ul>
+  <hr>
+  <a href="#commentBox" aria-expanded="false" data-toggle="collapse">
+    <i class="fa fa-envelope fa-2x"></i>意见箱
+  </a>
+  <ul id="commentBox" class="collapse list-unstyled ">
+    <li class="nav-item">
+      <a class="nav-link myComment" id="myComments-tab" data-toggle="tab" href="#myComments" role="tab" aria-controls="myComments" aria-selected="false">
+        <i class="fa fa-edit fa-2x"></i>
+        我的评价
       </a>
-      <ul id="commentBox" class="collapse list-unstyled ">
-        <li class="nav-item">
-          <a class="nav-link" id="" data-toggle="tab" href="#" role="tab" aria-controls="" aria-selected="false">
-            <i class="fa fa-edit fa-2x"></i>
-            我的评价
-          </a>
-        </li>
-        <a href="#"><i class="fa fa-paste fa-2x"></i>草稿箱</a>
-        <a href="#"><i class="fa fa-spinner fa-2x"></i>待审核</a>
-      </ul>
     </li>
-    <li>
-      <a href="login.html">
-        <i class="icon-interface-windows"></i>Login page
+    <li class="nav-item">
+      <a class="nav-link myComment" id="myDrafts-tab" data-toggle="tab" href="#myDrafts" role="tab" aria-controls="myDrafts" aria-selected="false">
+        <i class="fa fa-paste fa-2x"></i>
+        草稿箱
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link myComment"  id="myReviews-tab" data-toggle="tab" href="#myReviews" role="tab" aria-controls="myReviews" aria-selected="false">
+        <i class="fa fa-spinner fa-2x"></i>
+        待审核
       </a>
     </li>
   </ul>
+  <hr>
   <span class="heading">Extras</span>
   <ul class="list-unstyled">
     <li> <a href="#"> <i class="icon-flask"></i>Demo </a></li>
@@ -84,32 +86,8 @@
 <!-- 修改头像弹窗 -->
 <#include "/uploadAvatarArea.html"/>
 <script>
-/*    /!* 点击弹出上传头像 *!/
-    $(function(){
-        $("#changeAvatarBtn").click(
-)
-
+    /*初始化用户排名区域*/
+    $("#contributionList-tab").click(function () {
+        initUserXPRankingArea();
     })
-
-    /!*上传头像*!/
-    function(){
-
-        var formData = new FormData($( "#uploadform" )[0]);
-        $.ajax({
-            url: '${request.contextPath }/user/uploadAvatar',
-            type: 'POST',
-            data: formData,
-            async: false,
-            cache: false,
-            dataType: 'json',
-            contentType: false,
-            processData: false, /!*要求为Boolean类型的参数，默认为true。默认情况下，发送的数据将被转换为对象（从技术角度来讲而非字符串）以配合默认内容类型"application/x-www-form-urlencoded"。如果要发送DOM树信息或者其他不希望转换的信息，请设置为false。*!/
-            success: function (returndata) {
-                alert(returndata);
-            },
-            error: function (returndata) {
-                alert(returndata);
-            }
-        });
-    }*/
 </script>

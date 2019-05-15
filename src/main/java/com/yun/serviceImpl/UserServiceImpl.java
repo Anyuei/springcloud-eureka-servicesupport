@@ -51,4 +51,9 @@ public class UserServiceImpl implements UserService {
     public List<User> retrieveUsersByNickname(String nickname) {
         return userDao.retrieveUsersByNickname(nickname);
     }
+
+    @Override
+    public List<User> retrieveUsersByXP(Integer startIndex, Integer count) {
+        return userDao.retrieveUsersByXP(startIndex,count);
+    }
 }

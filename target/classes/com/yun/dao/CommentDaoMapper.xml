@@ -79,6 +79,33 @@ CREATE TABLE `comments` (
         </association>
 
     </resultMap>
+    <!--选择用户的所有评论-->
+    <select id="retrieveCommentsByUserID" resultType="Comment" parameterType="java.lang.Integer">
+        SELECT *
+        FROM
+             comments
+        WHERE
+             userID=#{userID}
+          AND
+             state !=0/*过滤审核不通过的评论*/
+    </select>
+    <!--选择用户的评论 根据key排序 获取从index开始的count条数据-->
+    <select id="retrieveCommentsByUserID_OrderByKey_StartIndex_HaveCount" resultType="Comment">
+        SELECT *
+        FROM
+             comments
+        WHERE
+             userID=#{userID}
+          AND
+             state !=0/*过滤审核不通过的评论*/
+          ORDER BY
+             ${key}
+          <if test="descOrAsc == 'asc'||descOrAsc == 'desc'">
+            ${descOrAsc}
+          </if>
+        LIMIT #{index},#{count}
+    </select>
+    <!--选择对象的评论-->
     <select id="retrieveCommentsByObjectID" resultMap="CommentMap" parameterType="java.lang.Long">
         SELECT c.* ,
                u.userName,

@@ -1,0 +1,104 @@
+
+<!-- 我的评论 界面 -->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">My Comments</h2>
+    </div>
+</header>
+<table class="table table-hover">
+    <thead class="thead-light">
+    <tr>
+        <th scope="col"></th>
+        <th scope="col">评论ID</th>
+        <th scope="col">评论对象ID</th>
+        <th scope="col">评论内容</th>
+        <th scope="col">
+            <a class='likesIcon' href='javascript:void(0)' id='myComment_likes' onclick='orderByThis(this)'>
+                点赞数<li class='fa fa-arrow-down'></li>
+            </a>
+        </th>
+        <th scope="col">
+            <a class='likesIcon' href='javascript:void(0)' id='myComment_opposition' onclick='orderByThis(this)'>
+                反对数<li class='fa fa-arrow-down'></li>
+            </a>
+
+        </th>
+        <th scope="col">
+            <a class='likesIcon' href='javascript:void(0)' id='myComment_realNameSupport' onclick='orderByThis(this)'>
+                实名支持数<li class='fa fa-arrow-down'></li>
+            </a>
+
+        </th>
+        <th scope="col">
+            <a class='likesIcon' href='javascript:void(0)' id='myComment_realNameOpposition' onclick='orderByThis(this)'>
+                实名反对数<li class='fa fa-arrow-down'></li>
+            </a>
+        </th>
+        <th scope="col">评论时间</th>
+    </tr>
+    </thead>
+    <tbody id="myCommentsRowsArea">
+    </tbody>
+</table>
+<script>
+    /*排序方案按钮激活*/
+    function orderByThis(dom){
+        var orderTypeID = dom.id;
+        $('#'+orderTypeID).children().toggleClass('fa-arrow-down fa-arrow-up');
+        var requestOrderType = orderTypeID.split("_")[1];
+        orderCommentByKey(requestOrderType);
+    }
+
+    /*我的评价按钮被激活时触发*/
+    $("#myComments-tab").click(
+        orderCommentByKey(null)
+    )
+    /*以某种字段order_type排序，要求descOrAsc排序，发送对应评论结果顺序的请求*/
+    function orderCommentByKey(order_type,descOrAsc) {
+        var key=order_type;
+        if (key==null){
+            key='commentTime';
+        }
+        if (descOrAsc==null){
+            descOrAsc='desc';
+        }
+        var currentPage=0;
+        $.ajax({
+            type: 'get',
+            url: '${request.contextPath }/comment/currentUserComments?orderBy='+key+'&currentPage='+currentPage+'&descOrAsc='+descOrAsc,//请求用户排名数据
+            async: true,
+            dataType: 'json',
+            success: function (data) {
+                var rankNum=1;//评论编号
+                var HTML_TXT="";
+                $('#myCommentsRowsArea').html("");//清空用户评论区数据
+                $.each(data,function(index,element){//组织数据
+                    HTML_TXT +=
+                        "<tr>"+
+                        "<th scope='row'>"+ rankNum++ +"</th>"+
+
+                        "<td>"+element['commentID']+
+                        "</td>"+
+                        "<td>"+element['objectID']+
+                        "</td>"+
+                        "<td>"+element['content']+
+                        "</td>"+
+                        "<td>"+element['likes']+
+                        "</td>"+
+                        "<td>"+element['opposition']+
+                        "</td>"+
+                        "<td>"+element['realNameSupport']+
+                        "</td>"+
+                        "<td>"+element['realNameOpposition']+
+                        "</td>"+
+                        "<td>"+element['commentTime']+
+                        "</td>"+
+                        "</tr>"
+
+                })
+                $('#myCommentsRowsArea').html(HTML_TXT);//填充数据
+            }
+        })
+    }
+
+</script>

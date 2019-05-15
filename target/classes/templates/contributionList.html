@@ -5,3 +5,43 @@
       <h2 class="no-margin-bottom">Contribution List</h2>
     </div>
   </header>
+  <table class="table table-hover">
+    <thead class="thead-light">
+        <tr>
+          <th scope="col">排名</th>
+          <th scope="col">用户昵称</th>
+          <th scope="col">经验值</th>
+        </tr>
+    </thead>
+    <tbody id="rankRowsArea">
+    </tbody>
+  </table>
+  <script>
+      $(function() {
+          initUserXPRankingArea();
+      })
+    function initUserXPRankingArea() {
+        $.ajax({
+            type: 'get',
+            url: '${request.contextPath }/user/XP_Ranking?currentPageNum=0&count=10',//请求用户排名数据
+            async: true,
+            dataType: 'json',
+            success: function (data) {
+                var rankNum=1;//排名编号
+                var HTML_TXT="";
+                $('#rankRowsArea').html("");//清空排名区数据
+                $.each(data,function(index,element){//组织数据
+                    HTML_TXT +=
+                    "<tr>"+
+                      "<th scope='row'>"+ rankNum++ +"</th>"+
+                      "<td>"+"<img src='"+element['avatarPath']+"' style='width: 20px;margin-right: 5px;'>"+
+                        element['userNickname']+"</td>"+
+                      "<td>"+element['xp']+"</td>"+
+                    "</tr>"
+
+                })
+                $('#rankRowsArea').html(HTML_TXT);//填充数据
+            }
+        })
+    }
+  </script>

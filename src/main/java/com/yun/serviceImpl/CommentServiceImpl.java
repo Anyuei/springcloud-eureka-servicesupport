@@ -47,9 +47,18 @@ public class CommentServiceImpl implements CommentService {
     public Comment retrieveCommentByID(Long id) {
         return null;
     }
+    /**
+     * 根据用户ID 查询评论 并根据字段 降序排序 获取index行往后的count条数据
+     * @param userID
+     * @return
+     */
+    @Override
+    public List<Comment> retrieveCommentsByUserID(Integer userID, String key, Integer index, Integer count,String descOrAsc) {
+        return commentDao.retrieveCommentsByUserID_OrderByKey_StartIndex_HaveCount(userID,key,index,count,descOrAsc);
+    }
 
     @Override
-    public List<Comment> retrieveCommentsByUserID(Long userID) {
+    public List<Comment> retrieveCommentsByUserID(Integer userID) {
         List<Comment> comments = commentDao.retrieveCommentsByUserID(userID);
         return comments;
     }

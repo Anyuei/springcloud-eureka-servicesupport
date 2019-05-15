@@ -1,6 +1,7 @@
 package com.yun.controller;
 
 import com.yun.EurekaServiceApplication;
+import com.yun.config.ConstantConfig;
 import com.yun.entity.User;
 import com.yun.service.UserService;
 import com.yun.utils.FileUtils;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -171,6 +173,23 @@ class UserController {
         user.setAvatarPath("/img/Avatar/"+imageSaveName);
         userService.updateUserByID(user);
         return "上传成功";
+    }
+
+    /**
+     * 查询用户排名
+     * @param startIndex
+     * @param count
+     * @return
+     */
+    @RequestMapping("/XP_Ranking")
+    public @ResponseBody List<User> getXPRankingOfUsers(
+            @RequestParam("currentPageNum") Integer startIndex,
+            @RequestParam("count")Integer count){
+        List<User> users = userService.retrieveUsersByXP(startIndex, count);
+        for (User user : users) {
+            user.setUserPassword("");
+        }
+        return users;
     }
 }
 
