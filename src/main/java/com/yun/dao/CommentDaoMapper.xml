@@ -52,6 +52,16 @@ CREATE TABLE `comments` (
         DELETE FROM comments WHERE commentID = #{commentID}
     </delete>
 
+    <update id="updateCommentOperateNumByID" parameterType="Comment">
+        UPDATE
+        comments
+        SET
+        <if test="likes != null">likes=#{likes},</if>
+        <if test="opposition != null">opposition=#{opposition},</if>
+        <if test="realNameSupport != null">realNameSupport=#{realNameSupport},</if>
+        <if test="realNameOpposition != null">realNameOpposition=#{realNameOpposition}</if>
+        WHERE commentID = #{commentID}
+    </update>
 
     <resultMap id="CommentMap" type="Comment">
         <id column="commentID" property="commentID"/>
@@ -125,6 +135,16 @@ CREATE TABLE `comments` (
           c.state !=0/*过滤审核不通过的评论*/
     </select>
 
+    <!--根据评论ID查询评论-->
+    <select id="retrieveCommentByID" resultType="Comment" parameterType="java.lang.Long">
+        SELECT *
+        FROM
+             comments
+        WHERE
+                commentID=#{commentID}
+          AND
+                state !=0/*过滤审核不通过的评论*/
+    </select>
 </mapper>
 
 

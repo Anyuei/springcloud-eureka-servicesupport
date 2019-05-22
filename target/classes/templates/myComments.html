@@ -34,7 +34,12 @@
                 实名反对数<li class='fa fa-arrow-down'></li>
             </a>
         </th>
-        <th scope="col">评论时间</th>
+        <th scope="col">
+            <a class='likesIcon' href='javascript:void(0)' id='myComment_commentTime' onclick='orderByThis(this)'>
+                评论时间<li class='fa fa-arrow-down'></li>
+            </a>
+
+        </th>
     </tr>
     </thead>
     <tbody id="myCommentsRowsArea">
@@ -44,9 +49,15 @@
     /*排序方案按钮激活*/
     function orderByThis(dom){
         var orderTypeID = dom.id;
-        $('#'+orderTypeID).children().toggleClass('fa-arrow-down fa-arrow-up');
+        var domChildren = $('#'+orderTypeID).children();
+        domChildren.toggleClass('fa-arrow-down fa-arrow-up');
+        /*默认降序排列*/
+        var descOrAsc = 'desc';
+        if (domChildren.attr("class")=="fa fa-arrow-up") {
+            descOrAsc='asc'
+        }
         var requestOrderType = orderTypeID.split("_")[1];
-        orderCommentByKey(requestOrderType);
+        orderCommentByKey(requestOrderType,descOrAsc);
     }
 
     /*我的评价按钮被激活时触发*/

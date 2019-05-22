@@ -24,9 +24,8 @@ import java.util.UUID;
 @RequestMapping("/user")
 class UserController {
 
-    private Integer limitAvatarSizeMB=2;//单位MB
-    private Long limitAvatarSize=1024L*1024*limitAvatarSizeMB;//2MB
-
+    @Autowired
+    private ConstantConfig constantConfig;
     @Autowired
     private UserService userService;
 
@@ -164,7 +163,7 @@ class UserController {
         String image_uuid = UUID.randomUUID().toString();
         String imageSaveName= image_uuid+"."+fileSuffix;
 
-        String resultString = FileUtils.uploadFile(file, avatarPath_absolute, limitAvatarSize, imageSaveName);
+        String resultString = FileUtils.uploadFile(file, avatarPath_absolute,constantConfig.getLimit_Avatar_Size(), imageSaveName);
         if (!resultString.equals("上传成功")){
             return resultString;
         }

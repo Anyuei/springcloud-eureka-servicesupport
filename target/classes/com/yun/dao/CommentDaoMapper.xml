@@ -28,7 +28,7 @@ CREATE TABLE `comments` (
                 imagesPath,
                 likes,
                 opposition,
-                realNameSupports,
+                realNameSupport,
                 realNameOpposition,
                 state,
                 commentTime
@@ -125,6 +125,16 @@ CREATE TABLE `comments` (
           c.state !=0/*过滤审核不通过的评论*/
     </select>
 
+    <!--根据评论ID查询评论-->
+    <select id="retrieveCommentByID" resultType="Comment" parameterType="java.lang.Long">
+        SELECT *
+        FROM
+             comments
+        WHERE
+                commentID=#{commentID}
+          AND
+                state !=0/*过滤审核不通过的评论*/
+    </select>
 </mapper>
 
 

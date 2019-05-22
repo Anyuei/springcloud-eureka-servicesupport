@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment retrieveCommentByID(Long id) {
-        return null;
+        return commentDao.retrieveCommentByID(id);
     }
     /**
      * 根据用户ID 查询评论 并根据字段 降序排序 获取index行往后的count条数据
@@ -89,4 +90,103 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> retrieveCommentsByState(Integer state) {
         return null;
     }
+
+    @Override
+    public CommentOperateLog retrieveCommentOperateLogByUserIDAndCommentID(Integer userID ,Long commentID) {
+        return commentOperateLogDao.retrieveCommentOperateByUserIDAndCommentID(commentID,userID);
+    }
+    @Override
+    public CommentOperateLog operateComment(CommentOperateLog commentOperateLog ,String operateType){
+        Integer commonOperateType = commentOperateLog.getCommonOperateType();
+        Integer realnameOperateType = commentOperateLog.getRealnameOperateType();
+
+        switch (operateType) {
+            case "likes":
+                if (commonOperateType==1){//取消喜欢
+                    commonOperateType=0;
+                }else{//确认喜欢
+                    commonOperateType=1;
+                    if (realnameOperateType==-1){//喜欢时，把实名反对去掉（如果实名反对被激活）
+                        realnameOperateType=0;
+                    }
+                }
+                break;
+            case "opposition":
+                if (commonOperateType==-1){//取消反对
+                    commonOperateType=0;
+                }else{//确认反对
+                    commonOperateType=-1;
+                    if (realnameOperateType==1){//反对时，把实名支持去掉（如果实名支持被激活）
+                        realnameOperateType=0;
+                    }
+                }
+                break;
+            case "realNameSupport":
+                if (realnameOperateType==1){//取消实名支持
+                    realnameOperateType=0;
+                }else{//确认支持
+                    realnameOperateType=1;
+                    if (commonOperateType==-1){//实名支持时，把反对去掉（如果实名支持被激活）
+                        commonOperateType=0;
+                    }
+                }
+                break;
+            case "realNameOpposition":
+                if (realnameOperateType==-1){//取消反对
+                    realnameOperateType=0;
+                }else{//确认反对
+                    realnameOperateType=-1;
+                    if (commonOperateType==1){//实名反对时，把普通喜欢去掉（如果普通喜欢被激活）
+                        commonOperateType=0;
+                    }
+                }
+                break;
+        }
+        commentOperateLog.setCommonOperateType(commonOperateType);//更新普通评论操作
+        commentOperateLog.setRealnameOperateType(realnameOperateType);//更新实名评论操作
+        commentOperateLog.setOperateTime(new Date());//更新操作时间
+        Integer state = commentOperateLogDao.insertCommentOperate(commentOperateLog);
+        if (state!=null&&state==1){
+            return commentOperateLog;
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public Integer operateLikesNumOfComment(Long commentID,Integer num) {
+        Comment comment = commentDao.retrieveCommentByID(commentID);
+        Long likes = comment.getLikes();
+        likes+=num;
+        comment.setLikes(likes);
+        return commentDao.updateCommentOperateNumByID(comment);
+    }
+
+    @Override
+    public Integer operateOppositionsNumOfComment(Long commentID,Integer num) {
+        Comment comment = commentDao.retrieveCommentByID(commentID);
+        Long oppositions = comment.getOpposition();
+        oppositions+=num;
+        comment.setOpposition(oppositions);
+        return commentDao.updateCommentOperateNumByID(comment);
+    }
+
+    @Override
+    public Integer operateRealNameSupportsNumOfComment(Long commentID,Integer num) {
+        Comment comment = commentDao.retrieveCommentByID(commentID);
+        Long supports = comment.getRealNameSupport();
+        supports+=num;
+        comment.setRealNameSupport(supports);
+        return commentDao.updateCommentOperateNumByID(comment);
+    }
+
+    @Override
+    public Integer operateRealNameOppositionsNumOfComment(Long commentID,Integer num) {
+        Comment comment = commentDao.retrieveCommentByID(commentID);
+        Long oppositions = comment.getRealNameOpposition();
+        oppositions+=num;
+        comment.setRealNameOpposition(oppositions);
+        return commentDao.updateCommentOperateNumByID(comment);
+    }
+
 }

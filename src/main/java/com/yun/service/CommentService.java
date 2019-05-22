@@ -2,6 +2,7 @@ package com.yun.service;
 
 
 import com.yun.entity.Comment;
+import com.yun.entity.CommentOperateLog;
 
 import java.util.List;
 
@@ -62,4 +63,52 @@ public interface CommentService {
      * @return
      */
     List<Comment> retrieveCommentsByState(Integer state);
+
+    /**
+     * 根据commentID(评论ID),userID(用户ID)查询某用户对他的操作
+     * @param userID
+     * @param commentID
+     * @return
+     */
+    CommentOperateLog retrieveCommentOperateLogByUserIDAndCommentID(Integer userID , Long commentID);
+
+    /**
+     * 对评论的操作
+     * @param commentOperateLog 评论操作详细信息对象
+     * @param operateType 操作类型
+     * @return
+     */
+    CommentOperateLog operateComment(CommentOperateLog commentOperateLog , String operateType);
+
+    /**
+     * 操作评论喜欢数
+     * @param commentID
+     * @param num
+     * @return
+     */
+    Integer operateLikesNumOfComment(Long commentID,Integer num);
+
+    /**
+     * 操作评论反对数
+     * @param commentID
+     * @param num
+     * @return
+     */
+    Integer operateOppositionsNumOfComment(Long commentID,Integer num);
+
+    /**
+     * 操作评论实名支持数
+     * @param commentID
+     * @param num
+     * @return
+     */
+    Integer operateRealNameSupportsNumOfComment(Long commentID,Integer num);
+
+    /**
+     * 操作评论实名反对数
+     * @param commentID
+     * @param num
+     * @return
+     */
+    Integer operateRealNameOppositionsNumOfComment(Long commentID,Integer num);
 }

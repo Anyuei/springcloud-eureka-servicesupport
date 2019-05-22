@@ -24,9 +24,9 @@ public interface CommentDao {
 
     /**
      * 根据评论ID修改评论
-     * @param id
+     * @param comment
      */
-    void updateCommentByID(Long id);
+    Integer updateCommentOperateNumByID(Comment comment);
 
     /**
      * 根据评论ID 查询评论

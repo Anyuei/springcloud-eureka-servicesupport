@@ -74,11 +74,31 @@
     #operationBar{
         background-color: #138496;
     }
+    /*评论操作项*/
     .commentOperateArea span{
-      margin: 10px;
+        margin: 10px 10px 0px 10px;
     }
+    /*评论操作区*/
     .commentTextArea *{
-      vertical-align: top;
+        vertical-align: top;
+    }
+    /*评论操作项*/
+    .commentOperateBtn a{
+        color: #bd2130;
+    }
+    /*评论时间样式*/
+    .commentTimeArea{
+        margin: 10px 10px 0px 10px;
+        float: right;
+    }
+    /*水平分割线 样式*/
+    hr {
+        margin-top: 7px;/*解决ie和ff margin-top不一致问题*/
+        *margin: 0;/**/
+        border: 0;/*是去掉fierfoxf的一条阴影线*/
+        color: black; /*是设置ie老版本水平线的颜色；*/
+        background-color: black;/* 设置fierfox 下水平线的高度*/
+        height: 1px;/* 水平高度*/
     }
   </style>
   <body>
@@ -275,29 +295,37 @@
                                 "</div>"+
 
                                 "<div class='commentOperateArea'>" +
+                                    "<span class='commentOperateBtn'>"+
                                     "<a href='javascript:void(0)' id='comment_likes_"+element['commentID']+"' onclick=operateComment(this)>"+
                                         "<li id='comment_likes_"+element['commentID']+"_Icon' class='fa "+ likesIcon +"'>" +
                                             "点赞:" +element['likes']+
                                         "</li>"+
                                     "</a>"+
+                                    "</span>"+
+                                    "<span class='commentOperateBtn'>"+
                                     "<a href='javascript:void(0)' id='comment_opposition_"+element['commentID']+"' onclick=operateComment(this)>"+
                                         "<li id='comment_opposition_"+element['commentID']+"_Icon' class='fa "+ oppositionIcon +"'>" +
                                             "反对："+ element['opposition']+
                                         "</li>"+
                                     "</a>"+
+                                    "</span>"+
+                                    "<span class='commentOperateBtn'>"+
                                     "<a href='javascript:void(0)' id='comment_realNameSupport_"+element['commentID']+"' onclick=operateComment(this)>"+
                                         "<i class='fa fa-id-card-o' aria-hidden='true'></i>"+
                                         "<li id='comment_realNameSupport_"+element['commentID']+"_Icon' class='fa "+ realNameSupportStateIcon +"'>" +
                                             "实名支持："+element['realNameSupport']+
                                         "</li>"+
                                     "</a>"+
+                                    "</span>"+
+                                    "<span class='commentOperateBtn'>"+
                                     "<a href='javascript:void(0)' id='comment_realNameOpposition_"+element['commentID']+"' onclick=operateComment(this)>"+
                                         "<i class='fa fa-id-card' aria-hidden='true'></i>"+
                                         "<li id='comment_realNameOpposition_"+element['commentID']+"_Icon' class='fa "+ realNameOppositionStateIcon +"'>" +
                                             "实名反对："+element['realNameOpposition']+
                                         "</li>"+
                                     "</a>"+
-                                    "<h6>"+element['commentTime']+"</h6>"+
+                                    "</span>"+
+                                    "<strong class='commentTimeArea'>"+element['commentTime']+"</strong>"+
                                 "</div>"+
                                 "<hr />"
                         });
@@ -356,6 +384,7 @@
             },
             error : function(returndata) {
                 alert("系统内部错误：返回值"+returndata);
+                return "请重新登录";
             }
         });
     }
@@ -378,8 +407,8 @@
             },
             async : false,
             cache : false,
-            success : function(returndata) {
-                alert(returndata)
+            success : function(operate) {
+                alert(operate.operateID)
             },
             error : function(returndata) {
                 alert(returndata);

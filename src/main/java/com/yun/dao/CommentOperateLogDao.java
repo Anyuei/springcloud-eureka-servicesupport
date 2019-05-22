@@ -21,7 +21,7 @@ public interface CommentOperateLogDao {
      * @param userID
      * @return
      */
-    CommentOperateLog retrieveCommentOperateByUserIDAndCommentID(Long commentID,Integer userID);
+    CommentOperateLog retrieveCommentOperateByUserIDAndCommentID(@Param("commentID")Long commentID,@Param("userID")Integer userID);
     /**
      * 查询某对象下，某用户对所有操作过的评论的操作信息。
      * @param objectID

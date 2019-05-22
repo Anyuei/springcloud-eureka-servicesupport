@@ -17,6 +17,19 @@ public class CommentOperateLog implements Serializable {
     private Integer realnameOperateType;
     private Integer operateUserID;
     private Long commentID;
+    private Long objectID;
+    public CommentOperateLog() {
+    }
+
+    public CommentOperateLog(Long operateID, Date operateTime, Integer commonOperateType, Integer realnameOperateType, Integer operateUserID, Long commentID, Long objectID) {
+        this.operateID = operateID;
+        this.operateTime = operateTime;
+        this.commonOperateType = commonOperateType;
+        this.realnameOperateType = realnameOperateType;
+        this.operateUserID = operateUserID;
+        this.commentID = commentID;
+        this.objectID = objectID;
+    }
 
     @Override
     public String toString() {
@@ -26,7 +39,8 @@ public class CommentOperateLog implements Serializable {
                 ", commonOperateType=" + commonOperateType +
                 ", realnameOperateType=" + realnameOperateType +
                 ", operateUserID=" + operateUserID +
-                ", commentID='" + commentID + '\'' +
+                ", commentID=" + commentID +
+                ", objectID=" + objectID +
                 '}';
     }
 
@@ -76,5 +90,13 @@ public class CommentOperateLog implements Serializable {
 
     public void setCommentID(Long commentID) {
         this.commentID = commentID;
+    }
+
+    public Long getObjectID() {
+        return objectID;
+    }
+
+    public void setObjectID(Long objectID) {
+        this.objectID = objectID;
     }
 }

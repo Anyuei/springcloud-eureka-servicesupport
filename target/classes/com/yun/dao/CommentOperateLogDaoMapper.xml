@@ -49,8 +49,13 @@ CREATE TABLE `commentOperate` (
         <if test="objectID != null">objectID=#{objectID}</if>
         WHERE operateID = #{operateID}
     </update>
+    <!-- 查询某用户对某对象下所有评论的操作 -->
     <select id="retrieveCommentOperatesByUserIDAndObjectID" resultType="CommentOperateLog">
         SELECT * FROM commentOperate WHERE objectID = #{objectID} and operateUserID = #{userID}
+    </select>
+    <!-- 查询某用户对某评论的操作 -->
+    <select id="retrieveCommentOperateByUserIDAndCommentID" resultType="CommentOperateLog">
+        SELECT * FROM commentOperate WHERE commentID = #{commentID} and operateUserID = #{userID}
     </select>
 </mapper>
 
