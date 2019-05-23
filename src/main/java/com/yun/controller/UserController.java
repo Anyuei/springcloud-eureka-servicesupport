@@ -59,6 +59,8 @@ class UserController {
                 String userNickname = reallyUser.getUserNickname();
                 System.out.println("USER:" + userNickname + " login success！["+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()) +"]");
                 session.setAttribute(userNickname, userNickname);
+                //把用户信息存入会话
+                session.setAttribute("currentUserInfo",reallyUser);
                 return "success";
             }
         }

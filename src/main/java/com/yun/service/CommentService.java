@@ -58,6 +58,13 @@ public interface CommentService {
     List<Comment> retrieveCommentsByObjectID(Long objectID,Integer userID);
 
     /**
+     * 当无登录用户时 直接返回
+     * @param objectID
+     * @return
+     */
+    List<Comment> retrieveCommentsByObjectID(Long objectID);
+
+    /**
      * 根据状态查询
      * @param state 评论状态 （0=审核中，1=通过，2=封禁，3=删除）
      * @return
@@ -72,13 +79,15 @@ public interface CommentService {
      */
     CommentOperateLog retrieveCommentOperateLogByUserIDAndCommentID(Integer userID , Long commentID);
 
+
     /**
-     * 对评论的操作
-     * @param commentOperateLog 评论操作详细信息对象
-     * @param operateType 操作类型
+     * 根据用户ID 评论ID 操作类型 操作评论
+     * @param userID
+     * @param commentID
+     * @param operateType
      * @return
      */
-    CommentOperateLog operateComment(CommentOperateLog commentOperateLog , String operateType);
+    CommentOperateLog operateComment(Integer userID, Long commentID , String operateType);
 
     /**
      * 操作评论喜欢数
@@ -111,4 +120,18 @@ public interface CommentService {
      * @return
      */
     Integer operateRealNameOppositionsNumOfComment(Long commentID,Integer num);
+    /**
+     * 更改评论个状态数数量
+     * @param commentID
+     * @param like_changeNum
+     * @param opposition_changeNum
+     * @param realNameSupport_changeNum
+     * @param realNameOpposition_changeNum
+     * @return
+     */
+    Integer operateNumOfComment(Long commentID,
+                                Integer like_changeNum,
+                                Integer opposition_changeNum,
+                                Integer realNameSupport_changeNum,
+                                Integer realNameOpposition_changeNum);
 }

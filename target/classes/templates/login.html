@@ -93,6 +93,7 @@
                 function() {
                     var userNickname=$("#login-username").val();
                     var userPassword=$("#login-password").val();
+                    var newWindow = window.open();
                     if(userNickname!=""&&userPassword!=""){
                         $.ajax({
                             type: 'post',
@@ -106,7 +107,7 @@
                             success: function(data) {
                                 console.log(data);
                                 if(data == "success") {
-                                    window.location.href = '${request.contextPath }/user/index/'+userNickname;
+                                    newWindow.location= '${request.contextPath }/user/index/'+userNickname;
                                     console.log("用户"+userNickname+"登录成功");
                                 } else if(data == "fail") {
                                     $("#warning").text("用户名或密码错误")

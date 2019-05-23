@@ -44,9 +44,14 @@ public class CommentController {
     @RequestMapping("/getCommentsByObjectID")
     public @ResponseBody List<Comment> getCommentsByObjectID(@RequestParam("ObjectID")String objectID_str,HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
-        Integer userID = user.getUserID();
+        List<Comment> comments=null;
         final long objectID = Long.parseLong(objectID_str);
-        final List<Comment> comments = commentService.retrieveCommentsByObjectID(objectID,userID);
+        if (user!=null){
+            Integer userID = user.getUserID();
+            comments = commentService.retrieveCommentsByObjectID(objectID,userID);
+        }else{
+            comments = commentService.retrieveCommentsByObjectID(objectID);
+        }
         return comments;
     }
 
@@ -101,26 +106,17 @@ public class CommentController {
                                                HttpSession session){
         //获取当前用户信息
         User user = (User)session.getAttribute("currentUserInfo");
-        Integer userID = user.getUserID();
-        //获取被操作评论的ID
-        Long commentID = Long.parseLong(commentID_str);
-        //根据用户ID和评论ID 搜索对应用户对对应评论的操作
-        CommentOperateLog commentOperateLog = commentService.retrieveCommentOperateLogByUserIDAndCommentID(userID, commentID);
-        if (commentOperateLog==null){//如果用户之前没有操作过此评论，初始化评论操作记录
-            Comment comment = commentService.retrieveCommentByID(commentID);
-            commentOperateLog = new CommentOperateLog(
-                    null,new Date(),
-                    0,
-                    0,
-                    userID,
-                    commentID,
-                    comment.getObjectID()
-            );
-        }
-        //更新对评论的操作
-        commentOperateLog = commentService.operateComment(commentOperateLog, operationType);
-        if (commentOperateLog!=null){
-            return commentOperateLog;//返回操作日志
+        if (user!=null){
+            Integer userID = user.getUserID();
+            //获取被操作评论的ID
+            Long commentID = Long.parseLong(commentID_str);
+
+            //更新对评论的操作
+            CommentOperateLog commentOperateLog = commentService.operateComment(userID, commentID, operationType);
+
+            if (commentOperateLog!=null){
+                return commentOperateLog;//返回操作日志
+            }
         }
         return null;
     }

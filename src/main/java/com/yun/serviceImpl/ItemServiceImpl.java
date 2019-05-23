@@ -66,6 +66,12 @@ public class ItemServiceImpl implements ItemService {
         }
         return item;
     }
+
+    @Override
+    public Item searchItemByName(String objectName) {
+        return itemDao.retrieveItemByName(objectName);
+    }
+
     /**
      * 根据对象名模糊查对象
      * @param objectName

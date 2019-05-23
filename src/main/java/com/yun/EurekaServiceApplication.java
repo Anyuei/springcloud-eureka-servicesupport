@@ -3,6 +3,7 @@ package com.yun;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.yun.Intercepter.URLInterceptor;
 import freemarker.template.TemplateException;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -10,8 +11,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
 
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
@@ -24,6 +27,7 @@ import java.io.IOException;
 @SpringBootApplication
 @EnableDiscoveryClient//代表自己是一个服务提供方
 @MapperScan("com.yun.dao")
+@Configuration
 public class EurekaServiceApplication extends WebMvcConfigurerAdapter {
     public static String uploadPath;//绝对上传路径
     public static String RELATIVE_UPLOADPATH;//相对上传路径
@@ -69,6 +73,17 @@ public class EurekaServiceApplication extends WebMvcConfigurerAdapter {
         return new HttpMessageConverters(converter);
     }
 
+    /**
+     * 拦截器注册
+     * @param registry
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // addPathPatterns 用于添加拦截规则
+        // excludePathPatterns 用户排除拦截
+        registry.addInterceptor(new URLInterceptor()).addPathPatterns("/user/index/*","/comment/operate");
+        super.addInterceptors(registry);
+    }
     /**
      * jar包入口方法
      * @param args

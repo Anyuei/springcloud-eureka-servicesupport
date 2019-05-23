@@ -27,7 +27,13 @@ public class MainContentPageController {
     @RequestMapping("/{itemName}")
     public String initPage(@PathVariable String itemName, HttpSession session, Model model){
         User user = (User)session.getAttribute("currentUserInfo");
-        Item item = itemService.searchItemByName(itemName,user.getUserID());
+        Item item = null;
+        if (user!=null){
+            item = itemService.searchItemByName(itemName,user.getUserID());
+        }else{
+            item = itemService.searchItemByName(itemName);
+        }
+
         String[] img_paths = item.getObjectPicturePath().split(",");
         item.setObjectPicturePath(img_paths[0]);
         model.addAttribute("user", user);

@@ -398,6 +398,8 @@
         var operationType_commentID = operationType_commentDom.id;
         var operationType = operationType_commentID.split("_")[1];//获取操作类型
         var commentID = operationType_commentID.split("_")[2];//获取操作对象ID
+        var operationType_commentID__Icon = operationType_commentID+"_Icon";
+
         $.ajax({
             url : '${request.contextPath }/comment/operate',
             type : 'post',
@@ -407,11 +409,15 @@
             },
             async : false,
             cache : false,
-            success : function(operate) {
-                alert(operate.operateID)
+            success : function(data) {
+                if (data==null){
+                    alert("请登录后操作");
+                }
+                var jsonData = JSON.parse(data);
+                alert(jsonData.operateTime);
             },
             error : function(returndata) {
-                alert(returndata);
+                alert("error");
             }
         })
     }

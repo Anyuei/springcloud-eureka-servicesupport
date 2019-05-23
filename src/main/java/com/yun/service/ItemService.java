@@ -26,6 +26,12 @@ public interface ItemService {
      * @return
      */
     Item searchItemByName(String objectName,Integer userID);
+    /**
+     * 根据对象名精确查对象
+     * @param objectName
+     * @return
+     */
+    Item searchItemByName(String objectName);
 
     /**
      * 根据对象名模糊查对象

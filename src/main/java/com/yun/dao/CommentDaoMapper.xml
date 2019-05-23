@@ -72,7 +72,7 @@ CREATE TABLE `comments` (
         <result column="imagesPath" property="imagesPath"/>
         <result column="likes" property="likes"/>
         <result column="opposition" property="opposition"/>
-        <result column="realNameSupports" property="realNameSupport"/>
+        <result column="realNameSupport" property="realNameSupport"/>
         <result column="realNameOpposition" property="realNameOpposition"/>
         <result column="state" property="state"/>
         <result column="commentTime" property="commentTime"/>

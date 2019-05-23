@@ -52,6 +52,16 @@ CREATE TABLE `comments` (
         DELETE FROM comments WHERE commentID = #{commentID}
     </delete>
 
+    <update id="updateCommentOperateNumByID" parameterType="Comment">
+        UPDATE
+        comments
+        SET
+        <if test="likes != null">likes=#{likes},</if>
+        <if test="opposition != null">opposition=#{opposition},</if>
+        <if test="realNameSupport != null">realNameSupport=#{realNameSupport},</if>
+        <if test="realNameOpposition != null">realNameOpposition=#{realNameOpposition}</if>
+        WHERE commentID = #{commentID}
+    </update>
 
     <resultMap id="CommentMap" type="Comment">
         <id column="commentID" property="commentID"/>
@@ -62,7 +72,7 @@ CREATE TABLE `comments` (
         <result column="imagesPath" property="imagesPath"/>
         <result column="likes" property="likes"/>
         <result column="opposition" property="opposition"/>
-        <result column="realNameSupports" property="realNameSupport"/>
+        <result column="realNameSupport" property="realNameSupport"/>
         <result column="realNameOpposition" property="realNameOpposition"/>
         <result column="state" property="state"/>
         <result column="commentTime" property="commentTime"/>
