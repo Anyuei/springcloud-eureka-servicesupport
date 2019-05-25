@@ -46,12 +46,20 @@ public interface ItemService {
      * @param categoryID 类目ID
      * @return 所有对象
      */
-    List<Item> retrieveItemsByCategoryID(Long categoryID);
+    List<Item> retrieveItemsByCategoryID(Long categoryID,Integer userID);
+
+    /**
+     * 查询分类下的对象
+     * @param categoryName
+     * @param userID
+     * @return
+     */
+    List<Item> searchItemsByCategoryName(String categoryName,Integer userID);
     /**
      * 根据对象的所属类目，查询某状态对象。
      * @param state 对象状态(0-正常 1-审核 2-封禁)
      * @param categoryID 类目ID
      * @return 所有对象
      */
-    List<Item> retrieveItemsInStateByCategoryID(Long categoryID,Integer state);
+    List<Item> retrieveItemsInStateByCategoryID(Long categoryID,Integer userID,Integer state);
 }

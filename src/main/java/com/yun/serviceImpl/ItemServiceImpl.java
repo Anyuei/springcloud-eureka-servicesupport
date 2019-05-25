@@ -89,22 +89,65 @@ public class ItemServiceImpl implements ItemService {
         }
         return items;
     }
+
+    /**
+     * 根据某种类下的对象
+     * @param categoryName
+     * @return
+     */
+    @Override
+    public List<Item> searchItemsByCategoryName(String categoryName,Integer userID) {
+        List<Item> items = itemDao.retrieveItemsByCategoryName(categoryName);
+        if(userID!=null){
+            //查询当前用户对所有类似此对象name发表的态度状态
+            HashMap<Long,Integer> map = getObjectIDAndlikestateMapOfUserLikesByUserID(userID);
+            //把用户的态度状态分别赋值给所查询的对象，前台展示需要知道每个对象的当前用户的态度状态
+            for (Item item : items) {
+                item.setIslike(map.get(item.getObjectID()));
+            }
+        }
+        return items;
+    }
+
     /**
      * 根据对象的所属类目查询对象信息
      * @param categoryID 类目ID
      * @return 所有对象
      */
-    public List<Item> retrieveItemsByCategoryID(Long categoryID){
-        return itemDao.retrieveItemsByCategoryID(categoryID);
+    public List<Item> retrieveItemsByCategoryID(Long categoryID,Integer userID){
+        List<Item> items = itemDao.retrieveItemsInStateByCategoryID(categoryID,0);
+        for (Item item : items) {
+            System.out.println("="+item.getObjectName());
+        }
+        if(userID!=null){
+            //查询当前用户对所有类似此对象name发表的态度状态
+            HashMap<Long,Integer> map = getObjectIDAndlikestateMapOfUserLikesByUserID(userID);
+            //把用户的态度状态分别赋值给所查询的对象，前台展示需要知道每个对象的当前用户的态度状态
+            for (Item item : items) {
+                item.setIslike(map.get(item.getObjectID()));
+            }
+        }
+        return items;
     }
+
     /**
      * 根据对象的所属类目，查询某状态对象。
      * @param state 对象状态(0-正常 1-审核 2-封禁)
+     * @param userID 用户ID
      * @param categoryID 类目ID
      * @return 所有对象
      */
-    public List<Item> retrieveItemsInStateByCategoryID(Long categoryID,Integer state){
-        return itemDao.retrieveItemsInStateByCategoryID(categoryID,state);
+    public List<Item> retrieveItemsInStateByCategoryID(Long categoryID,Integer userID,Integer state){
+        List<Item> items = itemDao.retrieveItemsInStateByCategoryID(categoryID,state);
+        if(userID!=null){
+            //查询当前用户对所有类似此对象name发表的态度状态
+            HashMap<Long,Integer> map = getObjectIDAndlikestateMapOfUserLikesByUserID(userID);
+            //把用户的态度状态分别赋值给所查询的对象，前台展示需要知道每个对象的当前用户的态度状态
+            for (Item item : items) {
+                item.setIslike(map.get(item.getObjectID()));
+            }
+        }
+        return items;
     }
 
     /**

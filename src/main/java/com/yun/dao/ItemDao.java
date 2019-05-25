@@ -1,6 +1,7 @@
 package com.yun.dao;
 
 import com.yun.entity.Item;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -36,11 +37,19 @@ public interface ItemDao {
      */
     List<Item> retrieveItemsByCategoryID(Long categoryID);
     /**
+     * 根据对象的所属类目查询对象信息
+     * @param categoryName 类目名
+     * @return 所有对象
+     */
+    List<Item> retrieveItemsByCategoryName(String categoryName);
+    /**
      * 根据对象的所属类目，查询某状态对象。
      * @param state 对象状态(0-正常 1-审核 2-封禁)
      * @param categoryID 类目ID
      * @return 所有对象
      */
-    List<Item> retrieveItemsInStateByCategoryID(Long categoryID,Integer state);
+    List<Item> retrieveItemsInStateByCategoryID(@Param("categoryID") Long categoryID, @Param("state") Integer state);
+
+
 
 }

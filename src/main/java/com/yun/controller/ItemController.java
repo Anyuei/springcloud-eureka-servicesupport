@@ -63,4 +63,28 @@ public class ItemController {
         User user = (User)session.getAttribute("currentUserInfo");
         return itemService.likeItem(objectID,user.getUserID(),likeState);
     }
+
+    /**
+     *
+     * @param categoryID
+     * @param session
+     * @return
+     */
+    @RequestMapping("/searchByCategoryID")
+    public @ResponseBody List<Item> searchItemsByCategoryID(@RequestParam("categoryID")Long categoryID,
+                                         HttpSession session){
+        User user = (User)session.getAttribute("currentUserInfo");
+        List<Item> items=null;
+        if (user!=null){
+            items = itemService.retrieveItemsInStateByCategoryID(categoryID,user.getUserID(),0);
+        }else{
+            items = itemService.retrieveItemsInStateByCategoryID(categoryID,null,0);
+        }
+        System.out.println(categoryID);
+        for (Item item : items) {
+            System.out.println("=="+item.getObjectName());
+        }
+
+        return items;
+    }
 }
