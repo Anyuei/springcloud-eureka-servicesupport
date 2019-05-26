@@ -71,7 +71,7 @@ public class ItemController {
      * @return
      */
     @RequestMapping("/searchByCategoryID")
-    public @ResponseBody List<Item> searchItemsByCategoryID(@RequestParam("categoryID")Long categoryID,
+    public @ResponseBody List<Item> searchItemsByCategoryID(@RequestParam("category")Long categoryID,
                                          HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
         List<Item> items=null;
@@ -80,11 +80,31 @@ public class ItemController {
         }else{
             items = itemService.retrieveItemsInStateByCategoryID(categoryID,null,0);
         }
-        System.out.println(categoryID);
         for (Item item : items) {
             System.out.println("=="+item.getObjectName());
         }
+        return items;
+    }
 
+    /**
+     *
+     * @param categoryName
+     * @param session
+     * @return
+     */
+    @RequestMapping("/searchByCategoryName")
+    public @ResponseBody List<Item> searchItemsByCategoryName(@RequestParam("category")String categoryName,
+                                                            HttpSession session){
+        User user = (User)session.getAttribute("currentUserInfo");
+        List<Item> items=null;
+        if (user!=null){
+            items = itemService.searchItemsInStateByCategoryName(categoryName,user.getUserID(),0);
+        }else{
+            items = itemService.searchItemsInStateByCategoryName(categoryName,null,0);
+        }
+        for (Item item : items) {
+            System.out.println("=="+item.getObjectName());
+        }
         return items;
     }
 }

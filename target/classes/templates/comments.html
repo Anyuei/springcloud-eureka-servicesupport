@@ -73,13 +73,14 @@
     font-size: larger;
     font-style: italic;
   }
+
 </style>
   <!-- 评论区-->
   <header class="page-header">
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-6">
-           <h2 class="no-margin-bottom">World</h2>
+          <h2 class="no-margin-bottom" style="margin: 9px 0px 0px 0px;">World</h2>
         </div>
         <!-- 搜索栏 -->
         <div class="col-lg-6">
@@ -141,7 +142,6 @@
     })
     //根据父类ID获取子类，并把子类数据追加在父类数据区div之后。
     function getCategories(supCategoryID){
-        console.log(supCategoryID);
         var supCategoryArea = "CategoryArea"+supCategoryID;
         $.ajax({
             type: 'get',
@@ -210,6 +210,13 @@
         //--------
         getCategories(categoryID);//获取类目，并追加数据
         activeBtn(categoryNavID);//激活Button
+
+        /*在对象显示区显示 此分类下的对象*/
+        if (categoryID!="1"){
+            getItemDataByCategory(categoryID);
+        }else{
+            getItemDataByCategory("大学");
+        }
     }
 
 
@@ -220,9 +227,8 @@
         //$('#myTab a[href=tab1]').tab('show');//备选方案
     }
 
-
-    /*搜索 被评论对象*/
-    $('#searchItems').click(function(){
+   /* 点击search触发搜索 根据对象名称 搜索 被评论对象*/
+    function searchItemByName(){
         /*获取关键词*/
         var itemKey = $('#itemsKey').val();
 
@@ -236,76 +242,123 @@
                 async: true,
                 dataType: 'json',
                 success: function(data) {
-                    //成功搜索后先清空，对象显示区
-                    $('.itemsArea_SearchResult').html("");
-                    console.log(data);
-                    var HTML_TXT="";
-                    $.each(data,function(index,element){
-                        var objectPicturePath = element['objectPicturePath'].split(",")[0];
-                        var islike ="fa-heart-o";
-                        var isdislike ="fa-thumbs-o-down";
-                        /*用来判定当前对象是否被当前用户发表过态度，以便显示不同的态度状态*/
-                        if(element['islike']==-1){
-                            isdislike="fa-thumbs-down";
-                        }
-                        if(element['islike']==1){
-                            islike= "fa-heart";
-                        }
-                        HTML_TXT +=
-                            /* 对象展示核心 Html 代码 */
-                            "<div class='col-lg-12 card'>"+
-                              "<div class='row'>"+
-                                "<div class='col-lg-3 itemBgImgStyle'>"+
-                                  //图片区
-                                  "<a href='${request.contextPath }/world/"+element['objectName']+"' target='_blank'>"+
-                                    "<img src='${request.contextPath }" + objectPicturePath + "' width='100%' height='100%'>"+
-                                  "</a>"+
-                                "</div>"+
-                                "<div class='col-lg-9'>"+
-                                  //对象名
-                                  "<h3 class='itemNameStyle'>"+
-                                     element['objectName']+//对象名
-                                  "</h3>"+
-                                  "<hr>"+
-                                  //简介
-                                  "<div class=''>"+
-                                     element['brief_introduction']+
-                                  "</div>"+
-                                  //对象操作区
-                                  "<div class='ItemOperationArea'>"+
-                                    //喜欢按钮---------------------------------------------------------
-                                    "<a class='likesIcon' href='javascript:void(0)' id='like_"+element['objectID']+"' onclick='likesBtn(this)'>"+
-                                    "<li id='like_"+element['objectID']+"_Icon' class='fa "+ islike +"'>喜欢</li>"+
-                                    "</a>"+
-                                    //点赞数量
-                                    "<span id='like_"+element['objectID']+"_Count' class='likeCountNum'>"+element['likes']+"</span>"+
-                                    //不看好按钮-------------------------------------------------------
-                                    "<a class='dislikesIcon' href='javascript:void(0)' id='dislike_"+element['objectID']+"' onclick='likesBtn(this)'>"+
-                                    "<li id='dislike_"+element['objectID']+"_Icon' class='fa "+ isdislike +"'>不看好</li>"+
-                                    "</a>"+
-                                    //不看好数量
-                                    "<span id='dislike_"+element['objectID']+"_Count' class='likeCountNum'>"+element['dislikes']+"</span>"+
-                                    //浏览量显示-------------------------------------------------------
-                                    "<li id='' class='fa fa-eye'>浏览量</li>"+
-                                    "<span id='' class=''>"+element['viewTimes']+"</span>"+
-                                    //创建者显示-------------------------------------------------------
-                                    "<span id='' class=''>"+element['likes']+"</span>"+
-                                  "</div>"+
-                                "</div>"+
-                              "</div>"+
-                            "</div>"+
-                            "<br>"
-
-                    });
-                    $('.itemsArea_SearchResult').append(HTML_TXT)//显示数据
+                    /*根据获取的数据  显示到结果区*/
+                    showDataInItemArea(data);
                 },
                 error: function() {
                     alert("无结果");
                 }
             });
         }
-    })
+    }
+    /*根据对象名称 搜索 被评论对象*/
+    $('#searchItems').click(
+        function(){
+            searchItemByName();
+        }
+    )
+    //回车键触发搜索
 
+    $(function() {
+        $(document).keydown(function (event) {
+            if (event.keyCode=== 13|| event.which === 13) {
+                searchItemByName()
+            }
+        });
+    })
+    /*根据对象所属 搜索 被评论对象*/
+    function getItemDataByCategory(categoryID_OR_Num){
+        var URL = "";
+        /*判断空值*/
+        if(categoryID_OR_Num == ''){
+            alert('类目错误！');
+        }else if ($.isNumeric(categoryID_OR_Num)) {
+            URL = '${request.contextPath }/items/searchByCategoryID?category='+categoryID_OR_Num;
+        }else{
+            URL =  '${request.contextPath }/items/searchByCategoryName?category='+categoryID_OR_Num;//infos查所有
+        }
+        $.ajax({
+            type: 'get',
+            url: URL,//infos查所有
+            async: true,
+            dataType:'json',
+            success: function(data) {
+                /*根据获取的数据  显示到结果区*/
+                showDataInItemArea(data);
+            },
+            error: function() {
+                alert("无结果");
+            }
+        });
+    }
+
+    /*把搜索的结果展示到结果区*/
+    function showDataInItemArea(data){
+        //成功搜索后先清空，对象显示区
+        $('.itemsArea_SearchResult').html("");
+        console.log(data);
+        var HTML_TXT="";
+        $.each(data,function(index,element){
+            var objectPicturePath = element['objectPicturePath'].split(",")[0];
+            var islike ="fa-heart-o";
+            var isdislike ="fa-thumbs-o-down";
+            /*用来判定当前对象是否被当前用户发表过态度，以便显示不同的态度状态*/
+            if(element['islike']==-1){
+                isdislike="fa-thumbs-down";
+            }
+            if(element['islike']==1){
+                islike= "fa-heart";
+            }
+            HTML_TXT +=
+                /* 对象展示核心 Html 代码 */
+                "<div class='col-lg-12 card'>"+
+                "<div class='row'>"+
+                "<div class='col-lg-3 itemBgImgStyle'>"+
+                //图片区
+                "<a href='${request.contextPath }/world/"+element['objectName']+"' target='_blank'>"+
+                "<img src='${request.contextPath }" + objectPicturePath + "' width='100%' height='100%'>"+
+                "</a>"+
+                "</div>"+
+                "<div class='col-lg-9'>"+
+                //对象名
+                "<h3 class='itemNameStyle'>"+
+                element['objectName']+//对象名
+                "</h3>"+
+                "<hr>"+
+                //简介
+                "<div class=''>"+
+                element['brief_introduction']+
+                "</div>"+
+                //对象操作区
+                "<div class='ItemOperationArea'>"+
+                //喜欢按钮---------------------------------------------------------
+                "<a class='likesIcon' href='javascript:void(0)' id='like_"+element['objectID']+"' onclick='likesBtn(this)'>"+
+                "<li id='like_"+element['objectID']+"_Icon' class='fa "+ islike +"'>喜欢</li>"+
+                "</a>"+
+                //点赞数量
+                "<span id='like_"+element['objectID']+"_Count' class='likeCountNum'>"+element['likes']+"</span>"+
+                //不看好按钮-------------------------------------------------------
+                "<a class='dislikesIcon' href='javascript:void(0)' id='dislike_"+element['objectID']+"' onclick='likesBtn(this)'>"+
+                "<li id='dislike_"+element['objectID']+"_Icon' class='fa "+ isdislike +"'>不看好</li>"+
+                "</a>"+
+                //不看好数量
+                "<span id='dislike_"+element['objectID']+"_Count' class='likeCountNum'>"+element['dislikes']+"</span>"+
+                //浏览量显示-------------------------------------------------------
+                "<li id='' class='fa fa-eye'></li>"+
+                "<span id='' class=''>"+element['viewTimes']+"</span>"+
+                //创建者显示-------------------------------------------------------
+                /*"<li id='' class='fa fa-eye'>贡献者：</li>"+
+                "<span id='' class=''>"+element['createUser']+"</span>"+*/
+                "</div>"+
+                "</div>"+
+                "</div>"+
+                "</div>"+
+                "<br>"
+
+        });
+        $('.itemsArea_SearchResult').append(HTML_TXT)//显示数据
+
+    }
 
     /*点赞功能 绑定在了点赞按钮上*/
     function likesBtn(likesBtnDom){

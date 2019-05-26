@@ -4,6 +4,17 @@
      height: 200px;
      overflow: hidden;
    }
+   /*重写bootstrap样式*/
+   nav.side-navbar a[data-toggle="collapse"]::before {
+     content: '';
+     display: inline-block;
+     -webkit-transform: translateY(-50%);
+     transform: translateY(-50%);
+     font-family: 'FontAwesome';
+     position: absolute;
+     top: 50%;
+     right: 20px;
+   }
 </style>
 <!-- Side Navbar 左侧选项区-->
 <nav class="side-navbar">
@@ -50,10 +61,12 @@
 
   </ul>
   <hr>
-  <a href="#commentBox" aria-expanded="false" data-toggle="collapse">
-    <i class="fa fa-envelope fa-2x"></i>意见箱
-  </a>
-  <ul id="commentBox" class="collapse list-unstyled ">
+  <li style="padding-left: 5%;">
+    <a href="#commentBox" aria-expanded="false" data-toggle="collapse">
+      <i class="fa fa-envelope fa-2x"></i>意见箱
+    </a>
+  </li>
+  <ul id="commentBox" class="collapse list-unstyled">
     <li class="nav-item">
       <a class="nav-link myComment" id="myComments-tab" data-toggle="tab" href="#myComments" role="tab" aria-controls="myComments" aria-selected="false">
         <i class="fa fa-edit fa-2x"></i>
@@ -74,13 +87,13 @@
     </li>
   </ul>
   <hr>
-  <span class="heading">Extras</span>
+<!--  <span class="heading">Extras</span>
   <ul class="list-unstyled">
     <li> <a href="#"> <i class="icon-flask"></i>Demo </a></li>
     <li> <a href="#"> <i class="icon-screen"></i>Demo </a></li>
     <li> <a href="#"> <i class="icon-mail"></i>Demo </a></li>
     <li> <a href="#"> <i class="icon-picture"></i>Demo </a></li>
-  </ul>
+  </ul>-->
 </nav>
 
 <!-- 修改头像弹窗 -->

@@ -141,4 +141,10 @@ public class User implements Serializable {
     public void setState(Integer state) {
         this.state = state;
     }
+
+    public Integer addXP(Integer number) {
+        this.xp += number;
+        System.out.println(this.xp);
+        return xp;
+    }
 }

@@ -2,8 +2,10 @@ package com.yun.serviceImpl;
 
 import com.yun.dao.CommentDao;
 import com.yun.dao.CommentOperateLogDao;
+import com.yun.dao.UserDao;
 import com.yun.entity.Comment;
 import com.yun.entity.CommentOperateLog;
+import com.yun.entity.User;
 import com.yun.service.CommentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +25,8 @@ import java.util.List;
 @Service
 @Transactional
 public class CommentServiceImpl implements CommentService {
-
+    @Resource
+    private UserDao userDao;
     @Resource
     private CommentDao commentDao;
     @Resource
@@ -100,8 +103,19 @@ public class CommentServiceImpl implements CommentService {
     public CommentOperateLog retrieveCommentOperateLogByUserIDAndCommentID(Integer userID ,Long commentID) {
         return commentOperateLogDao.retrieveCommentOperateByUserIDAndCommentID(commentID,userID);
     }
+
+    /**
+     * 用户对评论的操作 相关激发的操作
+     * @param user 用户
+     * @param commentID 被操作的评论  ID
+     * @param operateType 操作类型
+     * @param changeUserXP 操作获取的经验值
+     * @return
+     */
     @Override
-    public CommentOperateLog operateComment(Integer userID ,Long commentID ,String operateType){
+    public CommentOperateLog operateComment(User user , Long commentID , String operateType, Integer changeUserXP){
+
+        Integer userID = user.getUserID();
         Boolean isInitCommentOperate= false;
         //根据用户ID和评论ID 搜索对应用户对对应评论的操作
         CommentOperateLog commentOperateLog = commentOperateLogDao.retrieveCommentOperateByUserIDAndCommentID(commentID,userID);
@@ -124,20 +138,25 @@ public class CommentServiceImpl implements CommentService {
         Integer opposition_changeNum=0;
         Integer realNameSupport_changeNum=0;
         Integer realNameOpposition_changeNum=0;
-
+        Integer user_XP=0;//取消操作会变成响应的负值
         switch (operateType) {
             case "likes":
                 if (commonOperateType==1){//取消喜欢
                     commonOperateType=0;
                     like_changeNum=-1;
+                    user_XP=-changeUserXP;
                 }else{//确认喜欢
                     if (commonOperateType==-1){
                         opposition_changeNum=-1;//对应评论反对数减一
+
+                    }else if(commonOperateType==0){//第一次点喜欢时 增加经验值
+                        user_XP=changeUserXP;
                     }
                     commonOperateType=1;
                     like_changeNum=1;
                     if (realnameOperateType==-1){//喜欢时，把实名反对去掉（如果实名反对被激活）
                         realnameOperateType=0;
+                        user_XP-=5*changeUserXP;
                         realNameOpposition_changeNum=-1;//对应评论实名反对数减一
                     }
 
@@ -147,14 +166,18 @@ public class CommentServiceImpl implements CommentService {
                 if (commonOperateType==-1){//取消反对
                     commonOperateType=0;
                     opposition_changeNum=-1;//反对数减一
+                    user_XP=-changeUserXP;
                 }else{//确认反对
                     if (commonOperateType==1){//反对时，把喜欢去掉（如果喜欢被激活）
                         like_changeNum=-1;//喜欢数减一
+                    }else if (commonOperateType==0){
+                        user_XP=changeUserXP;
                     }
                     commonOperateType=-1;
                     opposition_changeNum=1;//反对数加一
                     if (realnameOperateType==1){//反对时，把实名支持去掉（如果实名支持被激活）
                         realnameOperateType=0;
+                        user_XP-=5*changeUserXP;
                         realNameSupport_changeNum=-1;//对应实名支持数减一
                     }
                 }
@@ -163,14 +186,18 @@ public class CommentServiceImpl implements CommentService {
                 if (realnameOperateType==1){//取消实名支持
                     realnameOperateType=0;
                     realNameSupport_changeNum=-1;//实名支持数减一
+                    user_XP=-5*changeUserXP;
                 }else{//确认支持
                     if (realnameOperateType==-1){//实名支持时，把实名反对去掉(如果实名反对被激活)
                         realNameOpposition_changeNum=-1;//实名反对数减一
+                    }else if(realnameOperateType==0){
+                        user_XP=5*changeUserXP;
                     }
                     realnameOperateType=1;
                     realNameSupport_changeNum=1;//实名支持数加一
                     if (commonOperateType==-1){//实名支持时，把反对去掉（如果反对被激活）
                         commonOperateType=0;
+                        user_XP-=changeUserXP;
                         opposition_changeNum=-1;//反对数减一
                     }
                 }
@@ -179,15 +206,19 @@ public class CommentServiceImpl implements CommentService {
                 if (realnameOperateType==-1){//取消实名反对
                     realnameOperateType=0;
                     realNameOpposition_changeNum=-1;//实名反对减一
+                    user_XP=-5*changeUserXP;
                 }else{//确认实名反对
                     if (realnameOperateType==1){//实名反对时，把实名支持去掉（如果实名支持被激活）
                         realNameSupport_changeNum=-1;
+                    }else if (realnameOperateType==0){
+                        user_XP=5*changeUserXP;
                     }
                     realnameOperateType=-1;
                     realNameOpposition_changeNum=1;//实名反对加一
                     if (commonOperateType==1){//实名反对时，把普通喜欢去掉（如果普通喜欢被激活）
                         commonOperateType=0;
                         like_changeNum=-1;
+                        user_XP-=changeUserXP;
                     }
                 }
                 break;
@@ -200,6 +231,9 @@ public class CommentServiceImpl implements CommentService {
                 realNameSupport_changeNum,
                 realNameOpposition_changeNum
         );
+        //更新用户经验值
+        user.addXP(user_XP);
+        userDao.updateUserByID(user);
 
         //更新当前用户 对评论的操作的记录
         commentOperateLog.setCommonOperateType(commonOperateType);//更新普通评论操作

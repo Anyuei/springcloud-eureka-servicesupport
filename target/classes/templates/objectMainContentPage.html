@@ -251,8 +251,8 @@
                 dataType:"json",
                 success: function(data) {
                     console.log("评论获取成功"+data);
-                    if(data !=null) {
-                        var comments = "";//<ul class='nav'>
+                    if(data !=null)  comments = "";//<ul class='nav'>{
+                        var
                         $.each(data,function(index,element){
                             var oppositionIcon = "fa-thumbs-o-down";/*反对按钮 未选中状态*/
                             var likesIcon = "fa-thumbs-o-up";/*喜欢按钮 未选中状态*/

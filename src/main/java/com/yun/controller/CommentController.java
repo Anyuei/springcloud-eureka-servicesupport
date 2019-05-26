@@ -6,6 +6,7 @@ import com.yun.entity.Comment;
 import com.yun.entity.CommentOperateLog;
 import com.yun.entity.User;
 import com.yun.service.CommentService;
+import com.yun.service.UserService;
 import com.yun.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,8 +32,12 @@ import java.util.UUID;
 @RequestMapping("/comment")
 public class CommentController {
 
+
     @Resource
     private CommentService commentService;
+
+    @Resource
+    private UserService userService;
 
     @Autowired
     private ConstantConfig constantConfig;
@@ -66,6 +71,7 @@ public class CommentController {
             HttpSession session,
             @RequestParam("image") MultipartFile image,
             Comment comment){
+        //有图片则添加图片
         if(!image.isEmpty()){
             String avatarPath_absolute =EurekaServiceApplication.staticPath+"img/Comment/";
             /*获取文件后缀*/
@@ -86,6 +92,11 @@ public class CommentController {
 
         //记录上传者
         User user = (User)session.getAttribute("currentUserInfo");
+
+        //增加用户经验值（贡献度）
+        user.setXp(user.getXp()+constantConfig.getComment_XP());
+
+        userService.updateUserByID(user);
         comment.setUserID(user.getUserID());
         comment.setCommentTime(new Date());
         if (commentService.insertComment(comment)==0){
@@ -107,12 +118,15 @@ public class CommentController {
         //获取当前用户信息
         User user = (User)session.getAttribute("currentUserInfo");
         if (user!=null){
-            Integer userID = user.getUserID();
             //获取被操作评论的ID
             Long commentID = Long.parseLong(commentID_str);
 
             //更新对评论的操作
-            CommentOperateLog commentOperateLog = commentService.operateComment(userID, commentID, operationType);
+            CommentOperateLog commentOperateLog = commentService.operateComment(/*用户对评论的操作*/
+                    user, //操作的用户
+                    commentID, //被操作的评论
+                    operationType,//操作的类型
+                    constantConfig.getOperate_Comment_XP());//用户操作评论改变的经验值
 
             if (commentOperateLog!=null){
                 return commentOperateLog;//返回操作日志

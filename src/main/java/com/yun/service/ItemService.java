@@ -54,7 +54,7 @@ public interface ItemService {
      * @param userID
      * @return
      */
-    List<Item> searchItemsByCategoryName(String categoryName,Integer userID);
+    List<Item> searchItemsInStateByCategoryName(String categoryName,Integer userID,Integer state);
     /**
      * 根据对象的所属类目，查询某状态对象。
      * @param state 对象状态(0-正常 1-审核 2-封禁)

@@ -26,6 +26,13 @@ public class ConstantConfig {
     private Integer Limit_Avatar_Size_MB;
 
     private Long Limit_Avatar_Size;
+    //评论一次获得的经验值
+    @Value("${Comment_XP}")
+    private Integer Comment_XP;
+    //对评论进行点赞，不喜欢，反对等操作的经验值
+    @Value("${Operate_Comment_XP}")
+    private Integer Operate_Comment_XP;
+
     public Long getLimit_Img_Size() {
         return 1024L*1024*Limit_Img_Size_MB;
     }
@@ -64,5 +71,21 @@ public class ConstantConfig {
 
     public void setLimit_Avatar_Size(Long limit_Avatar_Size) {
         Limit_Avatar_Size = limit_Avatar_Size;
+    }
+
+    public Integer getComment_XP() {
+        return Comment_XP;
+    }
+
+    public void setComment_XP(Integer comment_XP) {
+        Comment_XP = comment_XP;
+    }
+
+    public Integer getOperate_Comment_XP() {
+        return Operate_Comment_XP;
+    }
+
+    public void setOperate_Comment_XP(Integer operate_Comment_XP) {
+        Operate_Comment_XP = operate_Comment_XP;
     }
 }

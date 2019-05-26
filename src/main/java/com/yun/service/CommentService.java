@@ -3,6 +3,7 @@ package com.yun.service;
 
 import com.yun.entity.Comment;
 import com.yun.entity.CommentOperateLog;
+import com.yun.entity.User;
 
 import java.util.List;
 
@@ -82,12 +83,12 @@ public interface CommentService {
 
     /**
      * 根据用户ID 评论ID 操作类型 操作评论
-     * @param userID
+     * @param user
      * @param commentID
      * @param operateType
      * @return
      */
-    CommentOperateLog operateComment(Integer userID, Long commentID , String operateType);
+    CommentOperateLog operateComment(User user , Long commentID , String operateType, Integer changeUserXP);
 
     /**
      * 操作评论喜欢数

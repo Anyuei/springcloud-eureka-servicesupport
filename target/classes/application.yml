@@ -1,21 +1,56 @@
+spring:
+  #当前服务名称
+  application:
+    name: EurekaService
+  profiles: EurekaService_8714
 server:
-  port: 8701 # 服务提供方
+  port: 8714 # 服务提供方
   tomcat:
     uri-encoding: UTF-8
 # 指定当前eureka客户端的注册地址,
 eureka:
   client:
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:8699/eureka
-  instance:
-    hostname: localhost
+    serviceUrl:
+      defaultZone: http://peer8697:8697/eureka,http://peer8699:8699/eureka,http://peer8698:8698/eureka
 banner:
   charset: UTF-8
-
+---
 spring:
   #当前服务名称
   application:
-    name: eureka-service
+    name: EurekaService
+  profiles: EurekaService_8712
+server:
+  port: 8712 # 服务提供方
+  tomcat:
+    uri-encoding: UTF-8
+# 指定当前eureka客户端的注册地址,
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://peer8697:8697/eureka,http://peer8699:8699/eureka,http://peer8698:8698/eureka
+banner:
+  charset: UTF-8
+---
+spring:
+  #当前服务名称
+  application:
+    name: EurekaService
+  profiles: EurekaService_8713
+server:
+  port: 8713 # 服务提供方
+  tomcat:
+    uri-encoding: UTF-8
+# 指定当前eureka客户端的注册地址,
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://peer8697:8697/eureka,http://peer8699:8699/eureka,http://peer8698:8698/eureka
+banner:
+  charset: UTF-8
+---
+spring:
+
   #数据源
   datasource:
 #    type: org.apache.commons.dbcp.BasicDataSource

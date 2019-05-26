@@ -96,8 +96,8 @@ public class ItemServiceImpl implements ItemService {
      * @return
      */
     @Override
-    public List<Item> searchItemsByCategoryName(String categoryName,Integer userID) {
-        List<Item> items = itemDao.retrieveItemsByCategoryName(categoryName);
+    public List<Item> searchItemsInStateByCategoryName(String categoryName,Integer userID,Integer state) {
+        List<Item> items = itemDao.retrieveItemsByCategoryName(categoryName,state);
         if(userID!=null){
             //查询当前用户对所有类似此对象name发表的态度状态
             HashMap<Long,Integer> map = getObjectIDAndlikestateMapOfUserLikesByUserID(userID);

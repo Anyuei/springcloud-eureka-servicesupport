@@ -98,9 +98,16 @@ CREATE TABLE `object` (
 		SELECT * FROM object WHERE categoryID = #{categoryID};
 	</select>
 
+    <!-- 根据某类目下的所有对象 测试通过 2019.5.25-->
+    <select id="retrieveItemsByCategoryName" resultType="Item">
+        SELECT * FROM object WHERE categoryID =
+                (SELECT categoryID FROM categories WHERE categoryName = #{categoryName} )
+        and state = #{state} LIMIT 10;
+    </select>
+
 	<!-- 根据对象的所属类目，查询处于某状态对象的信息。 测试通过 2019.4.2-->
-	<select id="retrieveItemsInStateByCategoryID" resultType="Item" parameterType="java.lang.String">
-		SELECT * FROM object WHERE categoryID =  #{0} and state = #{1};
+	<select id="retrieveItemsInStateByCategoryID" resultType="Item">
+		SELECT * FROM object WHERE categoryID =  #{categoryID} and state = #{state} LIMIT 10;
 	</select>
 </mapper>
 

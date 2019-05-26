@@ -100,7 +100,9 @@ CREATE TABLE `object` (
 
     <!-- 根据某类目下的所有对象 测试通过 2019.5.25-->
     <select id="retrieveItemsByCategoryName" resultType="Item">
-        SELECT * FROM object WHERE categoryName = #{categoryName} LIMIT 10;
+        SELECT * FROM object WHERE categoryID =
+                (SELECT categoryID FROM categories WHERE categoryName = #{categoryName} )
+        and state = #{state} LIMIT 10;
     </select>
 
 	<!-- 根据对象的所属类目，查询处于某状态对象的信息。 测试通过 2019.4.2-->

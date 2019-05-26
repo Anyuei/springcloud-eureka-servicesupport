@@ -41,7 +41,7 @@ public interface ItemDao {
      * @param categoryName 类目名
      * @return 所有对象
      */
-    List<Item> retrieveItemsByCategoryName(String categoryName);
+    List<Item> retrieveItemsByCategoryName(@Param("categoryName") String categoryName, @Param("state") Integer state);
     /**
      * 根据对象的所属类目，查询某状态对象。
      * @param state 对象状态(0-正常 1-审核 2-封禁)

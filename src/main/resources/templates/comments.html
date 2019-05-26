@@ -73,13 +73,14 @@
     font-size: larger;
     font-style: italic;
   }
+
 </style>
   <!-- 评论区-->
   <header class="page-header">
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-6">
-           <h2 class="no-margin-bottom">World</h2>
+          <h2 class="no-margin-bottom" style="margin: 9px 0px 0px 0px;">World</h2>
         </div>
         <!-- 搜索栏 -->
         <div class="col-lg-6">
@@ -211,10 +212,11 @@
         activeBtn(categoryNavID);//激活Button
 
         /*在对象显示区显示 此分类下的对象*/
-        getItemDataByCategoryID(categoryID);
-
-
-
+        if (categoryID!="1"){
+            getItemDataByCategory(categoryID);
+        }else{
+            getItemDataByCategory("大学");
+        }
     }
 
 
@@ -225,9 +227,8 @@
         //$('#myTab a[href=tab1]').tab('show');//备选方案
     }
 
-
-    /*根据对象名称 搜索 被评论对象*/
-    $('#searchItems').click(function(){
+   /* 点击search触发搜索 根据对象名称 搜索 被评论对象*/
+    function searchItemByName(){
         /*获取关键词*/
         var itemKey = $('#itemsKey').val();
 
@@ -243,33 +244,52 @@
                 success: function(data) {
                     /*根据获取的数据  显示到结果区*/
                     showDataInItemArea(data);
-                    },
-                error: function() {
-                    alert("无结果");
-                }
-            });
-        }
-    })
-    /*根据对象所属 搜索 被评论对象*/
-    function getItemDataByCategoryID(categoryID){
-        /*判断空值*/
-        if(categoryID == ''){
-            alert('类目错误！');
-        }else{
-            $.ajax({
-                type: 'get',
-                url: '${request.contextPath }/items/searchByCategoryID?categoryID='+categoryID,//infos查所有
-                async: true,
-                dataType:'json',
-                success: function(data) {
-                    /*根据获取的数据  显示到结果区*/
-                    showDataInItemArea(data);
                 },
                 error: function() {
                     alert("无结果");
                 }
             });
         }
+    }
+    /*根据对象名称 搜索 被评论对象*/
+    $('#searchItems').click(
+        function(){
+            searchItemByName();
+        }
+    )
+    //回车键触发搜索
+
+    $(function() {
+        $(document).keydown(function (event) {
+            if (event.keyCode=== 13|| event.which === 13) {
+                searchItemByName()
+            }
+        });
+    })
+    /*根据对象所属 搜索 被评论对象*/
+    function getItemDataByCategory(categoryID_OR_Num){
+        var URL = "";
+        /*判断空值*/
+        if(categoryID_OR_Num == ''){
+            alert('类目错误！');
+        }else if ($.isNumeric(categoryID_OR_Num)) {
+            URL = '${request.contextPath }/items/searchByCategoryID?category='+categoryID_OR_Num;
+        }else{
+            URL =  '${request.contextPath }/items/searchByCategoryName?category='+categoryID_OR_Num;//infos查所有
+        }
+        $.ajax({
+            type: 'get',
+            url: URL,//infos查所有
+            async: true,
+            dataType:'json',
+            success: function(data) {
+                /*根据获取的数据  显示到结果区*/
+                showDataInItemArea(data);
+            },
+            error: function() {
+                alert("无结果");
+            }
+        });
     }
 
     /*把搜索的结果展示到结果区*/
@@ -324,10 +344,11 @@
                 //不看好数量
                 "<span id='dislike_"+element['objectID']+"_Count' class='likeCountNum'>"+element['dislikes']+"</span>"+
                 //浏览量显示-------------------------------------------------------
-                "<li id='' class='fa fa-eye'>浏览量</li>"+
+                "<li id='' class='fa fa-eye'></li>"+
                 "<span id='' class=''>"+element['viewTimes']+"</span>"+
                 //创建者显示-------------------------------------------------------
-                "<span id='' class=''>"+element['likes']+"</span>"+
+                /*"<li id='' class='fa fa-eye'>贡献者：</li>"+
+                "<span id='' class=''>"+element['createUser']+"</span>"+*/
                 "</div>"+
                 "</div>"+
                 "</div>"+
