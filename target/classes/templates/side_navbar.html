@@ -59,14 +59,13 @@
       </a>
     </li>
 
-  </ul>
-  <hr>
-  <li style="padding-left: 5%;">
-    <a href="#commentBox" aria-expanded="false" data-toggle="collapse">
-      <i class="fa fa-envelope fa-2x"></i>意见箱
-    </a>
-  </li>
-  <ul id="commentBox" class="collapse list-unstyled">
+
+    <hr>
+    <li>
+      <a  id="commentBox" >
+        <i class="fa fa-envelope fa-2x"></i>意见箱
+      </a>
+    </li>
     <li class="nav-item">
       <a class="nav-link myComment" id="myComments-tab" data-toggle="tab" href="#myComments" role="tab" aria-controls="myComments" aria-selected="false">
         <i class="fa fa-edit fa-2x"></i>
@@ -103,4 +102,10 @@
     $("#contributionList-tab").click(function () {
         initUserXPRankingArea();
     })
+
+  $("#commentBox").click(
+      function () {
+          $(".myComment").toggle();
+      }
+  )
 </script>

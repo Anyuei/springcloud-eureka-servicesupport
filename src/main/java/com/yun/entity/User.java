@@ -8,7 +8,8 @@ public class User implements Serializable {
     String userName;
     String userNickname;
     String userPassword;
-    String avatarPath;//头像路径
+    String avatarPath="/img/defaultImages/defaultAvatar♂.jpg";//头像路径
+
     boolean gender;
     Integer xp;
     String telephone;

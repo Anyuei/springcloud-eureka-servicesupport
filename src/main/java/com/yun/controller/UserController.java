@@ -192,5 +192,23 @@ class UserController {
         }
         return users;
     }
+
+    /**
+     * 用户的个人主页
+     * @param userNickname 用于查询用户的昵称
+     * @param model
+     * @return
+     */
+    @RequestMapping("/mainPage/{userNickname}")
+    public String getXPRankingOfUsers(
+            @PathVariable String userNickname,
+            Model model){
+            User user = userService.retrieveUserByNickname(userNickname);
+            if (user!=null){
+                user.setUserPassword(null);
+                model.addAttribute("user", user);
+            }
+            return "personalMainPage";
+    }
 }
 

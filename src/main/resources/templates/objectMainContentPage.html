@@ -241,6 +241,7 @@
 
     })
     /*对象详情页中：获取对象的评论显示在对象下方*/
+    /*对象详情页中：获取对象的评论显示在对象下方*/
     function getComments(objectID) {
         console.log("评论获取成功"+objectID);
         $.ajax(
@@ -251,8 +252,8 @@
                 dataType:"json",
                 success: function(data) {
                     console.log("评论获取成功"+data);
-                    if(data !=null)  comments = "";//<ul class='nav'>{
-                        var
+                    if(data !=null) {
+                        var comments = "";//<ul class='nav'>
                         $.each(data,function(index,element){
                             var oppositionIcon = "fa-thumbs-o-down";/*反对按钮 未选中状态*/
                             var likesIcon = "fa-thumbs-o-up";/*喜欢按钮 未选中状态*/
@@ -281,51 +282,51 @@
                             console.log(element['commentID']);
                             comments +=
                                 "<div class='media'>"+
-                                    /*发表评论的用户头像*/
-                                    "<a class='pr-3' href=''>"+
-                                        "<img class='rounded' src='"+element['user']['avatarPath']+"' alt='头像' width='75px'/>"+
-                                    "</a>"+
-                                    "<div class='media-body commentTextArea'>"+
-                                        /*发表评论的用户姓名*/
-                                        "<span class='mt-0'>"+element['user']['userName']+"</span><hr>"+
-                                             imgHTML+
-                                          /*评论内容*/
-                                        "<span style='margin: 0px 10px;'>"+element['content']+"</span>"+
-                                   " </div>"+
+                                /*发表评论的用户头像*/
+                                "<a class='pr-3' href='${request.contextPath }/user/mainPage/"+element['user']['userNickname']+"'>"+
+                                "<img class='rounded' src='"+element['user']['avatarPath']+"' alt='头像' width='75px'/>"+
+                                "</a>"+
+                                "<div class='media-body commentTextArea'>"+
+                                /*发表评论的用户姓名*/
+                                "<span class='mt-0'>"+element['user']['userNickname']+"</span><hr>"+
+                                imgHTML+
+                                /*评论内容*/
+                                "<span style='margin: 0px 10px;'>"+element['content']+"</span>"+
+                                " </div>"+
                                 "</div>"+
 
                                 "<div class='commentOperateArea'>" +
-                                    "<span class='commentOperateBtn'>"+
-                                    "<a href='javascript:void(0)' id='comment_likes_"+element['commentID']+"' onclick=operateComment(this)>"+
-                                        "<li id='comment_likes_"+element['commentID']+"_Icon' class='fa "+ likesIcon +"'>" +
-                                            "点赞:" +element['likes']+
-                                        "</li>"+
-                                    "</a>"+
-                                    "</span>"+
-                                    "<span class='commentOperateBtn'>"+
-                                    "<a href='javascript:void(0)' id='comment_opposition_"+element['commentID']+"' onclick=operateComment(this)>"+
-                                        "<li id='comment_opposition_"+element['commentID']+"_Icon' class='fa "+ oppositionIcon +"'>" +
-                                            "反对："+ element['opposition']+
-                                        "</li>"+
-                                    "</a>"+
-                                    "</span>"+
-                                    "<span class='commentOperateBtn'>"+
-                                    "<a href='javascript:void(0)' id='comment_realNameSupport_"+element['commentID']+"' onclick=operateComment(this)>"+
-                                        "<i class='fa fa-id-card-o' aria-hidden='true'></i>"+
-                                        "<li id='comment_realNameSupport_"+element['commentID']+"_Icon' class='fa "+ realNameSupportStateIcon +"'>" +
-                                            "实名支持："+element['realNameSupport']+
-                                        "</li>"+
-                                    "</a>"+
-                                    "</span>"+
-                                    "<span class='commentOperateBtn'>"+
-                                    "<a href='javascript:void(0)' id='comment_realNameOpposition_"+element['commentID']+"' onclick=operateComment(this)>"+
-                                        "<i class='fa fa-id-card' aria-hidden='true'></i>"+
-                                        "<li id='comment_realNameOpposition_"+element['commentID']+"_Icon' class='fa "+ realNameOppositionStateIcon +"'>" +
-                                            "实名反对："+element['realNameOpposition']+
-                                        "</li>"+
-                                    "</a>"+
-                                    "</span>"+
-                                    "<strong class='commentTimeArea'>"+element['commentTime']+"</strong>"+
+                                "<span class='commentOperateBtn'>"+
+                                "<a href='javascript:void(0)' id='comment_likes_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                "<li id='comment_likes_"+element['commentID']+"_Icon' class='fa "+ likesIcon +"'>" +
+                                "点赞:" +element['likes']+
+                                "</li>"+
+                                "</a>"+
+                                "</span>"+
+                                "<span class='commentOperateBtn'>"+
+                                "<a href='javascript:void(0)' id='comment_opposition_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                "<li id='comment_opposition_"+element['commentID']+"_Icon' class='fa "+ oppositionIcon +"'>" +
+                                "反对："+ element['opposition']+
+                                "</li>"+
+                                "</a>"+
+                                "</span>"+
+                                "<span class='commentOperateBtn'>"+
+                                "<a href='javascript:void(0)' id='comment_realNameSupport_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                "<i class='fa fa-id-card-o' aria-hidden='true'></i>"+
+                                "<li id='comment_realNameSupport_"+element['commentID']+"_Icon' class='fa "+ realNameSupportStateIcon +"'>" +
+                                "实名支持："+element['realNameSupport']+
+                                "</li>"+
+                                "</a>"+
+                                "</span>"+
+                                "<span class='commentOperateBtn'>"+
+                                "<a href='javascript:void(0)' id='comment_realNameOpposition_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                "<i class='fa fa-id-card' aria-hidden='true'></i>"+
+                                "<li id='comment_realNameOpposition_"+element['commentID']+"_Icon' class='fa "+ realNameOppositionStateIcon +"'>" +
+                                "实名反对："+element['realNameOpposition']+
+                                "</li>"+
+                                "</a>"+
+                                "</span>"+
+                                "<strong class='commentTimeArea'>"+element['commentTime']+"</strong>"+
                                 "</div>"+
                                 "<hr />"
                         });
