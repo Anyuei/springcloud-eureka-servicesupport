@@ -1,6 +1,7 @@
 package com.yun.dao;
 
 import com.yun.entity.Category;
+import com.yun.entity.CommentCountByCategory;
 
 import java.util.List;
 
@@ -53,4 +54,10 @@ public interface CategoryDao {
      * @return
      */
     List<Long> retrieveCategoriesIDBySupID(Long supCategoryID);
+    /**
+     * 查询某用户在某分类下评论的数量（此方法涉及3个表 放在此Dao纯属随机）
+     * @param userID
+     * @return
+     */
+    List<CommentCountByCategory> retrieveCommentCountByUserID(Integer userID);
 }

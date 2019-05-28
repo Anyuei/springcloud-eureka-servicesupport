@@ -2,6 +2,7 @@ package com.yun.controller;
 
 import com.yun.EurekaServiceApplication;
 import com.yun.config.ConstantConfig;
+import com.yun.entity.CommentCountByCategory;
 import com.yun.entity.User;
 import com.yun.service.UserService;
 import com.yun.utils.FileUtils;
@@ -209,6 +210,21 @@ class UserController {
                 model.addAttribute("user", user);
             }
             return "personalMainPage";
+    }
+
+    /**
+     * 获取当前用户 在各邻域（分类下）评论的数量
+     * @return
+     */
+    @RequestMapping("/commentRatio")
+    public @ResponseBody List<CommentCountByCategory> getCommentRatio(HttpSession session){
+        User user = (User)session.getAttribute("currentUserInfo");
+        List<CommentCountByCategory> commentCountByCategories=null;
+        if (user!=null){
+            Integer userID = user.getUserID();
+            commentCountByCategories = userService.retrieveCommentCountByUserID(userID);
+        }
+        return commentCountByCategories;
     }
 }
 

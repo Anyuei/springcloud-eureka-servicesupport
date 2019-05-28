@@ -75,6 +75,18 @@ CREATE TABLE `categorys` (
 	<select id="retrieveCategoriesIDBySupID" resultType="java.lang.Long" parameterType="java.lang.Long">
 		SELECT categoryID FROM categories WHERE supCategoryID = #{supCategoryID};
 	</select>
+	<!-- 根据用户ID查询用户评论的对象，并查询对象分类下的评论数 2019.5.28-->
+	<select id="retrieveCommentCountByUserID" resultType="CommentCountByCategory" parameterType="java.lang.Integer">
+		SELECT cate.categoryName as categoryName,
+			   COUNT(cate.categoryName) as commentCountNum
+		FROM comments c
+				 LEFT JOIN object o
+					 ON c.objectID = o.objectID
+				 LEFT JOIN categories cate
+					 on o.categoryID=cate.categoryID
+		WHERE c.userID = #{userID}
+		GROUP BY cate.categoryName;
+	</select>
 </mapper>
 
 

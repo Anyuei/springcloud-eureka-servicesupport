@@ -1,5 +1,6 @@
 package com.yun.service;
 
+import com.yun.entity.CommentCountByCategory;
 import com.yun.entity.User;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface UserService {
      * @return
      */
     List<User> retrieveUsersByXP(Integer startIndex,Integer count);
+
+    List<CommentCountByCategory> retrieveCommentCountByUserID(Integer userID);
 }

@@ -27,10 +27,37 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="${request.contextPath }/vendor/jquery/jquery.min.js"></script>
+
   </head>
   <style>
+    li{
+      list-style-type :none;
+    }
+    .userInfo{
+      margin-left: 0px;
 
+      padding: 0px;
 
+      color: #8c4848;
+
+      background-color: #c8c8c870;
+
+      border-radius: 0px 0px 100px 20px;
+    }
+    .userInfoLine{
+      padding: 10px 10px 10px 10px;
+
+      margin: 0px 0px 0px 0px;
+    }
+    .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+
+      position: relative;
+      width: 100%;
+      min-height: 1px;
+      padding-right: 0px;
+      padding-left: 0px;
+
+    }
   </style>
   <body>
     <div class="page">
@@ -43,15 +70,15 @@
                  <img src="${user.avatarPath!}" width="100%">
               </div>
 
-              <div class="row">
-                <div class="">
+              <ul class="userInfo">
+                <li class="userInfoLine">
                   <span>昵称：</span><span class="h4">${user.userNickname!'用户名错误'}</span>
-                </div>
-                
-                <div class="">
+                </li>
+
+                <li class="userInfoLine">
                   <span>个人简介：</span><span>${user.signature!'添加说明'}</span>
-                </div>
-              </div>
+                </li>
+              </ul>
             </div>
             <div class="col-sm-8">
               <table class="table table-hover">
@@ -80,7 +107,11 @@
                   </tr>
                 </tbody>
               </table>
+              <div id="interestCountModel">
+
+              </div>
             </div>
+
           </div>
       </div>
     </div>
@@ -88,13 +119,70 @@
     <script src="${request.contextPath }/vendor/popper.js/umd/popper.min.js"> </script>
     <script src="${request.contextPath }/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="${request.contextPath }/vendor/jquery.cookie/jquery.cookie.js"> </script>
-    <script src="${request.contextPath }/vendor/chart.js/Chart.min.js"></script>
     <script src="${request.contextPath }/vendor/jquery-validation/jquery.validate.min.js"></script>
-    <script src="${request.contextPath }/js/charts-home.js"></script>
+    <script src="${request.contextPath }/js/echarts.js"></script>
     <!-- Main File-->
     <script src="${request.contextPath }/js/front.js"></script>
   </body>
 <script>
+    function initChart(){
+        var myChart = echarts.init(document.getElementById('interestCountModel'));
+        var option = {
+            title : {
+                text: '用户贡献占比',
+                subtext: '用户各邻域评论所占比重',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: [ ]
+            },
+
+            series : [
+                {
+                    name: '贡献比重',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+
+        var series_data = "";
+        //从后台拿数据
+        //option.series[0].data.push({ value: high, name: "高度" }, { value: middle, name: "中度" }, { value: low, name: '低度' });
+
+        $.ajax({
+            type:"get",
+            url:"${request.contextPath }/user/commentRatio",
+            async:true,
+            dataType:"json",
+            success:function(data){
+                $.each(data,function(index,element){//组织数据
+                    option.series[0].data.push({ value:element["commentCountNum"], name:element["categoryName"]});
+                    option.legend.data.push(element["categoryName"]);
+                })
+            }
+        });
+
+        myChart.setOption(option);
+    }
+    $(function(){
+        initChart();
+    });
 
 </script>
 </html>

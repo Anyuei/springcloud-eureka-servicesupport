@@ -1,6 +1,9 @@
 package com.yun.serviceImpl;
 
+import com.yun.dao.CategoryDao;
 import com.yun.dao.UserDao;
+import com.yun.entity.Category;
+import com.yun.entity.CommentCountByCategory;
 import com.yun.entity.User;
 import com.yun.service.UserService;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
+    @Resource
+    private CategoryDao categoryDao;
     @Override
     public User insertUser(User user) {
         userDao.insertUser(user);
@@ -55,5 +60,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> retrieveUsersByXP(Integer startIndex, Integer count) {
         return userDao.retrieveUsersByXP(startIndex,count);
+    }
+    @Override
+    public List<CommentCountByCategory> retrieveCommentCountByUserID(Integer userID){
+        return categoryDao.retrieveCommentCountByUserID(userID);
     }
 }

@@ -10,6 +10,7 @@
         <tr>
           <th scope="col">排名</th>
           <th scope="col">用户昵称</th>
+          <th scope="col">实名评论数</th>
           <th scope="col">经验值</th>
         </tr>
     </thead>
@@ -34,8 +35,13 @@
                     HTML_TXT +=
                     "<tr>"+
                       "<th scope='row'>"+ rankNum++ +"</th>"+
-                      "<td>"+"<img src='"+element['avatarPath']+"' style='width: 20px;margin-right: 5px;'>"+
-                        element['userNickname']+"</td>"+
+                      "<td>"+
+                        "<a href='${request.contextPath }/user/mainPage/"+element['userNickname']+"'>"+
+                            "<img src='"+element['avatarPath']+"' style='width: 20px;margin-right: 5px;'>"+
+                                 element['userNickname']+
+                        "</a>"+
+                      "</td>"+
+                      "<td>"+element['realnameCommentNum']+"</td>"+
                       "<td>"+element['xp']+"</td>"+
                     "</tr>"
 
