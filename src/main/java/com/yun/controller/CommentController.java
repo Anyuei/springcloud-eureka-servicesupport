@@ -70,7 +70,8 @@ public class CommentController {
     public @ResponseBody String postComment(
             HttpSession session,
             @RequestParam("image") MultipartFile image,
-            Comment comment){
+            Comment comment,
+            Boolean isRealNameComment){
         //有图片则添加图片
         if(!image.isEmpty()){
             String avatarPath_absolute =EurekaServiceApplication.staticPath+"img/Comment/";
@@ -95,10 +96,11 @@ public class CommentController {
 
         //增加用户经验值（贡献度）
         user.setXp(user.getXp()+constantConfig.getComment_XP());
-
+        user.setRealnameCommentNum(user.getRealnameCommentNum()+1);
         userService.updateUserByID(user);
         comment.setUserID(user.getUserID());
         comment.setCommentTime(new Date());
+        comment.setRealnameState(isRealNameComment);
         if (commentService.insertComment(comment)==0){
             return "评论失败";
         }else{

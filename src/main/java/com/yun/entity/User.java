@@ -16,10 +16,22 @@ public class User implements Serializable {
     String email;
     Integer state;//用户状态(0-正常 1-禁言 2-封号 )
     String signature;//个人说明
-
+    Integer realnameCommentNum;//实名评论数
     public User() {
     }
-    public User(Integer userID, String userName, String userNickname, String userPassword, String avatarPath, boolean gender, Integer xp, String telephone, String email, Integer state, String signature) {
+    public User(Integer userID,
+                String userName,
+                String userNickname,
+                String userPassword,
+                String avatarPath,
+                boolean gender,
+                Integer xp,
+                String telephone,
+                String email,
+                Integer state,
+                String signature,
+                Integer realnameCommentNum
+    ) {
         this.userID = userID;
         this.userName = userName;
         this.userNickname = userNickname;
@@ -31,11 +43,12 @@ public class User implements Serializable {
         this.email = email;
         this.state = state;
         this.signature = signature;
+        this.realnameCommentNum=realnameCommentNum;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userID, userName, userNickname, userPassword, avatarPath, gender, xp, telephone, email, state, signature);
+        return Objects.hash(userID, userName, userNickname, userPassword, avatarPath, gender, xp, telephone, email, state, signature,realnameCommentNum);
     }
 
     @Override
@@ -52,6 +65,7 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", state=" + state +
                 ", signature='" + signature + '\'' +
+                ", realnameCommentNum=" + realnameCommentNum +
                 '}';
     }
 
@@ -147,5 +161,13 @@ public class User implements Serializable {
         this.xp += number;
         System.out.println(this.xp);
         return xp;
+    }
+
+    public Integer getRealnameCommentNum() {
+        return realnameCommentNum;
+    }
+
+    public void setRealnameCommentNum(Integer realnameCommentNum) {
+        this.realnameCommentNum = realnameCommentNum;
     }
 }

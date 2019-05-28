@@ -100,6 +100,11 @@
         background-color: black;/* 设置fierfox 下水平线的高度*/
         height: 1px;/* 水平高度*/
     }
+
+    .modal-dialog {
+      max-width: 500px;
+      margin: 8.75rem auto;
+    }
   </style>
   <body>
     <div class="page">
@@ -167,15 +172,19 @@
                         </div>
                         <div class="form-group" style="margin-bottom: 0px;">
                           <label for="">添加图片：</label>
-                          <input class="form-control" type="file" name="image" id="uploadImage" placeholder="请上传图片">
+                          <input type="file" name="image" id="uploadImage" placeholder="请上传图片">
                         </div>
-                        <div class="form-group" style="margin-bottom: 0px;">
+<!--                        <div class="form-group" style="margin-bottom: 0px;">
                           <label for="">添加视频：</label>
                           <input class="form-control" type="file" name="video" id="uploadVideo" placeholder="请上传视频">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 0px;">
+                        </div>-->
+<!--                        <div class="form-group" style="margin-bottom: 0px;">
                           <label for="">建议：</label>
                           <input class="form-control" type="text"  placeholder="">
+                        </div>-->
+                        <div class="form-group" style="margin-bottom: 0px;">
+                          <label for="">实名评论：</label>
+                          <input type="checkbox" name="isRealNameComment" id="isRealNameComment">
                         </div>
                         <div class="text-right">
                           <button class="btn btn-primary commentBtn" type="submit" style="background-color: #3a8cd2b3; border: 0px solid transparent;" id="submitCommentBtn">提交</button>
@@ -347,7 +356,7 @@
 
         /*当提交按钮被点击*/
         $("#submitCommentBtn").click(function() {
-                //先检验用户状态
+            //先检验用户状态
                 console.log(checklogin())
                 if (checklogin()=="false"){
                     alert("请重新登录");

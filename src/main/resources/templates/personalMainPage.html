@@ -40,21 +40,46 @@
           <div class="row">
             <div class="col-sm-4">
               <div class="">
-                 <img src="${user.avatarPath!}">
+                 <img src="${user.avatarPath!}" width="100%">
               </div>
 
-              <div class="">
-                <h1 class="h4">${user.userNickname!'用户名错误'}</h1>
-                <p>${user.signature!'添加说明'}</p>
+              <div class="row">
+                <div class="">
+                  <span>昵称：</span><span class="h4">${user.userNickname!'用户名错误'}</span>
+                </div>
+                
+                <div class="">
+                  <span>个人简介：</span><span>${user.signature!'添加说明'}</span>
+                </div>
               </div>
             </div>
             <div class="col-sm-8">
-              <div class="row">
-                <div class="col-sm-3">经验值</div>
-                <div class="col-sm-3">粉丝数</div>
-                <div class="col-sm-3">被赞</div>
-                <div class="col-sm-3">实名贡献数</div>
-              </div>
+              <table class="table table-hover">
+                <thead class="thead-light">
+                <tr>
+                  <th scope="col">经验值</th>
+                  <th scope="col">粉丝数</th>
+                  <th scope="col">被赞</th>
+                  <th scope="col">实名贡献数</th>
+                </tr>
+                </thead>
+                <tbody id="rankRowsArea">
+                  <tr>
+                    <td>
+                      ${user.xp!'0'}
+                    </td>
+                    <td>
+                      0
+                    </td>
+                    <td>
+                      0
+                    </td>
+                    <td>
+                      ${user.realnameCommentNum!'0'}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
       </div>

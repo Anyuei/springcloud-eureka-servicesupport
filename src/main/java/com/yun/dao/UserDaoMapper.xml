@@ -18,8 +18,8 @@ CREATE TABLE `users` (
 <mapper namespace="com.yun.dao.UserDao">
 	<!--插入用户 测试通过 2019.3.25 -->
 	<insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userID">
-		INSERT INTO users(userName,userNickname,userPassword,avatarPath,gender,xp,telephone,email,state,signature)
-	    VALUES(#{userName},#{userNickname},#{userPassword},#{avatarPath},#{gender},#{xp},#{telephone},#{email},#{state},#{signature})
+		INSERT INTO users(userName,userNickname,userPassword,avatarPath,gender,xp,telephone,email,state,signature,realnameCommentNum)
+	    VALUES(#{userName},#{userNickname},#{userPassword},#{avatarPath},#{gender},#{xp},#{telephone},#{email},#{state},#{signature},#{realnameCommentNum})
 	</insert>
 	<!--根据ID删除用户 测试通过 2019.3.25 -->
 	<delete id="deleteUserByID">
@@ -39,7 +39,8 @@ CREATE TABLE `users` (
         <if test="telephone != null">telephone=#{telephone},</if>
         <if test="email != null"> email=#{email},</if>
         <if test="state != null">state=#{state},</if>
-		<if test="signature != null">signature=#{signature}</if>
+		<if test="signature != null">signature=#{signature},</if>
+		<if test="realnameCommentNum != null">realnameCommentNum=#{realnameCommentNum}</if>
 	    WHERE userID=#{userID}
 	</update>
 	<!--根据ID查询用户 测试通过 2019.3.25 -->

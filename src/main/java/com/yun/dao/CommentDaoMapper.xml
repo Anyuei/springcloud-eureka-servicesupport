@@ -31,7 +31,8 @@ CREATE TABLE `comments` (
                 realNameSupport,
                 realNameOpposition,
                 state,
-                commentTime
+                commentTime,
+                realnameState
                 )
 	    VALUES(
                       #{userID},
@@ -44,7 +45,8 @@ CREATE TABLE `comments` (
                       #{realNameSupport},
                       #{realNameOpposition},
                       #{state},
-                      #{commentTime}
+                      #{commentTime},
+                      #{realnameState}
                       )
 	</insert>
 
@@ -76,7 +78,7 @@ CREATE TABLE `comments` (
         <result column="realNameOpposition" property="realNameOpposition"/>
         <result column="state" property="state"/>
         <result column="commentTime" property="commentTime"/>
-
+        <result column="realnameState" property="realnameState"/>
         <association property="user" javaType="User">
             <id column="userID" property="userID"/>
             <result column="userName" property="userName"/>
@@ -86,6 +88,7 @@ CREATE TABLE `comments` (
             <result column="xp" property="xp"/>
             <result column="userState" property="state"/>
             <result column="signature" property="signature"/>
+            <result column="realnameCommentNum" property="realnameCommentNum"/>
         </association>
 
     </resultMap>
@@ -124,7 +127,8 @@ CREATE TABLE `comments` (
                u.gender,
                u.xp,
                u.state AS userState,
-               u.signature
+               u.signature,
+               u.realnameCommentNum
         FROM
              comments c,users u
         WHERE

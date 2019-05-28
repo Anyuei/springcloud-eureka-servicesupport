@@ -15,7 +15,7 @@ import java.util.Date;
 public class Comment implements Serializable {
     private Long commentID;//评论ID
     private Integer userID;//评论对应用户ID
-    private User user;//评论对应用户ID
+    private User user;//评论对应用户
     private Long objectID;//评论对应被评论对象ID
     private String stars="5";//评价星级
     private String content;//评价内容
@@ -26,7 +26,7 @@ public class Comment implements Serializable {
     private Long realNameOpposition=0L;//实名反对数
     private String state="1";//评论状态
     private Date commentTime;//评论时间
-
+    private Boolean realnameState;//实名状态
     private Integer commonOperateType;//当前用户对此条评论普通操作类型
     private Integer realnameOperateType;//当前用户对此条评论实名操作类型
     public Comment() {
@@ -42,12 +42,13 @@ public class Comment implements Serializable {
                 ", stars='" + stars + '\'' +
                 ", content='" + content + '\'' +
                 ", imagesPath='" + imagesPath + '\'' +
-                ", likes='" + likes + '\'' +
-                ", opposition='" + opposition + '\'' +
-                ", realNameSupport='" + realNameSupport + '\'' +
-                ", realNameOpposition='" + realNameOpposition + '\'' +
+                ", likes=" + likes +
+                ", opposition=" + opposition +
+                ", realNameSupport=" + realNameSupport +
+                ", realNameOpposition=" + realNameOpposition +
                 ", state='" + state + '\'' +
                 ", commentTime=" + commentTime +
+                ", realnameState=" + realnameState +
                 ", commonOperateType=" + commonOperateType +
                 ", realnameOperateType=" + realnameOperateType +
                 '}';
@@ -171,5 +172,13 @@ public class Comment implements Serializable {
 
     public void setRealnameOperateType(Integer realnameOperateType) {
         this.realnameOperateType = realnameOperateType;
+    }
+
+    public Boolean getRealnameState() {
+        return realnameState;
+    }
+
+    public void setRealnameState(Boolean realnameState) {
+        this.realnameState = realnameState;
     }
 }
