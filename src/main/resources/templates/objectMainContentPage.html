@@ -305,37 +305,42 @@
                                 "</div>"+
 
                                 "<div class='commentOperateArea'>" +
-                                "<span class='commentOperateBtn'>"+
-                                  "<a href='javascript:void(0)' id='comment_likes_"+element['commentID']+"' onclick=operateComment(this)>"+
-                                    "<li id='comment_likes_"+element['commentID']+"_Icon' class='fa "+ likesIcon +"'>" +
-                                    "点赞:" +element['likes']+
-                                    "</li>"+
-                                  "</a>"+
-                                "</span>"+
-                                "<span class='commentOperateBtn'>"+
-                                  "<a href='javascript:void(0)' id='comment_opposition_"+element['commentID']+"' onclick=operateComment(this)>"+
-                                    "<li id='comment_opposition_"+element['commentID']+"_Icon' class='fa "+ oppositionIcon +"'>" +
-                                    "反对："+ element['opposition']+
-                                    "</li>"+
-                                  "</a>"+
-                                "</span>"+
-                                "<span class='commentOperateBtn'>"+
-                                  "<a href='javascript:void(0)' id='comment_realNameSupport_"+element['commentID']+"' onclick=operateComment(this)>"+
-                                    "<i class='fa fa-id-card-o' aria-hidden='true'></i>"+
-                                    "<li id='comment_realNameSupport_"+element['commentID']+"_Icon' class='fa "+ realNameSupportStateIcon +"'>" +
-                                    "实名支持："+element['realNameSupport']+
-                                    "</li>"+
-                                  "</a>"+
-                                "</span>"+
-                                "<span class='commentOperateBtn'>"+
-                                  "<a href='javascript:void(0)' id='comment_realNameOpposition_"+element['commentID']+"' onclick=operateComment(this)>"+
-                                    "<i class='fa fa-id-card' aria-hidden='true'></i>"+
-                                    "<li id='comment_realNameOpposition_"+element['commentID']+"_Icon' class='fa "+ realNameOppositionStateIcon +"'>" +
-                                    "实名反对："+element['realNameOpposition']+
-                                    "</li>"+
-                                  "</a>"+
-                                "</span>"+
-                                "<strong class='commentTimeArea'>"+element['commentTime']+"</strong>"+
+                                  "<span class='commentOperateBtn'>"+
+                                    "<a href='javascript:void(0)' id='comment_likes_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                      "<li id='comment_likes_"+element['commentID']+"_Icon' class='fa "+ likesIcon +"'>" +
+                                      "点赞:" +
+                                      "</li>"+
+                                      "<span id='comment_likes_"+element['commentID']+"_Count' class=''>"+element['likes']+"</span>"+
+                                    "</a>"+
+                                  "</span>"+
+                                  "<span class='commentOperateBtn'>"+
+                                    "<a href='javascript:void(0)' id='comment_opposition_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                      "<li id='comment_opposition_"+element['commentID']+"_Icon' class='fa "+ oppositionIcon +"'>" +
+                                      "反对："+
+                                      "</li>"+
+                                      "<span id='comment_opposition_"+element['commentID']+"_Count' class=''>"+element['opposition']+"</span>"+
+                                    "</a>"+
+                                  "</span>"+
+                                  "<span class='commentOperateBtn'>"+
+                                    "<a href='javascript:void(0)' id='comment_realNameSupport_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                      "<i class='fa fa-id-card-o' aria-hidden='true'></i>"+
+                                      "<li id='comment_realNameSupport_"+element['commentID']+"_Icon' class='fa "+ realNameSupportStateIcon +"'>" +
+                                      "实名支持："+
+                                      "</li>"+
+                                      "<span id='comment_realNameSupport_"+element['commentID']+"_Count' class=''>"+element['realNameSupport']+"</span>"+
+                                    "</a>"+
+
+                                  "</span>"+
+                                  "<span class='commentOperateBtn'>"+
+                                    "<a href='javascript:void(0)' id='comment_realNameOpposition_"+element['commentID']+"' onclick=operateComment(this)>"+
+                                      "<i class='fa fa-id-card' aria-hidden='true'></i>"+
+                                      "<li id='comment_realNameOpposition_"+element['commentID']+"_Icon' class='fa "+ realNameOppositionStateIcon +"'>" +
+                                      "实名反对："+
+                                      "</li>"+
+                                      "<span id='comment_realNameOpposition_"+element['commentID']+"_Count' class=''>"+element['realNameOpposition']+"</span>"+
+                                    "</a>"+
+                                  "</span>"+
+                                  "<strong class='commentTimeArea'>"+element['commentTime']+"</strong>"+
                                 "</div>"+
                                 "<hr />"
                         });
@@ -408,7 +413,7 @@
         var operationType_commentID = operationType_commentDom.id;
         var operationType = operationType_commentID.split("_")[1];//获取操作类型
         var commentID = operationType_commentID.split("_")[2];//获取操作对象ID
-        var operationType_commentID__Icon = operationType_commentID+"_Icon";
+        var operationType_commentID_Icon = operationType_commentID+"_Icon";
 
         $.ajax({
             url : '${request.contextPath }/comment/operate',
@@ -425,11 +430,63 @@
                 var likesIcon = "fa-thumbs-o-up";/*喜欢按钮 未选中状态*/
                 var realNameOppositionStateIcon = "fa-thumbs-o-down";/*实名反对按钮 未选中状态*/
                 var realNameSupportStateIcon ="fa-thumbs-o-up";/*实名喜欢按钮 未选中状态*/
-                
-                     var commonState = data.data.commonOperateType;
-                     var realname = data.data.realnameOperateType;
-                     alert(commonState);
-                     alert(realname);
+
+                var commonState = data.commonOperateType;
+                var realnameState = data.realnameOperateType;
+
+                var IconClass=$('#'+operationType_commentID_Icon).attr('class').split(" ")[1];
+                if(IconClass=="fa-thumbs-o-up"){
+                    $('#'+operationType_commentID_Icon).removeClass("fa-thumbs-o-up").addClass("fa-thumbs-up");
+
+                    var domIndex = $('#'+operationType_commentID+'_Count');
+                    var countlike = parseInt(domIndex.text());
+                    domIndex.text(countlike+1);
+
+                    var realNameOppositionIcon = $('#'+"comment_realNameOpposition_"+commentID+"_Icon");
+                    var oppositionIcon = $('#'+"comment_opposition_"+commentID+"_Icon");
+                    if(realNameOppositionIcon.attr("class").split(" ")[1]==="fa-thumbs-down"){
+                        var domIndex = $('#'+"comment_realNameOpposition_"+commentID+'_Count');
+                        var countlike = parseInt(domIndex.text());
+                        domIndex.text(countlike-1);
+                        realNameOppositionIcon.toggleClass("fa-thumbs-down fa-thumbs-o-down");
+                    }
+                    if(oppositionIcon.attr("class").split(" ")[1]==="fa-thumbs-down"){
+                        var domIndex = $('#'+"comment_opposition_"+commentID+'_Count');
+                        var countlike = parseInt(domIndex.text());
+                        domIndex.text(countlike-1);
+                        oppositionIcon.toggleClass("fa-thumbs-down fa-thumbs-o-down");
+                    }
+                }else if(IconClass=="fa-thumbs-o-down") {
+                    $('#'+operationType_commentID_Icon).removeClass("fa-thumbs-o-down").addClass("fa-thumbs-down");
+                    var domIndex = $('#'+operationType_commentID+'_Count');
+                    var countlike = parseInt(domIndex.text());
+                    domIndex.text(countlike+1);
+
+                    var commentIcon = $('#'+"comment_likes_"+commentID+"_Icon");
+                    var realNameSupportIcon = $('#'+"comment_realNameSupport_"+commentID+"_Icon");
+                    if(commentIcon.attr("class").split(" ")[1]==="fa-thumbs-up"){
+                        var domIndex = $('#'+"comment_likes_"+commentID+'_Count');
+                        var countlike = parseInt(domIndex.text());
+                        domIndex.text(countlike-1);
+                        commentIcon.toggleClass("fa-thumbs-up fa-thumbs-o-up");
+                    }
+                    if(realNameSupportIcon.attr("class").split(" ")[1]==="fa-thumbs-up"){
+                        var domIndex = $('#'+"comment_realNameSupport_"+commentID+'_Count');
+                        var countlike = parseInt(domIndex.text());
+                        domIndex.text(countlike-1);
+                        realNameSupportIcon.toggleClass("fa-thumbs-up fa-thumbs-o-up");
+                    }
+                }else if(IconClass=="fa-thumbs-up"){
+                    $('#'+operationType_commentID_Icon).removeClass("fa-thumbs-up").addClass("fa-thumbs-o-up");
+                    var domIndex = $('#'+operationType_commentID+'_Count');
+                    var countlike = parseInt(domIndex.text());
+                    domIndex.text(countlike-1);
+                }else if(IconClass=="fa-thumbs-down"){
+                    $('#'+operationType_commentID_Icon).removeClass("fa-thumbs-down").addClass("fa-thumbs-o-down");
+                    var domIndex = $('#'+operationType_commentID+'_Count');
+                    var countlike = parseInt(domIndex.text());
+                    domIndex.text(countlike-1);
+                }
             },
             error : function(returndata) {
                 alert("error");
