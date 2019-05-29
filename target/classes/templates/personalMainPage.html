@@ -27,6 +27,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="${request.contextPath }/vendor/jquery/jquery.min.js"></script>
+
   </head>
   <style>
     li{
@@ -106,8 +107,8 @@
                   </tr>
                 </tbody>
               </table>
-              <div class="interestCountModel">
-
+              <div id="interestCountModel" style="width: 50%;height:100%;">
+                  <!--此处代码由本html文件中的 initChart()方法生成-->
               </div>
             </div>
 
@@ -118,15 +119,14 @@
     <script src="${request.contextPath }/vendor/popper.js/umd/popper.min.js"> </script>
     <script src="${request.contextPath }/vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="${request.contextPath }/vendor/jquery.cookie/jquery.cookie.js"> </script>
-    <script src="${request.contextPath }/vendor/chart.js/Chart.min.js"></script>
     <script src="${request.contextPath }/vendor/jquery-validation/jquery.validate.min.js"></script>
-    <script src="${request.contextPath }/js/charts-home.js"></script>
+    <script src="${request.contextPath }/js/echarts.js"></script>
     <!-- Main File-->
     <script src="${request.contextPath }/js/front.js"></script>
   </body>
 <script>
     function initChart(){
-        var myChart = echarts.init($("interestCountModel"));
+        var myChart = echarts.init(document.getElementById('interestCountModel'));
         var option = {
             title : {
                 text: '用户贡献占比',
@@ -140,7 +140,8 @@
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: [ ]
+                width: '50%' ,
+                data: []
             },
 
             series : [
@@ -148,7 +149,7 @@
                     name: '贡献比重',
                     type: 'pie',
                     radius : '55%',
-                    center: ['50%', '60%'],
+                    center: ['50%', '40%'],
                     data:[],
                     itemStyle: {
                         emphasis: {
@@ -161,18 +162,15 @@
             ]
         };
 
-        var series_data = "";
-        //从后台拿数据
-        //option.series[0].data.push({ value: high, name: "高度" }, { value: middle, name: "中度" }, { value: low, name: '低度' });
 
         $.ajax({
             type:"get",
-            url:"${request.contextPath }/user/commentRatio",
-            async:true,
+            url:"${request.contextPath }/user/commentRatio?userID=${user.userID!''}",
+            async:false,
             dataType:"json",
             success:function(data){
-                $.each(data,function(index,element){//组织数据
-                    option.series[0].data.push({ value:element["commentCountNum"], name:element["categoryName"]});
+                $.each(data,function(index,element){
+                    option.series[0].data.push({ value:0+element["commentCountNum"], name:element["categoryName"]});
                     option.legend.data.push(element["categoryName"]);
                 })
             }

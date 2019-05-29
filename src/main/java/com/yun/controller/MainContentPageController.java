@@ -24,18 +24,31 @@ public class MainContentPageController {
     @Resource
     private ItemService itemService;
 
+    /**
+     * 初始化对象 主页面
+     * @param itemName
+     * @param session
+     * @param model
+     * @return
+     */
     @RequestMapping("/{itemName}")
     public String initPage(@PathVariable String itemName, HttpSession session, Model model){
         User user = (User)session.getAttribute("currentUserInfo");
         Item item = null;
+        /*允许未登录访问*/
         if (user!=null){
             item = itemService.searchItemByName(itemName,user.getUserID());
         }else{
             item = itemService.searchItemByName(itemName);
         }
-
+        /*增加浏览次数*/
+        String viewTimes = item.getViewTimes();
+        item.setViewTimes(Integer.parseInt(viewTimes)+1+"");
+        itemService.updateItemViewTimesByID(item);
+        /*从图片路径分割出封面路径*/
         String[] img_paths = item.getObjectPicturePath().split(",");
         item.setObjectPicturePath(img_paths[0]);
+        /*数据交给freemarker渲染*/
         model.addAttribute("user", user);
         model.addAttribute("item",item);//对象信息
         model.addAttribute("img_paths",img_paths);//轮播图

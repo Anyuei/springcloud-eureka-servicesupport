@@ -78,6 +78,15 @@ CREATE TABLE `object` (
 	    WHERE objectID = #{objectID}
 	</update>
 
+    <!--修改对象浏览次数 测试通过 2019.4.2 -->
+    <update id="updateItemViewTimesByID" parameterType="Item">
+        UPDATE
+        object
+        SET
+        <if test="viewTimes != null">viewTimes=#{viewTimes}</if>
+        WHERE objectID = #{objectID}
+    </update>
+
     <!--根据ID查询对象 测试通过 2019.4.2 -->
 	<select id="retrieveItemByID" resultType="Item" parameterType="java.lang.Long">
 		SELECT * FROM object WHERE objectID = #{objectID};

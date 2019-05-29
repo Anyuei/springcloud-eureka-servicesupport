@@ -10,6 +10,12 @@ public interface ItemDao {
     void deleteItemByID(Long objectID);
     void deleteItemsByCategoryID(Long categoryID);
     void updateItemByID(Item item);
+
+    /**
+     * 修改对象浏览次数
+     * @param item
+     */
+    void updateItemViewTimesByID(Item item);
     Item retrieveItemByID(Long objectID);
 
     /**

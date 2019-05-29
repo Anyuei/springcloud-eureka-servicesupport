@@ -1,11 +1,15 @@
 package com.yun.serviceImpl;
 
 import com.sun.imageio.plugins.common.I18N;
+import com.yun.config.ConstantConfig;
 import com.yun.dao.ItemDao;
 import com.yun.dao.LikesDao;
+import com.yun.dao.UserDao;
 import com.yun.entity.Item;
 import com.yun.entity.Like;
+import com.yun.entity.User;
 import com.yun.service.ItemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +27,17 @@ import java.util.List;
  * @Date: 2019/4/2 20:42
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class ItemServiceImpl implements ItemService {
     @Resource
     private ItemDao itemDao;
     @Resource
     private LikesDao likesDao;
+    @Resource
+    private UserDao userDao;
+
+    @Autowired
+    private ConstantConfig constantConfig;
 
     public void insertItem(Item item){
 
@@ -39,9 +48,23 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItemsByCategoryID(Long categoryID){
 
     }
-    public void updateItemByID(Item item){
 
+    /**
+     * 修改对象信息
+     * @param item
+     */
+    public void updateItemByID(Item item){
+        itemDao.updateItemByID(item);
     }
+
+    /**
+     * 修改对象浏览次数
+     * @param item
+     */
+    public void updateItemViewTimesByID(Item item){
+        itemDao.updateItemViewTimesByID(item);
+    }
+
     public Item retrieveItemByID(Long objectID){
         return itemDao.retrieveItemByID(objectID);
     }
@@ -51,6 +74,7 @@ public class ItemServiceImpl implements ItemService {
      * @param userID
      * @return
      */
+    @Transactional(readOnly = true)
     public Item searchItemByName(String objectName,Integer userID){
         Item item = itemDao.retrieveItemByName(objectName);
         //查询当前用户对此对象ID发表的态度状态
@@ -68,6 +92,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Item searchItemByName(String objectName) {
         return itemDao.retrieveItemByName(objectName);
     }
@@ -77,6 +102,7 @@ public class ItemServiceImpl implements ItemService {
      * @param objectName
      * @return
      */
+    @Transactional(readOnly = true)
     public List<Item> searchItemsByName(String objectName,Integer userID){
         List<Item> items = itemDao.retrieveItemsByName(objectName);
         if(userID!=null){
@@ -96,6 +122,7 @@ public class ItemServiceImpl implements ItemService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public List<Item> searchItemsInStateByCategoryName(String categoryName,Integer userID,Integer state) {
         List<Item> items = itemDao.retrieveItemsByCategoryName(categoryName,state);
         if(userID!=null){
@@ -114,6 +141,7 @@ public class ItemServiceImpl implements ItemService {
      * @param categoryID 类目ID
      * @return 所有对象
      */
+    @Transactional(readOnly = true)
     public List<Item> retrieveItemsByCategoryID(Long categoryID,Integer userID){
         List<Item> items = itemDao.retrieveItemsInStateByCategoryID(categoryID,0);
         for (Item item : items) {
@@ -137,6 +165,7 @@ public class ItemServiceImpl implements ItemService {
      * @param categoryID 类目ID
      * @return 所有对象
      */
+    @Transactional(readOnly = true)
     public List<Item> retrieveItemsInStateByCategoryID(Long categoryID,Integer userID,Integer state){
         List<Item> items = itemDao.retrieveItemsInStateByCategoryID(categoryID,state);
         if(userID!=null){
@@ -155,6 +184,7 @@ public class ItemServiceImpl implements ItemService {
      * @param userID
      * @return
      */
+    @Transactional(readOnly = true)
     public HashMap<Long,Integer> getObjectIDAndlikestateMapOfUserLikesByUserID(Integer userID){
         List<Like> likes = likesDao.retrieveLikesByID(userID);
         HashMap<Long,Integer> map = new HashMap<>();
@@ -167,11 +197,16 @@ public class ItemServiceImpl implements ItemService {
     /**
      * 用户：userID对事物：objectID_str表达态度操作，likeState_str(-1:不喜欢; 0:无感; 1：喜欢;)
      * @param objectID_str
-     * @param userID
+     * @param user
      * @param likeState_str
      * @return
      */
-    public String likeItem(String objectID_str, Integer userID, String likeState_str){
+    @Transactional
+    public String likeItem(String objectID_str, User user, String likeState_str){
+
+        Integer userID = user.getUserID();
+        Integer xp = user.getXp();
+
         Long objectID = Long.parseLong(objectID_str);
         Integer likeState = Integer.parseInt(likeState_str);
         //先查询此用户对此对象的态度
@@ -189,12 +224,16 @@ public class ItemServiceImpl implements ItemService {
         //likeState(-1:不喜欢; 0:无感; 1：喜欢;)
         if (like.getStateOfMind()==0 && likeState==1){//之前无状态现在喜欢
             item.setLikes(item.getLikes()+likeState);
+            user.setXp(xp+constantConfig.getOperate_Object_XP());
         }else if (like.getStateOfMind()==0&&likeState==-1){//之前无状态现在不喜欢
             item.setDislikes(item.getDislikes()-likeState);
+            user.setXp(xp+constantConfig.getOperate_Object_XP());
         }else if (like.getStateOfMind()==1&&likeState==0){//之前喜欢现在无状态
             item.setLikes(item.getLikes()-1);
+            user.setXp(xp-constantConfig.getOperate_Object_XP());
         }else if (like.getStateOfMind()==-1&&likeState==0){//之前不喜欢现在无状态
             item.setDislikes(item.getDislikes()-1);
+            user.setXp(xp-constantConfig.getOperate_Object_XP());
         }else{//之前喜欢，现在不喜欢 或 之前喜欢现在不喜欢
             item.setLikes(item.getLikes()+likeState);
             item.setDislikes(item.getDislikes()-likeState);
@@ -205,6 +244,7 @@ public class ItemServiceImpl implements ItemService {
 
         likesDao.updateLikeByID(like);
         itemDao.updateItemByID(item);
+        userDao.updateUserByID(user);
 
         return likeState_str;
     }

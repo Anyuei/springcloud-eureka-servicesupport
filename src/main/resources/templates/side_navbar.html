@@ -22,7 +22,9 @@
   <div class="sidebar-header d-flex align-items-center">
     <!--avatar 头像-->
     <div class="avatar">
-      <img src=${user.avatarPath!}  class="img-fluid rounded-circle">
+      <a href='${request.contextPath }/user/mainPage/${user.userNickname!}'>
+         <img src=${user.avatarPath!}  class="img-fluid rounded-circle">
+      </a>
     </div>
     <!--用户名 与 个人说明-->
     <div class="title">

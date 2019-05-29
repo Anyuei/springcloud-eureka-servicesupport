@@ -29,9 +29,16 @@ public class ConstantConfig {
     //评论一次获得的经验值
     @Value("${Comment_XP}")
     private Integer Comment_XP;
+    //实名评论一次获得的经验值
+    @Value("${RealNameComment_XP}")
+    private Integer RealNameComment_XP;
     //对评论进行点赞，不喜欢，反对等操作的经验值
     @Value("${Operate_Comment_XP}")
     private Integer Operate_Comment_XP;
+
+    //对对象进行点赞，不喜欢等操作的经验值
+    @Value("${Operate_Object_XP}")
+    private Integer Operate_Object_XP;
 
     public Long getLimit_Img_Size() {
         return 1024L*1024*Limit_Img_Size_MB;
@@ -87,5 +94,22 @@ public class ConstantConfig {
 
     public void setOperate_Comment_XP(Integer operate_Comment_XP) {
         Operate_Comment_XP = operate_Comment_XP;
+    }
+
+    public Integer getRealNameComment_XP() {
+        return RealNameComment_XP;
+    }
+
+    public void setRealNameComment_XP(Integer realNameComment_XP) {
+        RealNameComment_XP = realNameComment_XP;
+
+    }
+
+    public Integer getOperate_Object_XP() {
+        return Operate_Object_XP;
+    }
+
+    public void setOperate_Object_XP(Integer operate_Object_XP) {
+        Operate_Object_XP = operate_Object_XP;
     }
 }

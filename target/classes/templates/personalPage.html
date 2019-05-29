@@ -17,11 +17,15 @@
                 </div>
             </div>
             <div class="card-body text-center">
-                <div class="client-avatar"><img src=${user.avatarPath!''} alt="loading..." class="img-fluid rounded-circle">
+                <div class="client-avatar">
+                    <!--头像-->
+                    <a href='${request.contextPath }/user/mainPage/${user.userNickname!}'>
+                        <img src=${user.avatarPath!''} alt="loading..." class="img-fluid rounded-circle">
+                    </a>
                     <div class="status bg-green"></div>
                 </div>
                 <div class="client-title">
-                    <h3>${user.userNickname!'用户名错误'}</h3><span>${user.signature!'没有个人说明'}</span><a href="#">Follow</a>
+                    <h3>${user.userNickname!'用户名错误'}</h3><span>${user.signature!'没有个人说明'}</span>
                 </div>
                 <div class="client-info">
                     <div class="row">

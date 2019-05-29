@@ -94,13 +94,22 @@ public class CommentController {
         //记录上传者
         User user = (User)session.getAttribute("currentUserInfo");
 
-        //增加用户经验值（贡献度）
-        user.setXp(user.getXp()+constantConfig.getComment_XP());
-        user.setRealnameCommentNum(user.getRealnameCommentNum()+1);
+
+        if(isRealNameComment==null){
+            comment.setRealnameState(false);
+            //增加用户经验值（贡献度）
+            user.setXp(user.getXp()+constantConfig.getComment_XP());
+        }else{
+            comment.setRealnameState(isRealNameComment);
+            /*实名评论时 增加实名评论的分数*/
+            user.setXp(user.getXp()+constantConfig.getRealNameComment_XP());
+            user.setRealnameCommentNum(user.getRealnameCommentNum()+1);
+        }
         userService.updateUserByID(user);
+
         comment.setUserID(user.getUserID());
         comment.setCommentTime(new Date());
-        comment.setRealnameState(isRealNameComment);
+
         if (commentService.insertComment(comment)==0){
             return "评论失败";
         }else{

@@ -61,7 +61,7 @@ public class ItemController {
                                          @RequestParam("likeState")String likeState,
                                          HttpSession session){
         User user = (User)session.getAttribute("currentUserInfo");
-        return itemService.likeItem(objectID,user.getUserID(),likeState);
+        return itemService.likeItem(objectID,user,likeState);
     }
 
     /**

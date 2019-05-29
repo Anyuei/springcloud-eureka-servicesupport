@@ -107,8 +107,8 @@
                   </tr>
                 </tbody>
               </table>
-              <div id="interestCountModel">
-
+              <div id="interestCountModel" style="width: 50%;height:100%;">
+                  <!--此处代码由本html文件中的 initChart()方法生成-->
               </div>
             </div>
 
@@ -140,7 +140,8 @@
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: [ ]
+                width: '50%' ,
+                data: []
             },
 
             series : [
@@ -148,7 +149,7 @@
                     name: '贡献比重',
                     type: 'pie',
                     radius : '55%',
-                    center: ['50%', '60%'],
+                    center: ['50%', '40%'],
                     data:[],
                     itemStyle: {
                         emphasis: {
@@ -161,18 +162,15 @@
             ]
         };
 
-        var series_data = "";
-        //从后台拿数据
-        //option.series[0].data.push({ value: high, name: "高度" }, { value: middle, name: "中度" }, { value: low, name: '低度' });
 
         $.ajax({
             type:"get",
-            url:"${request.contextPath }/user/commentRatio",
-            async:true,
+            url:"${request.contextPath }/user/commentRatio?userID=${user.userID!''}",
+            async:false,
             dataType:"json",
             success:function(data){
-                $.each(data,function(index,element){//组织数据
-                    option.series[0].data.push({ value:element["commentCountNum"], name:element["categoryName"]});
+                $.each(data,function(index,element){
+                    option.series[0].data.push({ value:0+element["commentCountNum"], name:element["categoryName"]});
                     option.legend.data.push(element["categoryName"]);
                 })
             }

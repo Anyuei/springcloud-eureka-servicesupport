@@ -217,13 +217,10 @@ class UserController {
      * @return
      */
     @RequestMapping("/commentRatio")
-    public @ResponseBody List<CommentCountByCategory> getCommentRatio(HttpSession session){
-        User user = (User)session.getAttribute("currentUserInfo");
-        List<CommentCountByCategory> commentCountByCategories=null;
-        if (user!=null){
-            Integer userID = user.getUserID();
-            commentCountByCategories = userService.retrieveCommentCountByUserID(userID);
-        }
+    public @ResponseBody List<CommentCountByCategory> getCommentRatio(
+            @RequestParam("userID") Integer userID){
+        List<CommentCountByCategory> commentCountByCategories
+                =userService.retrieveCommentCountByUserID(userID);
         return commentCountByCategories;
     }
 }

@@ -1,6 +1,7 @@
 package com.yun.service;
 
 import com.yun.entity.Item;
+import com.yun.entity.User;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ public interface ItemService {
     void insertItem(Item item);
     void deleteItemByID(Long objectID);
     void deleteItemsByCategoryID(Long categoryID);
+    void updateItemViewTimesByID(Item item);
     void updateItemByID(Item item);
     Item retrieveItemByID(Long objectID);
 
@@ -17,7 +19,7 @@ public interface ItemService {
      * @param objectID
      * @return
      */
-    String likeItem(String objectID,Integer userID,String likeState);
+    String likeItem(String objectID, User user, String likeState);
 
     /**
      * 根据对象名精确查对象
