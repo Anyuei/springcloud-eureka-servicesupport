@@ -203,7 +203,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Transactional
     public String likeItem(String objectID_str, User user, String likeState_str){
-
+        //先获取用户ID和用户经验值
         Integer userID = user.getUserID();
         Integer xp = user.getXp();
 

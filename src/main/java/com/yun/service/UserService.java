@@ -13,6 +13,7 @@ public interface UserService {
     User retrieveUserByName(String name);
     List<User> retrieveUsersByName(String name);
     User retrieveUserByNickname(String nickname);
+    User retrieveUserByEmail(String email);
     List<User> retrieveUsersByNickname(String nickname);
     /**
      * 根据用户经验值排序,并取对应分页的数据。

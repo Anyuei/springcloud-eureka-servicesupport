@@ -56,7 +56,10 @@ CREATE TABLE `users` (
 	<select id="retrieveUsersByName" resultType="User">
 		SELECT * FROM users WHERE userName like CONCAT('%',#{name},'%')
 	</select>
-
+	<!-- 根据邮箱查询 测试通过 2019.6.2 -->
+	<select id="retrieveUserByEmail" resultType="User" parameterType="String">
+		SELECT * FROM users WHERE email=#{email}
+	</select>
 	<!-- 根据昵称精确查询 测试通过 2019.3.25 -->
 	<select id="retrieveUserByNickname" resultType="User">
 		SELECT * FROM users WHERE userNickname = #{nickname}

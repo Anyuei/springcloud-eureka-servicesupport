@@ -55,6 +55,15 @@ spring:
       charset: utf-8
       enabled: true
       force: true
+  mail:
+    host: smtp.qq.com
+    username: ayp199645aabb@qq.com
+    password: ettdtxuejgvsbahj
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 25000
 mybatis:
   mapper-locations: classpath:com/yun/dao/*.xml
   type-aliases-package: com.yun.entity

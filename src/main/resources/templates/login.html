@@ -25,6 +25,11 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
   </head>
+  <style>
+    #forgot-password-form {
+        display:none;
+    }
+  </style>
   <body>
     <div class="page login-page">
       <div class="container d-flex align-items-center">
@@ -58,7 +63,13 @@
                     <small id="warning"></small><br>
                     <button id="login" type="submit" class="btn btn-primary" >Login</button>
                   </form>
-                  <a href="#" class="forgot-pass">Forgot Password?</a>
+                  <a href="#" id="forgotPasswordBtn" class="forgot-pass">忘记密码?</a>
+                  <form method="post" class="form-validate"  onsubmit="return false;" id="forgot-password-form">
+                    <div class="form-group" >
+                      <input id="forgot-password" type="email" name="email" required data-msg="请输入您注册的邮箱" class="input-material">
+                    </div>
+                    <button id="send-email" type="submit" class="btn btn-danger" >发送密码找回邮件</button>
+                  </form>
                   <br>
                   <!--注册页面-->
                   <small>Do not have an account? </small>
@@ -122,6 +133,39 @@
                     }
                 })
         })
+
+        /*忘记密码*/
+        $("#forgotPasswordBtn").click(
+            function () {
+                $("#forgot-password-form").show();
+            }
+        )
+
+
+        $("#send-email").click(
+          function() {
+              var email =$("#forgot-password").val()
+                  $.ajax({
+                      type: 'post',
+                      url: '${request.contextPath }/user/forgotPassword',
+                      async: true,
+                      dataType:"json",
+                      data: {
+                          "email": email,
+                      },
+                      success: function(data) {
+                          if(data == "success") {
+                              alert("密码已发送至您的邮箱")
+                          } else if(data == "fail") {
+                              alert("邮箱不存在")
+                          }
+                      },
+                      error: function() {
+                          alert("网络错误");
+                      }
+          });
+        })
+
     </script>
   </body>
 </html>

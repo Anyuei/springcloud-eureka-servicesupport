@@ -4,6 +4,7 @@ import com.yun.EurekaServiceApplication;
 import com.yun.config.ConstantConfig;
 import com.yun.entity.CommentCountByCategory;
 import com.yun.entity.User;
+import com.yun.service.EmailService;
 import com.yun.service.UserService;
 import com.yun.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EmailService emailService;
     /**
      * 注销并重定向登录页面
      *
@@ -222,6 +225,25 @@ class UserController {
         List<CommentCountByCategory> commentCountByCategories
                 =userService.retrieveCommentCountByUserID(userID);
         return commentCountByCategories;
+    }
+    /**
+     * 用户密码找回
+     * @return
+     */
+    @RequestMapping("/forgotPassword")
+    public @ResponseBody String getCommentRatio(
+            @RequestParam("email") String email){
+        final User user = userService.retrieveUserByEmail(email);
+        if (user==null){
+            return "fail";
+        }else{
+            emailService.sendSimpleMail(
+                    email,
+                    "评价网用户名密码找回",
+                    "用户名："+user.getUserNickname()+"密码："+user.getUserPassword());
+            return "success";
+        }
+
     }
 }
 

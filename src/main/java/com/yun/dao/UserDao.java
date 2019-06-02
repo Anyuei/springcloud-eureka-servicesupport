@@ -51,6 +51,12 @@ public interface UserDao {
      * @return
      */
     User retrieveUserByNickname(String nickname);
+    /**
+     * 根据邮箱查用户
+     * @param email
+     * @return
+     */
+    User retrieveUserByEmail(String email);
 
     /**
      * 昵称模糊查

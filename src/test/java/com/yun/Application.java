@@ -4,6 +4,7 @@ import com.yun.dao.CategoryDao;
 import com.yun.dao.UserDao;
 import com.yun.entity.Category;
 import com.yun.entity.User;
+import com.yun.service.EmailService;
 import com.yun.utils.RedisUtil;
 import com.yun.utils.RedisUtils;
 import org.junit.Test;
@@ -44,6 +45,8 @@ public class Application
     @Resource
     private CategoryDao categoryDao;
 
+    @Autowired
+    private EmailService emailService;
     @Autowired
     RedisUtil redisUtil;
     @Test
@@ -133,5 +136,9 @@ public class Application
         redisUtil.setKV("ssss", "dddd");
         String res = redisUtil.getValueByKey("ssss");
         System.out.println(res);
+    }
+    @Test
+    public void testSentMail(){
+        emailService.sendSimpleMail("ayp199645aabb@qq.com","评价网密码找回","测试成功");
     }
 }
