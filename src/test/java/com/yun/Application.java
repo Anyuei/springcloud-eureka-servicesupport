@@ -5,6 +5,7 @@ import com.yun.dao.UserDao;
 import com.yun.entity.Category;
 import com.yun.entity.User;
 import com.yun.service.EmailService;
+import com.yun.utils.MD5Util;
 import com.yun.utils.RedisUtil;
 import com.yun.utils.RedisUtils;
 import org.junit.Test;
@@ -140,5 +141,9 @@ public class Application
     @Test
     public void testSentMail(){
         emailService.sendSimpleMail("ayp199645aabb@qq.com","评价网密码找回","测试成功");
+    }
+    @Test
+    public void testMd5(){
+        System.out.println(MD5Util.getStringMD5("12345"));
     }
 }

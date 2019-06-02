@@ -29,6 +29,11 @@
     #forgot-password-form {
         display:none;
     }
+    .has-shadow{
+      -webkit-box-shadow: 2px 2px 17px rgba(207, 19, 19, 0.1), -1px 0 14px rgba(0, 0, 0, 0.78);
+
+      box-shadow: 2px 2px 17px rgba(207, 19, 19, 0.1), -1px 0 14px rgba(0, 0, 0, 0.78);
+    }
   </style>
   <body>
     <div class="page login-page">
@@ -66,7 +71,7 @@
                   <a href="#" id="forgotPasswordBtn" class="forgot-pass">忘记密码?</a>
                   <form method="post" class="form-validate"  onsubmit="return false;" id="forgot-password-form">
                     <div class="form-group" >
-                      <input id="forgot-password" type="email" name="email" required data-msg="请输入您注册的邮箱" class="input-material">
+                      <input id="forgot-password" type="email" name="email" required data-msg="请输入您注册的邮箱" class="input-material" required="required">
                     </div>
                     <button id="send-email" type="submit" class="btn btn-danger" >发送密码找回邮件</button>
                   </form>
@@ -104,7 +109,6 @@
                 function() {
                     var userNickname=$("#login-username").val();
                     var userPassword=$("#login-password").val();
-                    var newWindow = window.open();
                     if(userNickname!=""&&userPassword!=""){
                         $.ajax({
                             type: 'post',
@@ -118,6 +122,7 @@
                             success: function(data) {
                                 console.log(data);
                                 if(data == "success") {
+                                    var newWindow = window.open();
                                     newWindow.location= '${request.contextPath }/user/index/'+userNickname;
                                     console.log("用户"+userNickname+"登录成功");
                                 } else if(data == "fail") {
@@ -144,7 +149,8 @@
 
         $("#send-email").click(
           function() {
-              var email =$("#forgot-password").val()
+              var email =$("#forgot-password").val();
+              if (email!=""){
                   $.ajax({
                       type: 'post',
                       url: '${request.contextPath }/user/forgotPassword',
@@ -163,9 +169,9 @@
                       error: function() {
                           alert("网络错误");
                       }
-          });
+                  });
+              }
         })
-
     </script>
   </body>
 </html>

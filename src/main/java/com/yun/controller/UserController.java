@@ -7,11 +7,14 @@ import com.yun.entity.User;
 import com.yun.service.EmailService;
 import com.yun.service.UserService;
 import com.yun.utils.FileUtils;
+import com.yun.utils.MD5Util;
+import com.yun.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.security.provider.MD5;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,7 +33,8 @@ class UserController {
     private ConstantConfig constantConfig;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    RedisUtil redisUtil;
     @Autowired
     private EmailService emailService;
     /**
@@ -55,11 +59,13 @@ class UserController {
     @RequestMapping("/validationLogin")
     @ResponseBody//禁用把返回值解析为路径，而直接把返回结果加到HTTP响应体中
     public String validationLogin(User user,HttpSession session) {
-        if (user.getUserNickname() != null && user.getUserPassword() != null) {
+        final String userPassword = user.getUserPassword();
+        if (user.getUserNickname() != null && userPassword != null) {
             System.out.println("用户名->"+user.getUserNickname()+"希望登录");
             User reallyUser = userService.retrieveUserByNickname(user.getUserNickname());
-            System.out.println(reallyUser);
-            if (reallyUser != null && reallyUser.getUserPassword().equals(user.getUserPassword())) {
+
+            final String passwordMD5 = MD5Util.getStringMD5(userPassword);//MD5加密
+            if (reallyUser != null && reallyUser.getUserPassword().equals(passwordMD5)) {
                 String userNickname = reallyUser.getUserNickname();
                 System.out.println("USER:" + userNickname + " login success！["+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()) +"]");
                 session.setAttribute(userNickname, userNickname);
@@ -130,7 +136,8 @@ class UserController {
         if (userService.retrieveUserByNickname(newUserNickname) == null) {
             User newUser = new User();
             newUser.setUserNickname(newUserNickname);
-            newUser.setUserPassword(newUserPassword);
+            String passwordMD5 = MD5Util.getStringMD5(newUserPassword);
+            newUser.setUserPassword(passwordMD5);
             newUser.setEmail(newUserEmail);
             if (userService.insertUser(newUser)!=null){
                 System.out.println("USER:" + newUserNickname + " register success！["+new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()) +"]");
@@ -231,19 +238,69 @@ class UserController {
      * @return
      */
     @RequestMapping("/forgotPassword")
-    public @ResponseBody String getCommentRatio(
-            @RequestParam("email") String email){
+    public @ResponseBody String forgotPassword(
+            @RequestParam("email") String email,HttpServletRequest request){
         final User user = userService.retrieveUserByEmail(email);
         if (user==null){
             return "fail";
         }else{
+            final UUID uuid = UUID.randomUUID();
+            String uuid_str = uuid.toString();
+            redisUtil.setKV(uuid_str,email,600);//10分钟有效
+            request.getRequestURI();
             emailService.sendSimpleMail(
                     email,
                     "评价网用户名密码找回",
-                    "用户名："+user.getUserNickname()+"密码："+user.getUserPassword());
+                    "用户名："+user.getUserNickname()+"请访问此链接修改密码："+request.getRequestURL()+"/"+uuid_str);
             return "success";
         }
+    }
+    /**
+     * 跳转密码重置页面
+     * @return
+     */
+    @RequestMapping("/forgotPassword/{uuid}")
+    public String forgotPasswordPage(
+            @PathVariable String uuid,
+            Model model){
+        if (uuid==null){
+            return "error";
+        }
+        String email = redisUtil.getValueByKey(uuid);
+        if (email==null){
+            return "error";
+        }
+        User user = userService.retrieveUserByEmail(email);
+        if (user==null){
+            return "error";
+        }else{
+            user.setUserPassword(null);
+            redisUtil.deleteKey(uuid);
+            model.addAttribute("user", user);
+            return "resetPassword";
+        }
 
+    }
+    /**
+     * 用户密码重置
+     * @return
+     */
+    @RequestMapping("/resetPassword")
+    public @ResponseBody String resetPassword(User user){
+        String userNickname = user.getUserNickname();
+        String userPassword = user.getUserPassword();
+        if (user==null||user.getUserNickname().equals("")||user.getUserPassword().equals("")){
+            return "fail";
+        }else{
+            User realUser = userService.retrieveUserByNickname(userNickname);
+            if (realUser!=null){
+                realUser.setUserPassword(MD5Util.getStringMD5(userPassword));
+                userService.updateUserByID(realUser);
+                return "success";
+            }else{
+                return "fail";
+            }
+        }
     }
 }
 

@@ -57,4 +57,33 @@ public class RedisUtil {
         }
         return state;
     }
+    public Long setKV(String key,String value,Integer expireSecond){
+        Jedis jedis = null;
+        String state = "";
+        Long remainingTime=0L;
+        try {
+            jedis = jedisPool.getResource();
+            state= jedis.set(key,value);
+            remainingTime= jedis.expire(key,expireSecond);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            jedis.close();
+        }
+        return remainingTime;
+    }
+    public Long deleteKey(String key){
+        Jedis jedis = null;
+        Long state =0L;
+
+        try {
+            jedis = jedisPool.getResource();
+            state= jedis.del(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            jedis.close();
+        }
+        return state;
+    }
 }
